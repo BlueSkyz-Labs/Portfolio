@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   BlueSkyz Labs Portfolio — Design Tokens
+   See SPEC.md §2 for the design rationale.
+   ============================================================================ */
+
+@layer base {
+  :root {
+    /* ── Color: Ink (backgrounds) ── */
+    --ink-void: #0a0a0a;
+    --ink-charcoal: #1a1a1a;
+    --ink-graphite: #2a2a2a;
+
+    /* ── Color: Gold (accent — used sparingly) ── */
+    --gold-champagne: #c9a962;
+    --gold-muted: #a8915a;
+
+    /* ── Color: Cream (text) ── */
+    --cream-offwhite: #f5f5f0;
+    --cream-muted: #a8a8a0;
+
+    /* ── Color: Semantic tokens ── */
+    --background: var(--ink-void);
+    --foreground: var(--cream-offwhite);
+    --muted: var(--cream-muted);
+    --accent: var(--gold-champagne);
+    --surface: var(--ink-charcoal);
+    --border: rgba(245, 245, 240, 0.08);
+
+    /* ── Motion ── */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --duration-fast: 200ms;
+    --duration-base: 300ms;
+    --duration-slow: 400ms;
+
+    /* ── Shadows ── */
+    --shadow-ink-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-ink-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-ink-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ── Base reset ── */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-dm-sans), system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Selection ── */
+  ::selection {
+    background: var(--gold-champagne);
+    color: var(--ink-void);
+  }
+
+  /* ── Focus ring — visible only for keyboard ── */
+  :focus {
+    outline: none;
+  }
+  :focus-visible {
+    outline: 1px solid var(--gold-champagne);
+    outline-offset: 2px;
+  }
+
+  /* ── Hairline divider utility ── */
+  hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  /* ── Scrollbar (subtle, brand-aligned) ── */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--ink-void);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--ink-graphite);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-muted);
+  }
+}
+
+/* ============================================================================
+   Component utilities
+   ============================================================================ */
+
+@layer components {
+  /* Single hairline rule in champagne gold */
+  .rule-gold {
+    background: var(--gold-champagne);
+    height: 1px;
+    width: 100%;
+    transform-origin: left;
+  }
+
+  /* Vertical hairline, used for the scroll cue */
+  .rule-gold-vertical {
+    background: var(--gold-champagne);
+    width: 1px;
+    height: 100%;
+  }
+
+  /* Subtle radial gradient — used in the hero */
+  .bg-hero-gradient {
+    background: radial-gradient(
+      ellipse at 100% 100%,
+      var(--ink-charcoal) 0%,
+      var(--ink-void) 60%
+    );
+  }
+
+  /* Hairline border (top or bottom) in gold */
+  .border-t-hairline-gold {
+    border-top: 1px solid var(--gold-champagne);
+  }
+  .border-b-hairline-gold {
+    border-bottom: 1px solid var(--gold-champagne);
+  }
+}
+
+/* ============================================================================
+   Reduced motion — respect user preference
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+    scroll-behavior: auto !important;
+  }
+}
