@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
 // ─── Typography (Google Fonts, self-hosted via next/font) ──────────────────
@@ -99,7 +101,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-ink-void text-cream-offwhite font-sans antialiased">
-        {children}
+        <Header />
+        <main id="main" className="relative min-h-screen">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );

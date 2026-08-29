@@ -5,29 +5,45 @@
 /* ============================================================================
    BlueSkyz Labs Portfolio — Design Tokens
    See SPEC.md §2 for the design rationale.
+
+   CSS variables (per SPEC.md §2.1 and the SA-portfolio contract):
+     --bg-primary:    #0A0A0A   page background (ink void)
+     --bg-secondary:  #111111   raised surface (slightly lifted)
+     --border:        #1F1F1F   hairline divider color
+     --text-primary:  #F5F5F0   body / headline color (cream offwhite)
+     --text-muted:    #6B6B6B   secondary text
+     --accent-gold:   #C9A962   champagne gold — used sparingly
    ============================================================================ */
 
 @layer base {
   :root {
-    /* ── Color: Ink (backgrounds) ── */
-    --ink-void: #0a0a0a;
-    --ink-charcoal: #1a1a1a;
-    --ink-graphite: #2a2a2a;
+    /* ── Color: Ink (backgrounds) — SPEC §2.1 ── */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #111111;
+    --border-color: #1f1f1f;
 
     /* ── Color: Gold (accent — used sparingly) ── */
-    --gold-champagne: #c9a962;
+    --accent-gold: #c9a962;
     --gold-muted: #a8915a;
 
     /* ── Color: Cream (text) ── */
-    --cream-offwhite: #f5f5f0;
+    --text-primary: #f5f5f0;
+    --text-muted: #6b6b6b;
+
+    /* ── Legacy aliases (kept for back-compat with existing tokens) ── */
+    --ink-void: var(--bg-primary);
+    --ink-charcoal: #1a1a1a;
+    --ink-graphite: #2a2a2a;
+    --gold-champagne: var(--accent-gold);
+    --cream-offwhite: var(--text-primary);
     --cream-muted: #a8a8a0;
 
-    /* ── Color: Semantic tokens ── */
-    --background: var(--ink-void);
-    --foreground: var(--cream-offwhite);
-    --muted: var(--cream-muted);
-    --accent: var(--gold-champagne);
-    --surface: var(--ink-charcoal);
+    /* ── Semantic tokens (used by components) ── */
+    --background: var(--bg-primary);
+    --foreground: var(--text-primary);
+    --muted: var(--text-muted);
+    --accent: var(--accent-gold);
+    --surface: var(--bg-secondary);
     --border: rgba(245, 245, 240, 0.08);
 
     /* ── Motion ── */
@@ -71,8 +87,8 @@
 
   /* ── Selection ── */
   ::selection {
-    background: var(--gold-champagne);
-    color: var(--ink-void);
+    background: var(--accent-gold);
+    color: var(--bg-primary);
   }
 
   /* ── Focus ring — visible only for keyboard ── */
@@ -80,7 +96,7 @@
     outline: none;
   }
   :focus-visible {
-    outline: 1px solid var(--gold-champagne);
+    outline: 1px solid var(--accent-gold);
     outline-offset: 2px;
   }
 
@@ -97,7 +113,7 @@
     height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--ink-void);
+    background: var(--bg-primary);
   }
   ::-webkit-scrollbar-thumb {
     background: var(--ink-graphite);
@@ -115,7 +131,7 @@
 @layer components {
   /* Single hairline rule in champagne gold */
   .rule-gold {
-    background: var(--gold-champagne);
+    background: var(--accent-gold);
     height: 1px;
     width: 100%;
     transform-origin: left;
@@ -123,7 +139,7 @@
 
   /* Vertical hairline, used for the scroll cue */
   .rule-gold-vertical {
-    background: var(--gold-champagne);
+    background: var(--accent-gold);
     width: 1px;
     height: 100%;
   }
@@ -133,16 +149,16 @@
     background: radial-gradient(
       ellipse at 100% 100%,
       var(--ink-charcoal) 0%,
-      var(--ink-void) 60%
+      var(--bg-primary) 60%
     );
   }
 
   /* Hairline border (top or bottom) in gold */
   .border-t-hairline-gold {
-    border-top: 1px solid var(--gold-champagne);
+    border-top: 1px solid var(--accent-gold);
   }
   .border-b-hairline-gold {
-    border-bottom: 1px solid var(--gold-champagne);
+    border-bottom: 1px solid var(--accent-gold);
   }
 }
 

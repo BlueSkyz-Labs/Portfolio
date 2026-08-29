@@ -1,0 +1,159 @@
+name: qa
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+# Cancel in-flight runs on the same ref so we don't waste CI minutes on stale pushes.
+concurrency:
+  group: qa-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  qa:
+    name: Quality Gates (lint, typecheck, build, e2e, a11y, perf)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: Enable pnpm via corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── Static gates (G1–G3) ────────────────────────────────────────────
+      - name: Typecheck (G1)
+        run: pnpm typecheck
+
+      - name: Lint (G2)
+        run: pnpm lint
+
+      - name: Format check (G3)
+        run: pnpm format:check
+
+      # ── Build (G4, G5) ─────────────────────────────────────────────────
+      - name: Build (G4)
+        run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+      # ── E2E + A11y + Visual + Cross-browser (G6, G7, G10, G11) ────────
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps
+
+      - name: Install Playwright system deps (always, idempotent)
+        run: pnpm exec playwright install-deps
+
+      - name: Run Playwright tests
+        run: pnpm exec playwright test --reporter=github,html,junit
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload Playwright test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 14
+          if-no-files-found: warn
+
+      # ── Lighthouse (G8, G9) ────────────────────────────────────────────
+      - name: Start built site
+        run: |
+          pnpm start &
+          # Wait for the server to be reachable.
+          for i in {1..30}; do
+            if curl -sf http://localhost:3000 > /dev/null; then
+              echo "Site is up"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Site did not start in time"
+          exit 1
+
+      - name: Lighthouse CI
+        run: |
+          npx --yes @lhci/cli@0.14.x autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+          retention-days: 14
+          if-no-files-found: warn
+
+  edge-smoke:
+    name: Edge smoke (Chromium + Edge UA)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: qa
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+      - name: Run smoke under Edge user-agent
+        run: |
+          pnpm start &
+          for i in {1..30}; do
+            if curl -sf http://localhost:3000 > /dev/null; then
+              echo "Site is up"
+              break
+            fi
+            sleep 1
+          done
+          pnpm exec playwright test \
+            --project=chromium \
+            --reporter=line \
+            --grep "Smoke"

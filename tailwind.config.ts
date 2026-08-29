@@ -76,7 +76,6 @@ const config: Config = {
           {
             lineHeight: "1.5",
             letterSpacing: "0.04em",
-            textTransform: "uppercase",
           },
         ], // 12
       },
