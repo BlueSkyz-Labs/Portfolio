@@ -40,7 +40,7 @@ jobs:
 
       - name: Add exact QA dependencies
         run: >-
-          pnpm add -D --save-exact
+          pnpm add -Dw --save-exact
           @playwright/test@1.62.1
           @axe-core/playwright@4.13.0
           @lhci/cli@0.15.1
