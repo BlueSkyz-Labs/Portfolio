@@ -42,10 +42,14 @@ test("CLI rejects a candidate that violates the hard Product Truth budget", () =
   const scriptPath = fileURLToPath(
     new URL("../../scripts/check-bundle-regression.mjs", import.meta.url),
   );
-  const result = spawnSync(process.execPath, [scriptPath, basePath, candidatePath], {
-    cwd: dir,
-    encoding: "utf8",
-  });
+  const result = spawnSync(
+    process.execPath,
+    [scriptPath, basePath, candidatePath],
+    {
+      cwd: dir,
+      encoding: "utf8",
+    },
+  );
 
   assert.notEqual(
     result.status,
