@@ -1,0 +1,85 @@
+name: tailwind-v4-apply
+
+on:
+  push:
+    branches: [chore/tailwind-v4-convergence]
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    name: Apply and verify Tailwind v4 migration
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: chore/tailwind-v4-convergence
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install verified upstream baseline
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply Tailwind v4 package graph
+        run: |
+          pnpm add --save-dev --save-exact tailwindcss@4.3.3 @tailwindcss/postcss@4.3.3
+          pnpm remove autoprefixer
+
+      - name: Apply Tailwind v4 PostCSS contract
+        run: |
+          cat > postcss.config.mjs <<'EOF'
+          const config = {
+            plugins: {
+              "@tailwindcss/postcss": {},
+            },
+          };
+
+          export default config;
+          EOF
+
+      - name: Apply Tailwind v4 CSS import contract
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("src/app/globals.css")
+          text = path.read_text()
+          old = "@tailwind base;\n@tailwind components;\n@tailwind utilities;\n"
+          new = '@config "../../tailwind.config.ts";\n@import "tailwindcss";\n'
+          if old not in text:
+              raise SystemExit("expected Tailwind v3 directives were not found")
+          path.write_text(text.replace(old, new, 1))
+          PY
+
+      - name: Security and architecture verification
+        run: |
+          pnpm audit --prod --audit-level=high
+          pnpm test:architecture
+
+      - name: Static and deployment verification
+        run: |
+          pnpm typecheck
+          pnpm lint
+          pnpm format:check
+          NEXT_TELEMETRY_DISABLED=1 pnpm build
+
+      - name: Commit generated lock and migration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json pnpm-lock.yaml postcss.config.mjs src/app/globals.css
+          git diff --cached --exit-code && { echo "No migration changes to commit"; exit 1; } || true
+          git commit -m "chore(css): migrate styling pipeline to Tailwind v4"
+          git push origin HEAD:chore/tailwind-v4-convergence
