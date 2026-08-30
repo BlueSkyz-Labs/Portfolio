@@ -18,7 +18,11 @@ test("PostCSS pipeline explicitly compiles Tailwind utilities", () => {
 
   const config = readFileSync(configPath, "utf8");
   assert.match(config, /tailwindcss/, "PostCSS config must enable tailwindcss");
-  assert.match(config, /autoprefixer/, "PostCSS config must enable autoprefixer");
+  assert.match(
+    config,
+    /autoprefixer/,
+    "PostCSS config must enable autoprefixer",
+  );
 
   const globals = readFileSync("src/app/globals.css", "utf8");
   assert.match(globals, /@tailwind\s+base;/);
