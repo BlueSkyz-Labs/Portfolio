@@ -11,8 +11,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "next build && node scripts/verify-static-export.mjs",
+    "start": "node scripts/serve-static.mjs",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "typecheck": "tsc --noEmit",
