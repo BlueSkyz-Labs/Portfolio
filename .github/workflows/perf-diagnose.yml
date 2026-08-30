@@ -28,6 +28,18 @@ jobs:
       - name: Frozen install
         run: pnpm install --frozen-lockfile
 
+      - name: TDD RED — hard budget is not blocking yet
+        id: hard-budget-red
+        continue-on-error: true
+        run: pnpm test:architecture
+
+      - name: Confirm expected TDD RED
+        run: |
+          if [[ "${{ steps.hard-budget-red.outcome }}" != "failure" ]]; then
+            echo "Expected hard-budget regression test to fail before implementation" >&2
+            exit 1
+          fi
+
       - name: Baseline production build
         run: |
           set -o pipefail
