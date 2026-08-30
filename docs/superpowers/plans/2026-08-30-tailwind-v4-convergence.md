@@ -25,16 +25,19 @@
 ### Task 1: Encode the Tailwind v4 Toolchain Contract
 
 **Files:**
+
 - Modify: `tests/architecture/css-pipeline.test.mjs`
 - Test: `tests/architecture/css-pipeline.test.mjs`
 
 **Interfaces:**
+
 - Consumes: repository `package.json`, `postcss.config.mjs`, `src/app/globals.css`.
 - Produces: deterministic assertions that reject Tailwind v3 directives/plugin wiring and require the v4 package/plugin/import contract.
 
 - [ ] **Step 1: Write the failing test**
 
 Require:
+
 - `tailwindcss` major version 4 in devDependencies;
 - `@tailwindcss/postcss` major version 4 in devDependencies;
 - no direct `autoprefixer` devDependency;
@@ -57,12 +60,14 @@ Commit message: `test(css): require Tailwind v4 pipeline contract`
 ### Task 2: Implement the Minimal Tailwind v4 Migration
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `postcss.config.mjs`
 - Modify: `src/app/globals.css`
 - Preserve: `tailwind.config.ts`
 
 **Interfaces:**
+
 - Consumes: existing v3 theme configuration and CSS variable layer.
 - Produces: Tailwind v4 PostCSS compilation while preserving all existing class names and custom theme tokens.
 
@@ -118,10 +123,12 @@ Commit message: `chore(css): migrate styling pipeline to Tailwind v4`
 ### Task 3: Verify Build and Visual/Runtime Compatibility
 
 **Files:**
+
 - Modify only if a fresh failing test exposes a real v4 compatibility issue.
 - Evidence: GitHub Actions artifacts for bundle, Playwright, and Lighthouse.
 
 **Interfaces:**
+
 - Consumes: Tailwind v4 candidate and existing QA harness.
 - Produces: exact-revision evidence that design/runtime behavior survived the toolchain migration.
 
@@ -158,10 +165,12 @@ Use existing G5 script in CI. Record candidate initial First Load JS and regress
 ### Task 4: Close the Stacked PR Frontier
 
 **Files:**
+
 - Update: this plan's checkbox/evidence state if repository convention requires durable execution accounting.
 - PR: `chore/tailwind-v4-convergence` → `fix/foundation-assurance` while PR #2 remains unmerged.
 
 **Interfaces:**
+
 - Consumes: exact candidate SHA, upstream base SHA, CI/runtime evidence.
 - Produces: a reviewable downstream PR with explicit dependency topology and no accidental widening into Sprint-2 UI work.
 
