@@ -1,12 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { SITE } from "@/lib/constants";
 
 /**
@@ -28,13 +23,10 @@ export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReduced = useReducedMotion();
 
-  // Parallax: hairline rule moves at 0.4× scroll speed.
-  // Disabled when prefers-reduced-motion is set.
   const { scrollY } = useScroll();
   const ruleY = useTransform(scrollY, [0, 1000], [0, 400]);
   const reducedRuleY = useTransform(scrollY, [0, 1000], [0, 0]);
 
-  // Entry animation variants — out-expo per SPEC §2.4.
   const entryEase = [0.16, 1, 0.3, 1] as const;
 
   return (
@@ -44,8 +36,7 @@ export function HeroSection() {
       aria-labelledby="hero-statement"
       className="relative flex min-h-screen min-h-[100svh] flex-col justify-between overflow-hidden bg-hero-gradient px-6 pt-24 pb-12 md:px-12 md:pt-28 md:pb-16 lg:px-24 lg:pt-32 lg:pb-20"
     >
-      {/* ── Top meta line ────────────────────────────────────── */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: prefersReduced ? 0.15 : 0.4, ease: entryEase }}
@@ -57,17 +48,12 @@ export function HeroSection() {
         <span className="font-sans text-caption text-cream-muted">
           {SITE.edition}
         </span>
-      </motion.div>
+      </m.div>
 
-      {/* ── Hairline gold rule at the 8% horizontal mark ─────── */}
-      {/* Parallax via Framer Motion `y` — disabled when reduced motion is set. */}
-      <motion.div
+      <m.div
         aria-hidden="true"
         className="absolute left-0 top-[8%] h-px w-full origin-left bg-gold-champagne/70"
-        style={{
-          // Parallax offset at scroll — disabled under reduced-motion.
-          y: prefersReduced ? reducedRuleY : ruleY,
-        }}
+        style={{ y: prefersReduced ? reducedRuleY : ruleY }}
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{
@@ -77,7 +63,6 @@ export function HeroSection() {
         }}
       />
 
-      {/* ── Center statement ─────────────────────────────────── */}
       <div className="flex flex-1 flex-col justify-center py-space-7">
         <h1
           id="hero-statement"
@@ -85,7 +70,7 @@ export function HeroSection() {
         >
           {SITE.hero.statement.split("|").map((line, i, arr) => (
             <span key={i} className="block overflow-hidden">
-              <motion.span
+              <m.span
                 className="block"
                 initial={{ y: prefersReduced ? 0 : "100%", opacity: 0 }}
                 animate={{ y: "0%", opacity: 1 }}
@@ -102,12 +87,12 @@ export function HeroSection() {
                 ) : (
                   line
                 )}
-              </motion.span>
+              </m.span>
             </span>
           ))}
         </h1>
 
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: prefersReduced ? 0 : 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -118,11 +103,10 @@ export function HeroSection() {
           className="mt-space-4 max-w-xl font-sans text-body-lg font-normal text-cream-muted lg:mt-space-5"
         >
           {SITE.hero.subline}
-        </motion.p>
+        </m.p>
       </div>
 
-      {/* ── Bottom row: scroll cue ───────────────────────────── */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{
@@ -139,7 +123,7 @@ export function HeroSection() {
         >
           <div className="absolute inset-0 animate-pulse-soft bg-gradient-to-b from-gold-champagne via-gold-champagne/60 to-transparent" />
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 }
