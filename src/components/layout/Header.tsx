@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { m, useScroll, useSpring } from "framer-motion";
 import { Container } from "./Container";
 import { Nav } from "./Nav";
 import { SITE } from "@/lib/constants";
@@ -18,26 +17,53 @@ import { cn } from "@/lib/utils";
  * Behavior:
  * - Backdrop-blur appears after 24px scroll (avoids CLS on Safari).
  * - Scroll-progress bar fills 0 → 100% across the viewport width.
- * - Reduced-motion respected: progress uses a spring; Framer's
- *   `useReducedMotion` is honored implicitly via the eased spring.
+ * - Progress is a direct transform of scroll position, so reduced-motion
+ *   users are not given an additional spring/easing animation.
  */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const progressRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    let frame = 0;
 
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 30,
-    mass: 0.2,
-    restDelta: 0.001,
-  });
+    const updateFromScroll = () => {
+      frame = 0;
+      const scrollY = window.scrollY;
+      const scrollable = Math.max(
+        document.documentElement.scrollHeight - window.innerHeight,
+        1,
+      );
+      const progress = Math.min(Math.max(scrollY / scrollable, 0), 1);
+
+      if (progressRef.current) {
+        progressRef.current.style.transform = `scaleX(${progress})`;
+      }
+
+      const nextScrolled = scrollY > 24;
+      setScrolled((current) =>
+        current === nextScrolled ? current : nextScrolled,
+      );
+    };
+
+    const scheduleUpdate = () => {
+      if (frame === 0) {
+        frame = window.requestAnimationFrame(updateFromScroll);
+      }
+    };
+
+    updateFromScroll();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (frame !== 0) {
+        window.cancelAnimationFrame(frame);
+      }
+    };
+  }, []);
 
   return (
     <header
@@ -55,10 +81,11 @@ export function Header() {
         Skip to content
       </a>
 
-      <m.div
+      <div
+        ref={progressRef}
         aria-hidden="true"
         className="absolute inset-x-0 top-0 h-px origin-left bg-gold-champagne"
-        style={{ scaleX }}
+        style={{ transform: "scaleX(0)" }}
       />
 
       <Container className="flex h-16 items-center justify-between md:h-20">
