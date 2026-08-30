@@ -383,9 +383,10 @@ src/
 
 - **Platform**: Cloudflare Pages
 - **Build command**: `pnpm build`
-- **Output**: OpenNext Cloudflare adapter → `.open-next/`
+- **Rendering model**: Next.js static export (`output: "export"`)
+- **Output**: `out/`
 - **Domain**: `portfolio.tonydemo.com` (CNAME)
-- **Branch**: `main` is production, `develop` is preview
+- **Branch**: `main` is production; non-production branches/PRs use Pages previews
 - **Env vars**: managed in Cloudflare dashboard, mirrored in `.env.example`
 
 ### 6.6 Quality Gates (Pre-Commit)

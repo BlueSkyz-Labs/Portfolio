@@ -43,7 +43,7 @@ In short:
 ├── next.config.ts
 ├── tailwind.config.ts
 ├── tsconfig.json
-├── cloudflare-pages.toml
+├── wrangler.toml
 ├── .env.example               # Environment template
 ├── src/
 │   ├── app/
@@ -91,14 +91,15 @@ pnpm build        # production build
 
 ## ✦ Deployment
 
-Cloudflare Pages — automatic on push to `main`.
+Cloudflare Pages — static Next.js export, automatic through the connected Pages project.
 
-1. Connect this repo to a Cloudflare Pages project
+1. Connect this repo to the `blueskyz-labs-portfolio` Cloudflare Pages project
 2. Build command: `pnpm install --frozen-lockfile && pnpm build`
-3. Build output: `.next`
-4. Add the custom domain `portfolio.tonydemo.com` in the Cloudflare dashboard
+3. Build output: `out`
+4. Production branch: `main`; other branches and pull requests use Pages preview deployments
+5. Add the custom domain `portfolio.tonydemo.com` in the Cloudflare dashboard
 
-The `cloudflare-pages.toml` file at the root carries the headers / redirects / cache rules.
+`wrangler.toml` declares the Pages project and build output. `public/_headers` carries the static security and cache headers that ship with the exported artifact.
 
 ## ✦ Decisions
 
