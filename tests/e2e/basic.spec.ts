@@ -8,6 +8,8 @@ import { test, expect } from "@playwright/test";
  *   2. No console errors during load.
  *   3. Global semantic landmarks are unique and visible (SPEC §3.1, §4.6).
  *   4. Hero section (#hero) is visible and on-screen.
+ *   5. Native scroll-progress/parallax behavior survives the JS-budget refactor.
+ *   6. Reduced-motion keeps hero parallax disabled.
  *
  * If any assertion fails, the visitor's first impression is broken — block the PR.
  */
@@ -93,5 +95,55 @@ test.describe("Smoke — Home", () => {
     await expect(statement, "hero <h1> must exist").toHaveCount(1);
     await expect(statement).toBeVisible();
     await expect(statement).not.toBeEmpty();
+  });
+
+  test("native scroll progress and hero parallax remain functional", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+
+    const progress = page.locator('header > div[aria-hidden="true"]');
+    const heroRule = page.locator('#hero > div[aria-hidden="true"]');
+    const readHeroTranslateY = () =>
+      heroRule.evaluate((node) => {
+        const transform = getComputedStyle(node).transform;
+        if (transform === "none") return 0;
+        return new DOMMatrixReadOnly(transform).m42;
+      });
+
+    await expect(progress).toHaveCount(1);
+    await expect(heroRule).toHaveCount(1);
+
+    await page.evaluate(() => window.scrollTo(0, 500));
+
+    await expect
+      .poll(() => progress.evaluate((node) => node.style.transform))
+      .not.toBe("scaleX(0)");
+
+    const viewport = page.viewportSize();
+    if ((viewport?.width ?? 0) < 768) {
+      await expect.poll(readHeroTranslateY).toBe(0);
+    } else {
+      await expect.poll(readHeroTranslateY).not.toBe(0);
+    }
+  });
+
+  test("reduced motion disables hero parallax", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/", { waitUntil: "networkidle" });
+
+    const heroRule = page.locator('#hero > div[aria-hidden="true"]');
+    const readHeroTranslateY = () =>
+      heroRule.evaluate((node) => {
+        const transform = getComputedStyle(node).transform;
+        if (transform === "none") return 0;
+        return new DOMMatrixReadOnly(transform).m42;
+      });
+
+    await expect(heroRule).toHaveCount(1);
+
+    await page.evaluate(() => window.scrollTo(0, 500));
+
+    await expect.poll(readHeroTranslateY).toBe(0);
   });
 });

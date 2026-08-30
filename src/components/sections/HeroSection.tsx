@@ -1,12 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { m } from "framer-motion";
 import { SITE } from "@/lib/constants";
 
 /**
@@ -16,36 +11,74 @@ import { SITE } from "@/lib/constants";
  * no 3D. Hairline gold rule at 8%, 96px Cormorant Garamond Light
  * statement (italic optional), subline, meta line, scroll cue.
  *
- * Motion (SPEC §2.4 / §4.2):
- *  - Entry: fade up 16px, 400ms, out-expo (Framer Motion)
+ * Motion (SPEC §2.4 / §4.2 / §4.3):
+ *  - Entry: fade up 16px, 400ms, out-expo (Framer Motion via LazyMotion)
  *  - Subtle parallax on the gold hairline rule (0.4× scroll)
  *  - Scroll cue pulses opacity 0.4 → 1.0 → 0.4 over 2.4s
  *  - prefers-reduced-motion: opacity-only fades at 150ms; parallax off
+ *  - parallax disabled on mobile
  *
  * Layout: 100vh desktop / 100svh mobile (respects browser chrome).
  */
 export function HeroSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const prefersReduced = useReducedMotion();
+  const ruleRef = useRef<HTMLDivElement>(null);
+  const [prefersReduced, setPrefersReduced] = useState(false);
 
-  // Parallax: hairline rule moves at 0.4× scroll speed.
-  // Disabled when prefers-reduced-motion is set.
-  const { scrollY } = useScroll();
-  const ruleY = useTransform(scrollY, [0, 1000], [0, 400]);
-  const reducedRuleY = useTransform(scrollY, [0, 1000], [0, 0]);
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncPreference = () => setPrefersReduced(reducedMotion.matches);
 
-  // Entry animation variants — out-expo per SPEC §2.4.
+    syncPreference();
+    reducedMotion.addEventListener("change", syncPreference);
+    return () => reducedMotion.removeEventListener("change", syncPreference);
+  }, []);
+
+  useEffect(() => {
+    const disableParallax = window.matchMedia(
+      "(max-width: 767px), (prefers-reduced-motion: reduce)",
+    );
+    let frame = 0;
+
+    const updateParallax = () => {
+      frame = 0;
+      if (!ruleRef.current) return;
+
+      const translateY = disableParallax.matches
+        ? 0
+        : Math.min(window.scrollY * 0.4, 400);
+      ruleRef.current.style.transform = `translate3d(0, ${translateY}px, 0)`;
+    };
+
+    const scheduleUpdate = () => {
+      if (frame === 0) {
+        frame = window.requestAnimationFrame(updateParallax);
+      }
+    };
+
+    updateParallax();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    disableParallax.addEventListener("change", scheduleUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      disableParallax.removeEventListener("change", scheduleUpdate);
+      if (frame !== 0) {
+        window.cancelAnimationFrame(frame);
+      }
+    };
+  }, []);
+
   const entryEase = [0.16, 1, 0.3, 1] as const;
 
   return (
     <section
-      ref={sectionRef}
       id="hero"
       aria-labelledby="hero-statement"
       className="relative flex min-h-screen min-h-[100svh] flex-col justify-between overflow-hidden bg-hero-gradient px-6 pt-24 pb-12 md:px-12 md:pt-28 md:pb-16 lg:px-24 lg:pt-32 lg:pb-20"
     >
-      {/* ── Top meta line ────────────────────────────────────── */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: prefersReduced ? 0.15 : 0.4, ease: entryEase }}
@@ -57,27 +90,25 @@ export function HeroSection() {
         <span className="font-sans text-caption text-cream-muted">
           {SITE.edition}
         </span>
-      </motion.div>
+      </m.div>
 
-      {/* ── Hairline gold rule at the 8% horizontal mark ─────── */}
-      {/* Parallax via Framer Motion `y` — disabled when reduced motion is set. */}
-      <motion.div
+      <div
+        ref={ruleRef}
         aria-hidden="true"
-        className="absolute left-0 top-[8%] h-px w-full origin-left bg-gold-champagne/70"
-        style={{
-          // Parallax offset at scroll — disabled under reduced-motion.
-          y: prefersReduced ? reducedRuleY : ruleY,
-        }}
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{
-          duration: prefersReduced ? 0.15 : 0.8,
-          ease: entryEase,
-          delay: prefersReduced ? 0 : 0.1,
-        }}
-      />
+        className="absolute left-0 top-[8%] w-full"
+      >
+        <m.div
+          className="h-px w-full origin-left bg-gold-champagne/70"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{
+            duration: prefersReduced ? 0.15 : 0.8,
+            ease: entryEase,
+            delay: prefersReduced ? 0 : 0.1,
+          }}
+        />
+      </div>
 
-      {/* ── Center statement ─────────────────────────────────── */}
       <div className="flex flex-1 flex-col justify-center py-space-7">
         <h1
           id="hero-statement"
@@ -85,7 +116,7 @@ export function HeroSection() {
         >
           {SITE.hero.statement.split("|").map((line, i, arr) => (
             <span key={i} className="block overflow-hidden">
-              <motion.span
+              <m.span
                 className="block"
                 initial={{ y: prefersReduced ? 0 : "100%", opacity: 0 }}
                 animate={{ y: "0%", opacity: 1 }}
@@ -102,12 +133,12 @@ export function HeroSection() {
                 ) : (
                   line
                 )}
-              </motion.span>
+              </m.span>
             </span>
           ))}
         </h1>
 
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: prefersReduced ? 0 : 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -118,11 +149,10 @@ export function HeroSection() {
           className="mt-space-4 max-w-xl font-sans text-body-lg font-normal text-cream-muted lg:mt-space-5"
         >
           {SITE.hero.subline}
-        </motion.p>
+        </m.p>
       </div>
 
-      {/* ── Bottom row: scroll cue ───────────────────────────── */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{
@@ -139,7 +169,7 @@ export function HeroSection() {
         >
           <div className="absolute inset-0 animate-pulse-soft bg-gradient-to-b from-gold-champagne via-gold-champagne/60 to-transparent" />
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

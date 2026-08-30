@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { MotionProvider } from "@/components/providers/MotionProvider";
 import "./globals.css";
 
-// ─── Typography (Google Fonts, self-hosted via next/font) ──────────────────
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["300", "400", "500"],
@@ -20,7 +20,6 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-// ─── SEO & social metadata ─────────────────────────────────────────────────
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://portfolio.tonydemo.com";
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? "BlueSkyz Labs";
@@ -88,7 +87,6 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// ─── Root layout ──────────────────────────────────────────────────────────
 export default function RootLayout({
   children,
 }: {
@@ -101,11 +99,13 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-ink-void text-cream-offwhite font-sans antialiased">
-        <Header />
-        <main id="main" className="relative min-h-screen">
-          {children}
-        </main>
-        <Footer />
+        <MotionProvider>
+          <Header />
+          <main id="main" className="relative min-h-screen">
+            {children}
+          </main>
+          <Footer />
+        </MotionProvider>
       </body>
     </html>
   );
