@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { m, useScroll, useSpring } from "framer-motion";
 import { Container } from "./Container";
 import { Nav } from "./Nav";
 import { SITE } from "@/lib/constants";
@@ -24,15 +24,13 @@ import { cn } from "@/lib/utils";
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
 
-  // Track scroll position for the "blurred on scroll" state.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll(); // initial
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Scroll-progress hairline — Framer Motion spring for smoothness.
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 120,
@@ -50,7 +48,6 @@ export function Header() {
           : "border-b border-transparent bg-transparent",
       )}
     >
-      {/* Skip link — keyboard accessibility, SPEC.md §4.6 */}
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-sm focus:bg-ink-charcoal focus:px-4 focus:py-2 focus:text-body-sm focus:text-cream-offwhite focus:outline focus:outline-1 focus:outline-offset-2 focus:outline-gold-champagne"
@@ -58,15 +55,13 @@ export function Header() {
         Skip to content
       </a>
 
-      {/* Scroll-progress hairline — 1px gold, fills L→R with scroll */}
-      <motion.div
+      <m.div
         aria-hidden="true"
         className="absolute inset-x-0 top-0 h-px origin-left bg-gold-champagne"
         style={{ scaleX }}
       />
 
       <Container className="flex h-16 items-center justify-between md:h-20">
-        {/* Wordmark */}
         <Link
           href="/"
           aria-label={`${SITE.name} — home`}
@@ -81,10 +76,8 @@ export function Header() {
           </span>
         </Link>
 
-        {/* Primary nav — hidden on mobile until mobile menu lands (Sprint 2) */}
         <Nav />
 
-        {/* Right-aligned CTA — links to contact section */}
         <a
           href="#contact"
           className={cn(
