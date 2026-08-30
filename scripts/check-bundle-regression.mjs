@@ -22,16 +22,24 @@ export function parseRootFirstLoadBytes(buildLog) {
 
   const sizes = [...rootRow.matchAll(SIZE_PATTERN)];
   if (sizes.length < 2) {
-    throw new Error(`Could not parse route and First Load JS sizes from: ${rootRow}`);
+    throw new Error(
+      `Could not parse route and First Load JS sizes from: ${rootRow}`,
+    );
   }
 
   const firstLoad = sizes.at(-1);
   return toBytes(firstLoad[1], firstLoad[2]);
 }
 
-export function evaluateRegression(baseBytes, candidateBytes, maxIncreasePercent = 5) {
+export function evaluateRegression(
+  baseBytes,
+  candidateBytes,
+  maxIncreasePercent = 5,
+) {
   if (!(baseBytes > 0) || !(candidateBytes >= 0)) {
-    throw new Error("Bundle sizes must be non-negative and baseline must be greater than zero");
+    throw new Error(
+      "Bundle sizes must be non-negative and baseline must be greater than zero",
+    );
   }
 
   const deltaPercent = ((candidateBytes - baseBytes) / baseBytes) * 100;
@@ -53,12 +61,16 @@ function formatKb(bytes) {
 function runCli() {
   const [baseLogPath, candidateLogPath] = process.argv.slice(2);
   if (!baseLogPath || !candidateLogPath) {
-    console.error("Usage: node scripts/check-bundle-regression.mjs <base-build.log> <candidate-build.log>");
+    console.error(
+      "Usage: node scripts/check-bundle-regression.mjs <base-build.log> <candidate-build.log>",
+    );
     process.exit(2);
   }
 
   const baseBytes = parseRootFirstLoadBytes(readFileSync(baseLogPath, "utf8"));
-  const candidateBytes = parseRootFirstLoadBytes(readFileSync(candidateLogPath, "utf8"));
+  const candidateBytes = parseRootFirstLoadBytes(
+    readFileSync(candidateLogPath, "utf8"),
+  );
   const result = evaluateRegression(baseBytes, candidateBytes);
 
   writeFileSync("bundle-evidence.json", `${JSON.stringify(result, null, 2)}\n`);
@@ -75,7 +87,9 @@ function runCli() {
   }
 
   if (!result.pass) {
-    console.error("G5 FAIL: First Load JS regressed by more than 5% versus the exact base revision.");
+    console.error(
+      "G5 FAIL: First Load JS regressed by more than 5% versus the exact base revision.",
+    );
     process.exit(1);
   }
 

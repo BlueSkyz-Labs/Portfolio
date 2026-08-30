@@ -21,7 +21,7 @@
     "lighthouse": "lhci autorun",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,json,md,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,json,md,css}\"",
-    "prepare": "husky || true"
+    "prepare": "git config core.hooksPath .githooks || true"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.2",
