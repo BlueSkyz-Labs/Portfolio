@@ -6,7 +6,7 @@ import { test, expect } from "@playwright/test";
  * Asserts:
  *   1. Home page loads without crash (200, title, no unhandled error).
  *   2. No console errors during load.
- *   3. <header> landmark is present and visible (SPEC §3.1).
+ *   3. Global semantic landmarks are unique and visible (SPEC §3.1, §4.6).
  *   4. Hero section (#hero) is visible and on-screen.
  *
  * If any assertion fails, the visitor's first impression is broken — block the PR.
@@ -18,7 +18,7 @@ test.describe("Smoke — Home", () => {
     expect(response, "navigation response").not.toBeNull();
     expect(response!.status(), "HTTP status").toBeLessThan(400);
 
-    // Title reflects the metadata in src/app/layout.tsx
+    // Title reflects the metadata in src/app/layout.tsx.
     await expect(page).toHaveTitle(/Portfolio/i);
   });
 
@@ -37,8 +37,6 @@ test.describe("Smoke — Home", () => {
 
     await page.goto("/", { waitUntil: "networkidle" });
 
-    // Fail on any console error or unhandled page exception.
-    // Network/aborted resource errors are surfaced separately if needed.
     expect(
       errors,
       `Unexpected console errors:\n${errors.join("\n")}`,
@@ -49,17 +47,23 @@ test.describe("Smoke — Home", () => {
     ).toEqual([]);
   });
 
-  test("header is present and visible", async ({ page }) => {
+  test("global semantic landmarks are unique and visible", async ({ page }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
-    // SPEC §3.1: sticky <header> with wordmark + nav + CTA.
-    // SPEC §4.6: semantic landmarks required.
-    const header = page.locator("header").first();
-    await expect(header, "<header> landmark must exist").toHaveCount(1);
-    await expect(header).toBeVisible();
+    const headers = page.locator("header");
+    const mains = page.locator("main");
+    const footers = page.locator("footer");
 
-    // The header must be reachable by keyboard — defends 2.1.1 Keyboard.
-    await header.locator("a, button").first().focus();
+    await expect(headers, "exactly one <header> landmark must exist").toHaveCount(1);
+    await expect(mains, "exactly one <main> landmark must exist").toHaveCount(1);
+    await expect(footers, "exactly one <footer> landmark must exist").toHaveCount(1);
+
+    await expect(headers.first()).toBeVisible();
+    await expect(mains.first()).toBeVisible();
+    await expect(footers.first()).toBeVisible();
+
+    // The header must expose a keyboard-focusable control — defends WCAG 2.1.1.
+    await headers.locator("a, button").first().focus();
   });
 
   test("hero section is visible", async ({ page }) => {
@@ -70,16 +74,13 @@ test.describe("Smoke — Home", () => {
     await expect(hero, "#hero section must exist").toHaveCount(1);
     await expect(hero).toBeVisible();
 
-    // The hero must occupy the viewport — full-viewport (100vh / 100svh).
     const viewport = page.viewportSize();
     const box = await hero.boundingBox();
     expect(box, "hero bounding box").not.toBeNull();
-    // Allow a small tolerance for sub-pixel layout.
     expect(box!.height, "hero height should be >= viewport height").toBeGreaterThanOrEqual(
       (viewport?.height ?? 0) - 8,
     );
 
-    // The hero statement heading is present and non-empty.
     const statement = page.locator("#hero-statement");
     await expect(statement, "hero <h1> must exist").toHaveCount(1);
     await expect(statement).toBeVisible();

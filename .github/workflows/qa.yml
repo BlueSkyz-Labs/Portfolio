@@ -13,10 +13,11 @@ concurrency:
 
 env:
   NODE_VERSION: "20"
+  PNPM_VERSION: "9.15.9"
 
 jobs:
   qa:
-    name: Quality Gates (lint, typecheck, build, e2e, a11y, perf)
+    name: Quality Gates (architecture, lint, typecheck, build, e2e, a11y, perf)
     runs-on: ubuntu-latest
     timeout-minutes: 25
 
@@ -24,17 +25,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # pnpm must exist before setup-node tries to resolve/cache the pnpm store.
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "pnpm"
 
-      - name: Enable pnpm via corepack
-        run: corepack enable
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # ── Architecture regression gate ─────────────────────────────────────
+      - name: Layout ownership regression
+        run: pnpm test:architecture
 
       # ── Static gates (G1–G3) ────────────────────────────────────────────
       - name: Typecheck (G1)
@@ -132,12 +141,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "pnpm"
 
-      - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
         env:
