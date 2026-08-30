@@ -80,10 +80,11 @@ function runCli() {
   );
 
   if (!result.hardBudgetSatisfied) {
-    console.warn(
-      `Product Truth budget remains NOT SATISFIED: ${formatKb(candidateBytes)} >= ` +
-        `${formatKb(PRODUCT_HARD_BUDGET_BYTES)}. This is tracked separately from G5 regression.`,
+    console.error(
+      `Product Truth budget FAIL: ${formatKb(candidateBytes)} >= ` +
+        `${formatKb(PRODUCT_HARD_BUDGET_BYTES)}. Initial-route JS must be below the hard budget.`,
     );
+    process.exit(1);
   }
 
   if (!result.pass) {
@@ -93,6 +94,9 @@ function runCli() {
     process.exit(1);
   }
 
+  console.log(
+    `Product Truth budget PASS: ${formatKb(candidateBytes)} < ${formatKb(PRODUCT_HARD_BUDGET_BYTES)}.`,
+  );
   console.log("G5 PASS: no bundle-size regression greater than 5%.");
 }
 
