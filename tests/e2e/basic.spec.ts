@@ -104,6 +104,12 @@ test.describe("Smoke — Home", () => {
 
     const progress = page.locator('header > div[aria-hidden="true"]');
     const heroRule = page.locator('#hero > div[aria-hidden="true"]');
+    const readHeroTranslateY = () =>
+      heroRule.evaluate((node) => {
+        const transform = getComputedStyle(node).transform;
+        if (transform === "none") return 0;
+        return new DOMMatrixReadOnly(transform).m42;
+      });
 
     await expect(progress).toHaveCount(1);
     await expect(heroRule).toHaveCount(1);
@@ -116,13 +122,9 @@ test.describe("Smoke — Home", () => {
 
     const viewport = page.viewportSize();
     if ((viewport?.width ?? 0) < 768) {
-      await expect
-        .poll(() => heroRule.evaluate((node) => node.style.transform))
-        .toBe("translate3d(0, 0px, 0)");
+      await expect.poll(readHeroTranslateY).toBe(0);
     } else {
-      await expect
-        .poll(() => heroRule.evaluate((node) => node.style.transform))
-        .not.toBe("translate3d(0, 0px, 0)");
+      await expect.poll(readHeroTranslateY).not.toBe(0);
     }
   });
 
@@ -131,12 +133,17 @@ test.describe("Smoke — Home", () => {
     await page.goto("/", { waitUntil: "networkidle" });
 
     const heroRule = page.locator('#hero > div[aria-hidden="true"]');
+    const readHeroTranslateY = () =>
+      heroRule.evaluate((node) => {
+        const transform = getComputedStyle(node).transform;
+        if (transform === "none") return 0;
+        return new DOMMatrixReadOnly(transform).m42;
+      });
+
     await expect(heroRule).toHaveCount(1);
 
     await page.evaluate(() => window.scrollTo(0, 500));
 
-    await expect
-      .poll(() => heroRule.evaluate((node) => node.style.transform))
-      .toBe("translate3d(0, 0px, 0)");
+    await expect.poll(readHeroTranslateY).toBe(0);
   });
 });
