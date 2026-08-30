@@ -1,0 +1,99 @@
+name: perf-diagnose
+
+on:
+  push:
+    branches: [perf/initial-js-budget]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    name: Diagnose initial JS composition
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Frozen install
+        run: pnpm install --frozen-lockfile
+
+      - name: Baseline production build
+        run: |
+          set -o pipefail
+          NEXT_TELEMETRY_DISABLED=1 pnpm build 2>&1 | tee /tmp/perf-baseline-build.log
+
+      - name: Measure exported home-page JavaScript
+        run: |
+          python - <<'PY'
+          import gzip
+          import json
+          import re
+          from pathlib import Path
+
+          html = Path("out/index.html").read_text()
+          sources = sorted(set(re.findall(r'<script[^>]+src="([^"]+\.js)"', html)))
+          files = []
+          total_raw = 0
+          total_gzip = 0
+          for src in sources:
+              local = Path("out") / src.lstrip("/")
+              if not local.exists():
+                  raise SystemExit(f"referenced JS asset missing: {src}")
+              data = local.read_bytes()
+              gzip_bytes = len(gzip.compress(data, compresslevel=9, mtime=0))
+              raw_bytes = len(data)
+              files.append({"src": src, "rawBytes": raw_bytes, "gzipBytes": gzip_bytes})
+              total_raw += raw_bytes
+              total_gzip += gzip_bytes
+
+          evidence = {
+              "referencedScriptCount": len(files),
+              "totalRawBytes": total_raw,
+              "totalGzipBytes": total_gzip,
+              "files": files,
+          }
+          Path("perf-network-evidence.json").write_text(json.dumps(evidence, indent=2) + "\n")
+          print(json.dumps(evidence, indent=2))
+          PY
+
+      - name: Generate Next bundle analyzer report
+        run: |
+          cp next.config.ts /tmp/next.config.ts
+          pnpm add --workspace-root --save-dev --save-exact @next/bundle-analyzer@15.5.24
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("next.config.ts")
+          text = path.read_text()
+          text = 'import withBundleAnalyzer from "@next/bundle-analyzer";\n' + text
+          old = "export default nextConfig;"
+          new = "export default withBundleAnalyzer({ enabled: true })(nextConfig);"
+          if old not in text:
+              raise SystemExit("expected next config export not found")
+          path.write_text(text.replace(old, new, 1))
+          PY
+          ANALYZE=true NEXT_TELEMETRY_DISABLED=1 pnpm exec next build
+          mv /tmp/next.config.ts next.config.ts
+          git checkout -- package.json pnpm-lock.yaml
+
+      - name: Upload diagnostic evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-diagnostic-evidence
+          path: |
+            perf-network-evidence.json
+            .next/analyze/
+            /tmp/perf-baseline-build.log
+          retention-days: 7
+          if-no-files-found: error
