@@ -25,9 +25,7 @@ export function HeroSection() {
   const [prefersReduced, setPrefersReduced] = useState(false);
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    );
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const syncPreference = () => setPrefersReduced(reducedMotion.matches);
 
     syncPreference();
