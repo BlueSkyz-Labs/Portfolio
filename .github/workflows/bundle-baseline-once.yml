@@ -13,7 +13,6 @@ env:
 
 jobs:
   baseline:
-    if: startsWith(github.event.head_commit.message, 'chore(ci): measure main bundle baseline')
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
