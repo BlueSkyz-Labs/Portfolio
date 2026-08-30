@@ -58,6 +58,9 @@ yarn-error.log*
 # =============================================================================
 coverage/
 .nyc_output/
+playwright-report/
+test-results/
+.lighthouseci/
 
 # =============================================================================
 # OS
@@ -72,7 +75,7 @@ $RECYCLE.BIN/
 # =============================================================================
 public/*.placeholder
 
-# Team / process artifacts (parent process scope, not part of the project)
-TEAM_STATUS.md
-SPRINT_*.md
-CHARTER.md
+# Team / process artifacts at repository root only (parent-process scope)
+/TEAM_STATUS.md
+/SPRINT_*.md
+/CHARTER.md

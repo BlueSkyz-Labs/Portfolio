@@ -1,28 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "export",
   reactStrictMode: true,
   poweredByHeader: false,
 
-  // Cloudflare Pages deploys as a static export via OpenNext.
-  // We keep this minimal — no image domains yet (use next/image + R2 later).
+  // Cloudflare Pages serves the generated `out/` directory as static assets.
+  // On-demand Next image optimization requires a server runtime, so static
+  // exports keep images unoptimized until a dedicated image pipeline exists.
   images: {
-    formats: ["image/avif", "image/webp"],
-  },
-
-  // Performance headers applied to every route.
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-        ],
-      },
-    ];
+    unoptimized: true,
   },
 
   // TypeScript & ESLint are strict; fail builds on issues.

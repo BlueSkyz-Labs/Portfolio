@@ -67,10 +67,7 @@ export function Nav() {
   }, []);
 
   return (
-    <nav
-      aria-label="Primary"
-      className="hidden items-center gap-8 md:flex"
-    >
+    <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
       <ul className="flex items-center gap-8">
         {NAV_LINKS.map((link) => {
           const id = link.href.replace(/^#/, "");

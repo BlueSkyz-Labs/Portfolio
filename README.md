@@ -21,17 +21,17 @@ In short:
 
 ## ✦ Stack
 
-| Layer        | Tech                                  |
-|--------------|---------------------------------------|
-| Framework    | [Next.js 15](https://nextjs.org) (App Router, RSC) |
-| Language     | TypeScript 5 (strict mode)            |
-| Styling      | Tailwind CSS 3 + CSS variables        |
-| UI           | [shadcn/ui](https://ui.shadcn.com) + Radix primitives |
-| Animation    | [Framer Motion](https://www.framer.com/motion/) |
-| Icons        | [Lucide](https://lucide.dev)          |
-| Fonts        | `next/font/google` (self-hosted)      |
-| Deploy       | [Cloudflare Pages](https://pages.cloudflare.com) |
-| Domain       | `portfolio.tonydemo.com`              |
+| Layer     | Tech                                                  |
+| --------- | ----------------------------------------------------- |
+| Framework | [Next.js 15](https://nextjs.org) (App Router, RSC)    |
+| Language  | TypeScript 5 (strict mode)                            |
+| Styling   | Tailwind CSS 3 + CSS variables                        |
+| UI        | [shadcn/ui](https://ui.shadcn.com) + Radix primitives |
+| Animation | [Framer Motion](https://www.framer.com/motion/)       |
+| Icons     | [Lucide](https://lucide.dev)                          |
+| Fonts     | `next/font/google` (self-hosted)                      |
+| Deploy    | [Cloudflare Pages](https://pages.cloudflare.com)      |
+| Domain    | `portfolio.tonydemo.com`                              |
 
 ## ✦ Project Structure
 
@@ -43,7 +43,7 @@ In short:
 ├── next.config.ts
 ├── tailwind.config.ts
 ├── tsconfig.json
-├── cloudflare-pages.toml
+├── wrangler.toml
 ├── .env.example               # Environment template
 ├── src/
 │   ├── app/
@@ -91,14 +91,15 @@ pnpm build        # production build
 
 ## ✦ Deployment
 
-Cloudflare Pages — automatic on push to `main`.
+Cloudflare Pages — static Next.js export, automatic through the connected Pages project.
 
-1. Connect this repo to a Cloudflare Pages project
+1. Connect this repo to the `blueskyz-labs-portfolio` Cloudflare Pages project
 2. Build command: `pnpm install --frozen-lockfile && pnpm build`
-3. Build output: `.next`
-4. Add the custom domain `portfolio.tonydemo.com` in the Cloudflare dashboard
+3. Build output: `out`
+4. Production branch: `main`; other branches and pull requests use Pages preview deployments
+5. Add the custom domain `portfolio.tonydemo.com` in the Cloudflare dashboard
 
-The `cloudflare-pages.toml` file at the root carries the headers / redirects / cache rules.
+`wrangler.toml` declares the Pages project and build output. `public/_headers` carries the static security and cache headers that ship with the exported artifact.
 
 ## ✦ Decisions
 

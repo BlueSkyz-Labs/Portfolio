@@ -9,7 +9,7 @@
 
 ## 1. Mission
 
-Define and enforce the quality gates that separate *"launched"* from *"premium-grade"* for the BlueSkyz Labs Portfolio. Every gate below is derived from a specific commitment in `SPEC.md`. If a gate fails, the PR is blocked.
+Define and enforce the quality gates that separate _"launched"_ from _"premium-grade"_ for the BlueSkyz Labs Portfolio. Every gate below is derived from a specific commitment in `SPEC.md`. If a gate fails, the PR is blocked.
 
 We optimize for the visitor's **first seven seconds** (SPEC §1): stillness, authority, curiosity, respect. Every check is written to defend that experience.
 
@@ -17,19 +17,19 @@ We optimize for the visitor's **first seven seconds** (SPEC §1): stillness, aut
 
 ## 2. Quality Gates (Overview)
 
-| Gate | Type | Source | Blocking? |
-|---|---|---|---|
-| G1 — TypeScript compiles | Static | SPEC §6.2 | ✅ Yes |
-| G2 — Lint clean (zero warnings) | Static | SPEC §6.6 | ✅ Yes |
-| G3 — Prettier formatted | Static | SPEC §6.6 | ✅ Yes |
-| G4 — Production build succeeds | Build | SPEC §6.6 | ✅ Yes |
-| G5 — Bundle size regression < 5% | Build | SPEC §6.3 | ✅ Yes |
-| G6 — E2E smoke (Playwright) | E2E | This doc §3 | ✅ Yes |
-| G7 — Accessibility: axe-core WCAG 2.1 AA | A11y | SPEC §4.6 | ✅ Yes |
-| G8 — Performance: Lighthouse ≥ 90 all cats | Perf | SPEC §6.3 | ✅ Yes |
-| G9 — LCP < 1.2s, INP < 200ms | Perf (RUM) | SPEC §6.3 | ✅ Yes |
-| G10 — Visual regression: screenshot diff | Visual | This doc §6 | ⚠️ Advisory |
-| G11 — Cross-browser: Chrome, Edge, Firefox | E2E matrix | This doc §7 | ✅ Yes |
+| Gate                                       | Type       | Source      | Blocking?   |
+| ------------------------------------------ | ---------- | ----------- | ----------- |
+| G1 — TypeScript compiles                   | Static     | SPEC §6.2   | ✅ Yes      |
+| G2 — Lint clean (zero warnings)            | Static     | SPEC §6.6   | ✅ Yes      |
+| G3 — Prettier formatted                    | Static     | SPEC §6.6   | ✅ Yes      |
+| G4 — Production build succeeds             | Build      | SPEC §6.6   | ✅ Yes      |
+| G5 — Bundle size regression < 5%           | Build      | SPEC §6.3   | ✅ Yes      |
+| G6 — E2E smoke (Playwright)                | E2E        | This doc §3 | ✅ Yes      |
+| G7 — Accessibility: axe-core WCAG 2.1 AA   | A11y       | SPEC §4.6   | ✅ Yes      |
+| G8 — Performance: Lighthouse ≥ 90 all cats | Perf       | SPEC §6.3   | ✅ Yes      |
+| G9 — LCP < 1.2s, INP < 200ms               | Perf (RUM) | SPEC §6.3   | ✅ Yes      |
+| G10 — Visual regression: screenshot diff   | Visual     | This doc §6 | ⚠️ Advisory |
+| G11 — Cross-browser: Chrome, Edge, Firefox | E2E matrix | This doc §7 | ✅ Yes      |
 
 G1–G5 run on every push via pre-commit + CI. G6–G11 run on every PR to `main` / `develop`.
 
@@ -45,6 +45,7 @@ G1–G5 run on every push via pre-commit + CI. G6–G11 run on every PR to `main
 - **`lighthouse-ci`** — Lighthouse audits in CI with assertion gates.
 
 > **Conceptual `package.json` addition** (for the implementer to wire up on the next PR):
+>
 > ```jsonc
 > {
 >   "devDependencies": {
@@ -54,10 +55,11 @@ G1–G5 run on every push via pre-commit + CI. G6–G11 run on every PR to `main
 >     "lighthouse": "^12.2.1",
 >     "@lhci/cli": "^0.14.0",
 >     "pixelmatch": "^6.0.0",
->     "pngjs": "^7.0.0"
->   }
+>     "pngjs": "^7.0.0",
+>   },
 > }
 > ```
+>
 > The full test dependency block also includes `typescript`, `eslint`, `prettier` (already present).
 
 ### 3.2 Test Layers
@@ -91,13 +93,13 @@ Defends the visitor's first seven seconds:
 
 ### 3.4 Critical-Path Tests
 
-| Test | What it defends | SPEC ref |
-|---|---|---|
-| `navigation.spec.ts` | Smooth scroll, active-section highlight, skip-link works | §4.1, §4.6 |
-| `hero.spec.ts` | 100vh height (desktop), scroll cue animation, hairline gold rule at 8% | §3.2 |
-| `contact-form.spec.ts` | All four states (default / hover / focus / loading / error) render correctly | §5.4 |
-| `accessibility.spec.ts` | axe-core scan, keyboard Tab order, focus ring (1px gold @ 2px offset) | §4.6 |
-| `responsive.spec.ts` | Layout shifts cleanly across breakpoints; type scale steps down correctly | §3.4 |
+| Test                    | What it defends                                                              | SPEC ref   |
+| ----------------------- | ---------------------------------------------------------------------------- | ---------- |
+| `navigation.spec.ts`    | Smooth scroll, active-section highlight, skip-link works                     | §4.1, §4.6 |
+| `hero.spec.ts`          | 100vh height (desktop), scroll cue animation, hairline gold rule at 8%       | §3.2       |
+| `contact-form.spec.ts`  | All four states (default / hover / focus / loading / error) render correctly | §5.4       |
+| `accessibility.spec.ts` | axe-core scan, keyboard Tab order, focus ring (1px gold @ 2px offset)        | §4.6       |
+| `responsive.spec.ts`    | Layout shifts cleanly across breakpoints; type scale steps down correctly    | §3.4       |
 
 ### 3.5 Test Rules
 
@@ -113,14 +115,14 @@ Defends the visitor's first seven seconds:
 
 Targets lifted verbatim from SPEC §6.3:
 
-| Metric | Hard limit | Target | Tool |
-|---|---|---|---|
-| **LCP** (Largest Contentful Paint) | **< 1.2 s** | 0.8 s | `lhci` + Web Vitals RUM |
-| **CLS** (Cumulative Layout Shift) | < 0.05 | 0 | `lhci` |
-| **INP** (Interaction to Next Paint) | **< 200 ms** | 100 ms | `web-vitals` (field) + `lhci` (lab) |
-| **TBT** (Total Blocking Time) | < 150 ms | < 50 ms | `lhci` |
-| **Total JS** (initial route, gzipped) | **< 120 KB** | < 80 KB | `next-bundle-analyzer` |
-| **Lighthouse** (perf / a11y / bp / seo) | **≥ 90** each | 100 each | `lhci collect --assert` |
+| Metric                                  | Hard limit    | Target   | Tool                                |
+| --------------------------------------- | ------------- | -------- | ----------------------------------- |
+| **LCP** (Largest Contentful Paint)      | **< 1.2 s**   | 0.8 s    | `lhci` + Web Vitals RUM             |
+| **CLS** (Cumulative Layout Shift)       | < 0.05        | 0        | `lhci`                              |
+| **INP** (Interaction to Next Paint)     | **< 200 ms**  | 100 ms   | `web-vitals` (field) + `lhci` (lab) |
+| **TBT** (Total Blocking Time)           | < 150 ms      | < 50 ms  | `lhci`                              |
+| **Total JS** (initial route, gzipped)   | **< 120 KB**  | < 80 KB  | `next-bundle-analyzer`              |
+| **Lighthouse** (perf / a11y / bp / seo) | **≥ 90** each | 100 each | `lhci collect --assert`             |
 
 ### 4.1 Lighthouse CI (G8)
 
@@ -134,8 +136,8 @@ Targets lifted verbatim from SPEC §6.3:
       "numberOfRuns": 3,
       "settings": {
         "preset": "desktop",
-        "chromeFlags": "--no-sandbox --headless=new"
-      }
+        "chromeFlags": "--no-sandbox --headless=new",
+      },
     },
     "assert": {
       "assertions": {
@@ -145,10 +147,10 @@ Targets lifted verbatim from SPEC §6.3:
         "categories:seo": ["error", { "minScore": 0.9 }],
         "largest-contentful-paint": ["error", { "maxNumericValue": 1200 }],
         "cumulative-layout-shift": ["error", { "maxNumericValue": 0.05 }],
-        "total-blocking-time": ["warn", { "maxNumericValue": 150 }]
-      }
-    }
-  }
+        "total-blocking-time": ["warn", { "maxNumericValue": 150 }],
+      },
+    },
+  },
 }
 ```
 
@@ -175,17 +177,17 @@ A failing build increments the JS payload by more than 5% vs. `main` (enforced b
 
 ### 5.2 WCAG 2.1 AA Checklist (tied to SPEC)
 
-| Criterion | SPEC ref | Check |
-|---|---|---|
-| 1.1.1 Non-text content | §2.6, §5 | All `<img>` have `alt`; decorative use `aria-hidden` |
-| 1.3.1 Info & relationships | §4.6 | Semantic landmarks: `<header> <main> <nav> <section> <article> <footer>` |
-| 1.4.3 Contrast (minimum) | §2.1 | `--cream-offwhite` on `--ink-void` = 16.8:1 (AAA) — verified by axe |
-| 1.4.11 Non-text contrast | §2.6 | Gold hairline borders against bg = 3:1 minimum |
-| 2.1.1 Keyboard | §4.6 | Every interactive element focusable |
-| 2.4.1 Bypass blocks | §4.6 | "Skip to content" link present |
-| 2.4.7 Focus visible | §4.6 | `:focus-visible` ring required |
-| 2.5.5 Target size | — | Min 44×44 CSS px for tap targets |
-| 4.1.2 Name, role, value | §4.6 | `aria-label` on icon-only buttons; Radix primitives handle the rest |
+| Criterion                  | SPEC ref | Check                                                                    |
+| -------------------------- | -------- | ------------------------------------------------------------------------ |
+| 1.1.1 Non-text content     | §2.6, §5 | All `<img>` have `alt`; decorative use `aria-hidden`                     |
+| 1.3.1 Info & relationships | §4.6     | Semantic landmarks: `<header> <main> <nav> <section> <article> <footer>` |
+| 1.4.3 Contrast (minimum)   | §2.1     | `--cream-offwhite` on `--ink-void` = 16.8:1 (AAA) — verified by axe      |
+| 1.4.11 Non-text contrast   | §2.6     | Gold hairline borders against bg = 3:1 minimum                           |
+| 2.1.1 Keyboard             | §4.6     | Every interactive element focusable                                      |
+| 2.4.1 Bypass blocks        | §4.6     | "Skip to content" link present                                           |
+| 2.4.7 Focus visible        | §4.6     | `:focus-visible` ring required                                           |
+| 2.5.5 Target size          | —        | Min 44×44 CSS px for tap targets                                         |
+| 4.1.2 Name, role, value    | §4.6     | `aria-label` on icon-only buttons; Radix primitives handle the rest      |
 
 ### 5.3 axe-core Configuration
 
@@ -234,11 +236,11 @@ Playwright's built-in screenshot diffing with committed baselines under `tests/v
 
 The portfolio must render identically (within the visual-regression tolerance) on:
 
-| Browser | Channel | Project goal |
-|---|---|---|
-| **Chromium** (latest) | Chrome | Primary — Lighthouse runs here |
-| **Firefox** (latest) | Firefox | Full visual + E2E pass |
-| **WebKit** (latest) | Safari-on-CI | Visual sanity (no E2E for now — Safari quirks are caught in QA passes) |
+| Browser               | Channel      | Project goal                                                           |
+| --------------------- | ------------ | ---------------------------------------------------------------------- |
+| **Chromium** (latest) | Chrome       | Primary — Lighthouse runs here                                         |
+| **Firefox** (latest)  | Firefox      | Full visual + E2E pass                                                 |
+| **WebKit** (latest)   | Safari-on-CI | Visual sanity (no E2E for now — Safari quirks are caught in QA passes) |
 
 Additionally, **Microsoft Edge** (Chromium-based) is covered by Chromium runs at the engine level. SPEC and stakeholder asks call out Edge specifically; we satisfy this by running Chromium with Edge's user-agent and Edge's fonts/metrics in a separate job, plus a manual smoke before each release.
 
@@ -308,4 +310,4 @@ Every CI run uploads:
 
 ---
 
-*Last updated by QA — synced with SPEC.md revision on initial release.*
+_Last updated by QA — synced with SPEC.md revision on initial release._

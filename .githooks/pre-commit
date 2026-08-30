@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+set -eu
+
+printf '%s\n' 'Running local engineering gates (architecture, G1-G4)...'
+pnpm test:architecture
+pnpm typecheck
+pnpm lint
+pnpm format:check
+NEXT_TELEMETRY_DISABLED=1 pnpm build
+printf '%s\n' 'G5 exact-base bundle regression is enforced by CI, where the target base SHA is authoritative.'
