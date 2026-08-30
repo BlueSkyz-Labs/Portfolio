@@ -17,6 +17,8 @@
     "lint:fix": "next lint --fix",
     "typecheck": "tsc --noEmit",
     "test:architecture": "node --test tests/architecture/*.test.mjs",
+    "test:e2e": "playwright test --project=chromium --project=firefox --project=webkit --project=mobile-chromium",
+    "lighthouse": "lhci autorun",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,json,md,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,json,md,css}\"",
     "prepare": "husky || true"

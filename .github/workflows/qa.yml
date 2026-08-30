@@ -81,7 +81,7 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: "1"
 
-      # ── E2E + A11y + Visual + Cross-browser (G6, G7, G10, G11) ────────
+      # ── E2E + A11y + Cross-browser (G6, G7, G11) ───────────────────────
       - name: Cache Playwright browsers
         id: playwright-cache
         uses: actions/cache@v4
@@ -91,15 +91,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-playwright-
 
+      - name: Install Playwright system dependencies
+        run: pnpm exec playwright install-deps chromium firefox webkit
+
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps
-
-      - name: Install Playwright system deps (always, idempotent)
-        run: pnpm exec playwright install-deps
+        run: pnpm exec playwright install chromium firefox webkit
 
       - name: Run Playwright tests
-        run: pnpm exec playwright test --reporter=github,html,junit
+        run: pnpm test:e2e
         env:
           NEXT_TELEMETRY_DISABLED: "1"
 
@@ -121,26 +121,11 @@ jobs:
           retention-days: 14
           if-no-files-found: warn
 
-      # ── Lighthouse (G8, G9) ────────────────────────────────────────────
-      - name: Start built site
-        run: |
-          pnpm start &
-          # Wait for the server to be reachable.
-          for i in {1..30}; do
-            if curl -sf http://localhost:3000 > /dev/null; then
-              echo "Site is up"
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "Site did not start in time"
-          exit 1
-
+      # ── Lighthouse (G8; G9 field INP remains a runtime/RUM gate) ────────
       - name: Lighthouse CI
-        run: |
-          npx --yes @lhci/cli@0.14.x autorun
+        run: pnpm lighthouse
         env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          NEXT_TELEMETRY_DISABLED: "1"
 
       - name: Upload Lighthouse report
         if: always()
@@ -177,17 +162,25 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: "1"
 
+      - name: Cache Playwright Chromium
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Chromium system dependencies
+        run: pnpm exec playwright install-deps chromium
+
+      - name: Install Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install chromium
+
       - name: Run smoke under Edge user-agent
-        run: |
-          pnpm start &
-          for i in {1..30}; do
-            if curl -sf http://localhost:3000 > /dev/null; then
-              echo "Site is up"
-              break
-            fi
-            sleep 1
-          done
-          pnpm exec playwright test \
-            --project=chromium \
-            --reporter=line \
-            --grep "Smoke"
+        run: >-
+          pnpm exec playwright test
+          --project=edge-ua
+          --reporter=line
+          --grep "Smoke"
