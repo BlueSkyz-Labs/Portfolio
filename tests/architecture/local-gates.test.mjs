@@ -15,6 +15,9 @@ test("repository installs a versioned pre-commit gate instead of silently missin
     "pnpm format:check",
     "pnpm build",
   ]) {
-    assert.match(hook, new RegExp(command.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(
+      hook,
+      new RegExp(command.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+    );
   }
 });
