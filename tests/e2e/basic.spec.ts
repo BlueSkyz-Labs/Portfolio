@@ -37,10 +37,9 @@ test.describe("Smoke — Home", () => {
 
     await page.goto("/", { waitUntil: "networkidle" });
 
-    expect(
-      errors,
-      `Unexpected console errors:\n${errors.join("\n")}`,
-    ).toEqual([]);
+    expect(errors, `Unexpected console errors:\n${errors.join("\n")}`).toEqual(
+      [],
+    );
     expect(
       pageErrors,
       `Unhandled page exceptions:\n${pageErrors.join("\n")}`,
@@ -54,9 +53,17 @@ test.describe("Smoke — Home", () => {
     const mains = page.locator("main");
     const footers = page.locator("footer");
 
-    await expect(headers, "exactly one <header> landmark must exist").toHaveCount(1);
-    await expect(mains, "exactly one <main> landmark must exist").toHaveCount(1);
-    await expect(footers, "exactly one <footer> landmark must exist").toHaveCount(1);
+    await expect(
+      headers,
+      "exactly one <header> landmark must exist",
+    ).toHaveCount(1);
+    await expect(mains, "exactly one <main> landmark must exist").toHaveCount(
+      1,
+    );
+    await expect(
+      footers,
+      "exactly one <footer> landmark must exist",
+    ).toHaveCount(1);
 
     await expect(headers.first()).toBeVisible();
     await expect(mains.first()).toBeVisible();
@@ -77,9 +84,10 @@ test.describe("Smoke — Home", () => {
     const viewport = page.viewportSize();
     const box = await hero.boundingBox();
     expect(box, "hero bounding box").not.toBeNull();
-    expect(box!.height, "hero height should be >= viewport height").toBeGreaterThanOrEqual(
-      (viewport?.height ?? 0) - 8,
-    );
+    expect(
+      box!.height,
+      "hero height should be >= viewport height",
+    ).toBeGreaterThanOrEqual((viewport?.height ?? 0) - 8);
 
     const statement = page.locator("#hero-statement");
     await expect(statement, "hero <h1> must exist").toHaveCount(1);

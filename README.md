@@ -21,17 +21,17 @@ In short:
 
 ## ✦ Stack
 
-| Layer        | Tech                                  |
-|--------------|---------------------------------------|
-| Framework    | [Next.js 15](https://nextjs.org) (App Router, RSC) |
-| Language     | TypeScript 5 (strict mode)            |
-| Styling      | Tailwind CSS 3 + CSS variables        |
-| UI           | [shadcn/ui](https://ui.shadcn.com) + Radix primitives |
-| Animation    | [Framer Motion](https://www.framer.com/motion/) |
-| Icons        | [Lucide](https://lucide.dev)          |
-| Fonts        | `next/font/google` (self-hosted)      |
-| Deploy       | [Cloudflare Pages](https://pages.cloudflare.com) |
-| Domain       | `portfolio.tonydemo.com`              |
+| Layer     | Tech                                                  |
+| --------- | ----------------------------------------------------- |
+| Framework | [Next.js 15](https://nextjs.org) (App Router, RSC)    |
+| Language  | TypeScript 5 (strict mode)                            |
+| Styling   | Tailwind CSS 3 + CSS variables                        |
+| UI        | [shadcn/ui](https://ui.shadcn.com) + Radix primitives |
+| Animation | [Framer Motion](https://www.framer.com/motion/)       |
+| Icons     | [Lucide](https://lucide.dev)                          |
+| Fonts     | `next/font/google` (self-hosted)                      |
+| Deploy    | [Cloudflare Pages](https://pages.cloudflare.com)      |
+| Domain    | `portfolio.tonydemo.com`                              |
 
 ## ✦ Project Structure
 

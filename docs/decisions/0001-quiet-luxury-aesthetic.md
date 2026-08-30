@@ -29,15 +29,18 @@ Adopt the **Quiet Luxury** aesthetic for v1 of the portfolio. Concretely:
 ## Consequences
 
 **Positive:**
+
 - Visually distinct from competitor portfolios
 - Aligns with premium brand positioning
 - Performance-friendly: minimal motion, system fonts fallback, no heavy assets
 
 **Negative:**
+
 - Dark-only v1 excludes a small segment of users
 - Brand voice requires discipline — easy to drift toward "template"
 
 **Mitigations:**
+
 - All design choices documented in `SPEC.md` (the design bible)
 - Light-mode is a v2 consideration; CSS variable structure already supports it
 - Pre-commit quality gates enforce the system

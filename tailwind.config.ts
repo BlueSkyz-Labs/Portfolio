@@ -59,18 +59,42 @@ const config: Config = {
       },
       fontSize: {
         // Display scale (Cormorant Garamond)
-        "display-2xl": ["6rem", { lineHeight: "1.0", letterSpacing: "0.005em" }], // 96
-        "display-xl": ["4.5rem", { lineHeight: "1.05", letterSpacing: "0.005em" }], // 72
-        "display-lg": ["3.5rem", { lineHeight: "1.1", letterSpacing: "0.005em" }], // 56
-        "display-md": ["2.5rem", { lineHeight: "1.15", letterSpacing: "0.005em" }], // 40
+        "display-2xl": [
+          "6rem",
+          { lineHeight: "1.0", letterSpacing: "0.005em" },
+        ], // 96
+        "display-xl": [
+          "4.5rem",
+          { lineHeight: "1.05", letterSpacing: "0.005em" },
+        ], // 72
+        "display-lg": [
+          "3.5rem",
+          { lineHeight: "1.1", letterSpacing: "0.005em" },
+        ], // 56
+        "display-md": [
+          "2.5rem",
+          { lineHeight: "1.15", letterSpacing: "0.005em" },
+        ], // 40
         "display-sm": ["2rem", { lineHeight: "1.2", letterSpacing: "0.005em" }], // 32
         // Headings (DM Sans)
-        "heading-lg": ["1.5rem", { lineHeight: "1.3", letterSpacing: "-0.011em" }], // 24
-        "heading-md": ["1.25rem", { lineHeight: "1.4", letterSpacing: "-0.011em" }], // 20
+        "heading-lg": [
+          "1.5rem",
+          { lineHeight: "1.3", letterSpacing: "-0.011em" },
+        ], // 24
+        "heading-md": [
+          "1.25rem",
+          { lineHeight: "1.4", letterSpacing: "-0.011em" },
+        ], // 20
         // Body (DM Sans)
-        "body-lg": ["1.125rem", { lineHeight: "1.6", letterSpacing: "-0.011em" }], // 18
+        "body-lg": [
+          "1.125rem",
+          { lineHeight: "1.6", letterSpacing: "-0.011em" },
+        ], // 18
         body: ["1rem", { lineHeight: "1.65", letterSpacing: "-0.011em" }], // 16
-        "body-sm": ["0.875rem", { lineHeight: "1.7", letterSpacing: "-0.011em" }], // 14
+        "body-sm": [
+          "0.875rem",
+          { lineHeight: "1.7", letterSpacing: "-0.011em" },
+        ], // 14
         caption: [
           "0.75rem",
           {
