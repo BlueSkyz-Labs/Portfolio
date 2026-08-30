@@ -1,4 +1,4 @@
-name: perf-diagnose
+name: perf-candidate-verify
 
 on:
   push:
@@ -8,12 +8,14 @@ permissions:
   contents: read
 
 jobs:
-  diagnose:
-    name: Diagnose initial JS composition
+  verify:
+    name: Verify initial JS budget candidate
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
         with:
@@ -28,22 +30,17 @@ jobs:
       - name: Frozen install
         run: pnpm install --frozen-lockfile
 
-      - name: TDD RED — hard budget is not blocking yet
-        id: hard-budget-red
-        continue-on-error: true
-        run: pnpm test:architecture
-
-      - name: Confirm expected TDD RED
+      - name: Architecture and static gates
         run: |
-          if [[ "${{ steps.hard-budget-red.outcome }}" != "failure" ]]; then
-            echo "Expected hard-budget regression test to fail before implementation" >&2
-            exit 1
-          fi
+          pnpm test:architecture
+          pnpm typecheck
+          pnpm lint
+          pnpm format:check
 
-      - name: Baseline production build
+      - name: Build candidate
         run: |
           set -o pipefail
-          NEXT_TELEMETRY_DISABLED=1 pnpm build 2>&1 | tee /tmp/perf-baseline-build.log
+          NEXT_TELEMETRY_DISABLED=1 pnpm build 2>&1 | tee /tmp/perf-candidate-build.log
 
       - name: Measure exported home-page JavaScript
         run: |
@@ -79,33 +76,23 @@ jobs:
           print(json.dumps(evidence, indent=2))
           PY
 
-      - name: Generate Next bundle analyzer report
+      - name: Build exact production base
         run: |
-          cp next.config.ts /tmp/next.config.ts
-          pnpm add --workspace-root --save-dev --save-exact @next/bundle-analyzer@15.5.24
-          python - <<'PY'
-          from pathlib import Path
+          git worktree add --detach /tmp/perf-base 5dadb214a2d62a5b9f131a5cdbc87325a5545f64
+          pnpm --dir /tmp/perf-base install --frozen-lockfile
+          set -o pipefail
+          NEXT_TELEMETRY_DISABLED=1 pnpm --dir /tmp/perf-base build 2>&1 | tee /tmp/perf-base-build.log
 
-          path = Path("next.config.ts")
-          text = path.read_text()
-          text = 'import withBundleAnalyzer from "@next/bundle-analyzer";\n' + text
-          old = "export default nextConfig;"
-          new = "export default withBundleAnalyzer({ enabled: true })(nextConfig);"
-          if old not in text:
-              raise SystemExit("expected next config export not found")
-          path.write_text(text.replace(old, new, 1))
-          PY
-          ANALYZE=true NEXT_TELEMETRY_DISABLED=1 pnpm exec next build
-          mv /tmp/next.config.ts next.config.ts
-          git checkout -- package.json pnpm-lock.yaml
+      - name: G5 and absolute Product Truth budget
+        run: node scripts/check-bundle-regression.mjs /tmp/perf-base-build.log /tmp/perf-candidate-build.log
 
-      - name: Upload diagnostic evidence
+      - name: Upload performance evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: perf-diagnostic-evidence
+          name: perf-candidate-evidence
           path: |
             perf-network-evidence.json
-            .next/analyze/
-            /tmp/perf-baseline-build.log
+            bundle-evidence.json
           retention-days: 7
-          if-no-files-found: error
+          if-no-files-found: warn
