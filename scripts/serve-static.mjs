@@ -23,18 +23,26 @@ const contentTypes = new Map([
 
 function safeFile(relativePath) {
   const absolutePath = resolve(root, relativePath);
-  if (absolutePath !== root && !absolutePath.startsWith(`${root}${sep}`)) return null;
-  if (!existsSync(absolutePath) || !statSync(absolutePath).isFile()) return null;
+  if (absolutePath !== root && !absolutePath.startsWith(`${root}${sep}`))
+    return null;
+  if (!existsSync(absolutePath) || !statSync(absolutePath).isFile())
+    return null;
   return absolutePath;
 }
 
 function resolveRequestPath(requestUrl) {
-  const pathname = decodeURIComponent(new URL(requestUrl, `http://${host}:${port}`).pathname);
+  const pathname = decodeURIComponent(
+    new URL(requestUrl, `http://${host}:${port}`).pathname,
+  );
   const relative = pathname.replace(/^\/+/, "");
   const candidates =
     pathname === "/"
       ? ["index.html"]
-      : [relative, `${relative}.html`, `${relative.replace(/\/$/, "")}/index.html`];
+      : [
+          relative,
+          `${relative}.html`,
+          `${relative.replace(/\/$/, "")}/index.html`,
+        ];
 
   for (const candidate of candidates) {
     const file = safeFile(candidate);
@@ -54,7 +62,9 @@ createServer((request, response) => {
     }
 
     response.writeHead(status, {
-      "Content-Type": contentTypes.get(extname(file).toLowerCase()) ?? "application/octet-stream",
+      "Content-Type":
+        contentTypes.get(extname(file).toLowerCase()) ??
+        "application/octet-stream",
     });
     createReadStream(file).pipe(response);
   } catch {

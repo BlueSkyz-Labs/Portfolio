@@ -25,6 +25,9 @@ test("Cloudflare Pages deploy contract uses a real Next static export", () => {
     "Referrer-Policy: strict-origin-when-cross-origin",
     "Permissions-Policy: camera=(), microphone=(), geolocation=()",
   ]) {
-    assert.match(headers, new RegExp(requiredHeader.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(
+      headers,
+      new RegExp(requiredHeader.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+    );
   }
 });
