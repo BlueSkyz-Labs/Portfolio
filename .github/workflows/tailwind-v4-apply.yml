@@ -34,8 +34,8 @@ jobs:
 
       - name: Apply Tailwind v4 package graph
         run: |
-          pnpm add --save-dev --save-exact tailwindcss@4.3.3 @tailwindcss/postcss@4.3.3
-          pnpm remove autoprefixer
+          pnpm add --workspace-root --save-dev --save-exact tailwindcss@4.3.3 @tailwindcss/postcss@4.3.3
+          pnpm remove --workspace-root autoprefixer
 
       - name: Apply Tailwind v4 PostCSS contract
         run: |
