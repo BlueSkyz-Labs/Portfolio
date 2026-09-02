@@ -17,4 +17,9 @@ test("Dependabot keeps GitHub Actions and pnpm dependencies current with bounded
   assert.match(config, /dependency-type: "production"/);
   assert.match(config, /development-dependencies:/);
   assert.match(config, /dependency-type: "development"/);
+  assert.equal(
+    (config.match(/update-types: \["minor", "patch"\]/g) ?? []).length,
+    2,
+    "minor/patch updates should be grouped while majors stay isolated for deliberate review",
+  );
 });
