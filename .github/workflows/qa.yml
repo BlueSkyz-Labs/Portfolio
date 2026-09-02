@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main, develop]
 
+# Read-only is sufficient for checkout, exact-base fetches, caches, and artifacts.
+permissions:
+  contents: read
+
 # Cancel in-flight runs on the same ref so we don't waste CI minutes on stale pushes.
 concurrency:
   group: qa-${{ github.ref }}
@@ -28,7 +32,7 @@ jobs:
 
       # pnpm must exist before setup-node tries to resolve/cache the pnpm store.
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
           version: ${{ env.PNPM_VERSION }}
           run_install: false
@@ -204,7 +208,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
           version: ${{ env.PNPM_VERSION }}
           run_install: false
