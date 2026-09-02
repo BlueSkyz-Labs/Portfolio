@@ -21,4 +21,7 @@ test("lint tooling uses explicit ESLint CLI with a versioned flat-config bridge"
   assert.match(config, /next\/typescript/);
   assert.match(config, /\.next\/\*\*/);
   assert.match(config, /out\/\*\*/);
+
+  const lockfile = readFileSync("pnpm-lock.yaml", "utf8");
+  assert.match(lockfile, /'@eslint\/eslintrc':\n\s+specifier: \^3\.3\.6/);
 });
