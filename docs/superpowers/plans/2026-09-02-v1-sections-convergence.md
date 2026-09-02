@@ -28,9 +28,11 @@
 ### Task 1: Add the failing v1 narrative contract
 
 **Files:**
+
 - Create: `tests/e2e/sections.spec.ts`
 
 **Interfaces:**
+
 - Consumes: existing section IDs from `src/app/page.tsx` and the `SPEC.md` IA.
 - Produces: an executable contract for all five v1 sections and the removal of placeholder copy.
 
@@ -42,7 +44,9 @@ import { test, expect } from "@playwright/test";
 const sections = ["manifesto", "work", "process", "about", "contact"] as const;
 
 test.describe("V1 narrative sections", () => {
-  test("all required sections render real content instead of placeholders", async ({ page }) => {
+  test("all required sections render real content instead of placeholders", async ({
+    page,
+  }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
     for (const id of sections) {
@@ -62,7 +66,9 @@ test.describe("V1 narrative sections", () => {
     await expect(page.locator("#process li")).toHaveCount(4);
   });
 
-  test("contact exposes labeled native controls and direct email fallback", async ({ page }) => {
+  test("contact exposes labeled native controls and direct email fallback", async ({
+    page,
+  }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
     await expect(page.getByLabel("Name")).toBeVisible();
@@ -77,7 +83,9 @@ test.describe("V1 narrative sections", () => {
 
     for (const id of sections) {
       await page.locator(`#${id}`).scrollIntoViewIfNeeded();
-      await expect(page.locator(`#${id}`).getByRole("heading").first()).toBeVisible();
+      await expect(
+        page.locator(`#${id}`).getByRole("heading").first(),
+      ).toBeVisible();
     }
   });
 });
@@ -98,10 +106,12 @@ Commit message: `test: define v1 narrative section contract`
 ### Task 2: Add public-safe content data
 
 **Files:**
+
 - Modify: `src/lib/constants.ts`
 - Modify: `src/types/index.ts`
 
 **Interfaces:**
+
 - Consumes: `Project` and site-wide constants.
 - Produces: `MANIFESTO`, `PROJECTS`, `PROCESS_STEPS`, `ABOUT`, and `CONTACT` constants used by server section components.
 
@@ -130,7 +140,8 @@ export const PROJECTS: readonly Project[] = [
     title: "Experience Systems",
     client: "BlueSkyz Labs",
     year: 2026,
-    summary: "Design systems where brand, interaction, accessibility, and performance are treated as one product surface.",
+    summary:
+      "Design systems where brand, interaction, accessibility, and performance are treated as one product surface.",
     tags: ["Product", "Experience", "Web"],
   },
   {
@@ -138,7 +149,8 @@ export const PROJECTS: readonly Project[] = [
     title: "Agentic Delivery",
     client: "BlueSkyz Labs",
     year: 2026,
-    summary: "AI-assisted engineering workflows that bind plans, tests, review evidence, and safe promotion into one operating discipline.",
+    summary:
+      "AI-assisted engineering workflows that bind plans, tests, review evidence, and safe promotion into one operating discipline.",
     tags: ["AI", "Engineering", "Assurance"],
   },
   {
@@ -146,7 +158,8 @@ export const PROJECTS: readonly Project[] = [
     title: "Edge-Native Products",
     client: "BlueSkyz Labs",
     year: 2026,
-    summary: "Lean digital products shaped for fast global delivery, low runtime cost, and measurable quality budgets from the first release.",
+    summary:
+      "Lean digital products shaped for fast global delivery, low runtime cost, and measurable quality budgets from the first release.",
     tags: ["Architecture", "Performance", "Cloud"],
   },
 ] as const;
@@ -163,10 +176,12 @@ Commit message: `feat(content): define public v1 portfolio narrative`
 ### Task 3: Add the minimal reveal primitive
 
 **Files:**
+
 - Create: `src/components/ui/Reveal.tsx`
 - Modify: `src/components/providers/MotionProvider.tsx`
 
 **Interfaces:**
+
 - Consumes: existing lazy `domAnimation` Motion features.
 - Produces: `Reveal({ children, delay?, distance? })` for section title/body entry motion.
 
@@ -215,12 +230,14 @@ Commit message: `feat(ui): add reduced-motion reveal primitive`
 ### Task 4: Implement Manifesto, Work, Process, and About as server sections
 
 **Files:**
+
 - Create: `src/components/sections/ManifestoSection.tsx`
 - Create: `src/components/sections/WorkSection.tsx`
 - Create: `src/components/sections/ProcessSection.tsx`
 - Create: `src/components/sections/AboutSection.tsx`
 
 **Interfaces:**
+
 - Consumes: `Container`, `Reveal`, and the public constants from Task 2.
 - Produces: semantic `<section>` components with IDs `manifesto`, `work`, `process`, `about`.
 
@@ -249,12 +266,14 @@ Commit message: `feat(sections): implement v1 studio narrative`
 ### Task 5: Implement a dependency-free contact section
 
 **Files:**
+
 - Create: `src/components/ui/Input.tsx`
 - Create: `src/components/ui/Textarea.tsx`
 - Create: `src/components/ui/Button.tsx`
 - Create: `src/components/sections/ContactSection.tsx`
 
 **Interfaces:**
+
 - Consumes: `SITE.email`, optional `NEXT_PUBLIC_CONTACT_ENDPOINT` at build time.
 - Produces: a semantic native form plus a direct `mailto:` fallback.
 
@@ -283,9 +302,11 @@ Commit message: `feat(contact): add progressive enhancement contact form`
 ### Task 6: Compose the real home narrative and remove placeholders
 
 **Files:**
+
 - Modify: `src/app/page.tsx`
 
 **Interfaces:**
+
 - Consumes: all section components from Tasks 4–5.
 - Produces: the final v1 home composition in the `SPEC.md` order.
 
@@ -315,9 +336,11 @@ Commit message: `feat(home): converge complete v1 narrative`
 ### Task 7: GREEN verification and performance gate
 
 **Files:**
+
 - Modify only if a failing gate identifies a concrete defect.
 
 **Interfaces:**
+
 - Consumes: exact PR head and exact `main` base.
 - Produces: merge evidence.
 
