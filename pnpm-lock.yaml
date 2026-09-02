@@ -48,6 +48,9 @@ importers:
       '@axe-core/playwright':
         specifier: 4.13.0
         version: 4.13.0(playwright-core@1.62.1)
+      '@eslint/eslintrc':
+        specifier: ^3.3.6
+        version: 3.3.6
       '@lhci/cli':
         specifier: 0.15.1
         version: 0.15.1
