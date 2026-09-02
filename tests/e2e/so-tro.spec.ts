@@ -13,7 +13,7 @@ test.describe("Sổ Trọ Vietnamese hypothesis page", () => {
 
     const main = page.locator("#so-tro");
     await expect(main).toBeVisible();
-    await expect(main).toHaveAttribute("lang", "vi");
+    await expect(main).toHaveAttribute("lang", "vi-VN");
 
     await expect(
       page.locator("#so-tro header p").filter({ hasText: /^Sổ Trọ$/ }),
@@ -112,6 +112,77 @@ test.describe("Sổ Trọ Vietnamese hypothesis page", () => {
       0,
     );
     await expect(page.getByText(/Chưa có ảnh giao diện thật/)).toBeVisible();
+  });
+
+  test("applies live Experience type and teal primary, not atelier gold", async ({
+    page,
+  }) => {
+    await page.goto("/so-tro", { waitUntil: "domcontentloaded" });
+    const surface = page.locator("#so-tro");
+
+    const bg = await surface.evaluate(
+      (el) => getComputedStyle(el).backgroundColor,
+    );
+    expect(bg).toBe("rgb(246, 246, 243)");
+
+    const title = page.locator("#so-tro-title");
+    const type = await title.evaluate((el) => {
+      const styles = getComputedStyle(el);
+      return {
+        family: styles.fontFamily,
+        size: styles.fontSize,
+        weight: styles.fontWeight,
+        color: styles.color,
+      };
+    });
+    expect(type.family).toMatch(/Be Vietnam Pro/i);
+    expect(type.family).not.toMatch(/Cormorant|DM Sans|Inter/i);
+    expect(type.size).toBe("40px");
+    expect(type.weight).toBe("700");
+    expect(type.color).toBe("rgb(15, 23, 42)");
+
+    const body = await page
+      .locator("#so-tro .so-tro-muted")
+      .first()
+      .evaluate((el) => {
+        const styles = getComputedStyle(el);
+        return { size: styles.fontSize, weight: styles.fontWeight };
+      });
+    expect(body.size).toBe("20px");
+    expect(body.weight).toBe("500");
+
+    const cta = page.locator("#so-tro a.so-tro-cta");
+    const ctaStyles = await cta.evaluate((el) => {
+      const styles = getComputedStyle(el);
+      return {
+        background: styles.backgroundColor,
+        weight: styles.fontWeight,
+        radius: styles.borderRadius,
+      };
+    });
+    expect(ctaStyles.background).toBe("rgb(15, 76, 92)");
+    expect(ctaStyles.weight).toBe("600");
+    expect(ctaStyles.radius).toBe("18px");
+
+    const painted = await surface.evaluate((root) => {
+      const forbidden = new Set(["rgb(201, 169, 98)", "rgb(176, 141, 60)"]);
+      const hits = [];
+      const visit = (node) => {
+        if (!(node instanceof Element)) return;
+        const styles = getComputedStyle(node);
+        for (const value of [
+          styles.color,
+          styles.backgroundColor,
+          styles.borderTopColor,
+        ]) {
+          if (forbidden.has(value)) hits.push(value);
+        }
+        for (const child of node.children) visit(child);
+      };
+      visit(root);
+      return hits;
+    });
+    expect(painted).toEqual([]);
   });
 
   test("stays indexable and has no serious WCAG blockers", async ({ page }) => {

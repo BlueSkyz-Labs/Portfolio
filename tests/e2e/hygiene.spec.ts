@@ -38,4 +38,12 @@ test.describe("Public marketing hygiene", () => {
       0,
     );
   });
+
+  test("home atelier gold remains plane B", async ({ page }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    const gold = await page
+      .locator("#hero em")
+      .evaluate((el) => getComputedStyle(el).color);
+    expect(gold).toBe("rgb(201, 169, 98)");
+  });
 });
