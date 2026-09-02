@@ -74,6 +74,12 @@ test.describe("Sổ Trọ Vietnamese hypothesis page", () => {
     await expect(page.locator('a[href*="x.com/blueskyz"]')).toHaveCount(0);
     await expect(page.locator("img")).toHaveCount(0);
     await expect(
+      page.locator('script[type="application/ld+json"]'),
+    ).toHaveCount(0);
+    await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(
+      0,
+    );
+    await expect(
       page.getByText(/Chưa có ảnh chụp giao diện thật/),
     ).toBeVisible();
   });

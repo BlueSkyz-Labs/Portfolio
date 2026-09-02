@@ -56,3 +56,30 @@ test("Sổ Trọ page exists with patched hypothesis hero, not the Excel/gõ-c�
   assert.doesNotMatch(source, /Hết tối mùng 1 cầm file Excel đi từng phòng/);
   assert.doesNotMatch(source, /Sổ cho người giữ dãy/);
 });
+
+test("public src does not invent schema, hreflang, cobalt, or GTM-forbidden channels", () => {
+  assert.deepEqual(filesMatching(/AggregateRating/i), []);
+  assert.deepEqual(filesMatching(/"@type"\s*:\s*"Review"/i), []);
+  assert.deepEqual(filesMatching(/hreflang/i), []);
+  assert.deepEqual(filesMatching(/alternates\s*:\s*\{[\s\S]*languages/i), []);
+  assert.deepEqual(filesMatching(/zalo\.me/i), []);
+  assert.deepEqual(filesMatching(/VietQR/i), []);
+  assert.deepEqual(filesMatching(/NĐ\s*141|Nghị định\s*141/i), []);
+  assert.deepEqual(filesMatching(/cobalt/i), []);
+});
+
+test("Sổ Trọ stays a single indexable page with no unique-attribute or doorway routes", () => {
+  const pages = srcFiles
+    .filter((path) => path.endsWith("/page.tsx"))
+    .map((path) => relative(SRC_ROOT, path))
+    .sort();
+  assert.deepEqual(pages, ["app/page.tsx", "app/so-tro/page.tsx"]);
+
+  const related = srcFiles.filter((path) => path.includes("so-tro"));
+  const source = related.map((path) => readFileSync(path, "utf8")).join("\n");
+  assert.doesNotMatch(
+    source,
+    /unique attributes|điểm độc|tính năng độc quyền/i,
+  );
+  assert.doesNotMatch(source, /index:\s*false|noindex/i);
+});
