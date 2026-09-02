@@ -5,7 +5,11 @@ import test from "node:test";
 const workflow = readFileSync(".github/workflows/qa.yml", "utf8");
 
 function countUses(action) {
-  return [...workflow.matchAll(new RegExp(`uses: ${action.replace("/", "\\/")}@(v\\d+)`, "g"))];
+  return [
+    ...workflow.matchAll(
+      new RegExp(`uses: ${action.replace("/", "\\/")}@(v\\d+)`, "g"),
+    ),
+  ];
 }
 
 test("GitHub Actions JavaScript actions use Node 24-native major releases", () => {
@@ -21,7 +25,11 @@ test("GitHub Actions JavaScript actions use Node 24-native major releases", () =
     const matches = countUses(action);
     assert.ok(matches.length > 0, `${action} must remain present in qa.yml`);
     for (const match of matches) {
-      assert.equal(match[1], expectedMajor, `${action} must use ${expectedMajor}`);
+      assert.equal(
+        match[1],
+        expectedMajor,
+        `${action} must use ${expectedMajor}`,
+      );
     }
   }
 });
