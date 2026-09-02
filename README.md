@@ -34,7 +34,7 @@ In short:
 | Deploy    | Cloudflare Pages static export (`out/`)                                                                                     |
 | Domain    | `portfolio.tonydemo.com`                                                                                                    |
 
-Exact dependency versions are pinned by [`package.json`](./package.json) and [`pnpm-lock.yaml`](./pnpm-lock.yaml); those files are authoritative when this summary and the lockfile differ.
+[`package.json`](./package.json) declares dependency constraints and pins the pnpm toolchain; [`pnpm-lock.yaml`](./pnpm-lock.yaml) is authoritative for the exact resolved dependency graph.
 
 ## ✦ Project Structure
 
@@ -74,7 +74,7 @@ Exact dependency versions are pinned by [`package.json`](./package.json) and [`p
 ### Prerequisites
 
 - Node.js ≥ 24.20.0 (the repository and Cloudflare build are pinned to 24.20.0 LTS via `.node-version`)
-- pnpm ≥ 9
+- pnpm 9.15.9 (pinned by `packageManager` to match CI; `engines.pnpm` remains the compatibility floor)
 
 ### Install & Develop
 
