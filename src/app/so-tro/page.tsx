@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function SoTroPage() {
   return (
-    <article id="so-tro" lang="vi-VN" className="pt-16 md:pt-20">
+    <article>
       <header className="relative overflow-hidden px-6 py-space-9 md:px-12 lg:px-24 lg:py-space-10">
         <div
           aria-hidden="true"

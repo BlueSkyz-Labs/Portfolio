@@ -4,6 +4,7 @@
  * Gold token is stored but does not paint splash/login/pair surfaces.
  */
 
+html.so-tro-root,
 #so-tro {
   --font-sans: var(--font-be-vietnam-pro), "Be Vietnam Pro";
   --text-base: 1.25rem;
@@ -22,6 +23,11 @@
   --ui-radius-control: 18px;
   --ui-radius-card: 24px;
   --ui-border: color-mix(in srgb, var(--ui-ink) 14%, transparent);
+  --background: var(--ui-canvas);
+  --foreground: var(--ui-ink);
+  --bg-primary: var(--ui-canvas);
+  --text-primary: var(--ui-ink);
+  --text-muted: var(--ui-ink-secondary);
 
   color-scheme: light;
   font-family: var(--font-sans);
@@ -32,7 +38,14 @@
   color: var(--ui-ink);
 }
 
+html.so-tro-root body {
+  background: var(--ui-canvas);
+  color: var(--ui-ink);
+  font-family: var(--font-sans);
+}
+
 @media (prefers-color-scheme: dark) {
+  html.so-tro-root,
   #so-tro {
     --ui-canvas: #090d16;
     --ui-surface: #111827;
@@ -45,24 +58,59 @@
     --ui-brand-gold: #fbbf24;
     --ui-danger: #f87171;
     --ui-success: #4ade80;
+    --background: var(--ui-canvas);
+    --foreground: var(--ui-ink);
+    --bg-primary: var(--ui-canvas);
+    --text-primary: var(--ui-ink);
+    --text-muted: var(--ui-ink-secondary);
     color-scheme: dark;
   }
 }
 
-html:has(#so-tro) main#main {
-  background: #f6f6f3;
+#so-tro .so-tro-shell-header,
+#so-tro .so-tro-shell-footer {
+  background: var(--ui-canvas);
+  color: var(--ui-ink);
+  font-family: var(--font-sans);
 }
 
-html:has(#so-tro) header.fixed {
-  border-bottom-color: rgba(245, 245, 240, 0.08) !important;
-  background-color: var(--bg-primary) !important;
-  backdrop-filter: none !important;
+#so-tro .so-tro-shell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.5rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--ui-border);
 }
 
-@media (prefers-color-scheme: dark) {
-  html:has(#so-tro) main#main {
-    background: #090d16;
-  }
+#so-tro .so-tro-shell-mark {
+  color: var(--ui-ink);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+#so-tro .so-tro-shell-link {
+  color: var(--ui-primary);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+#so-tro .so-tro-shell-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--ui-border);
+  color: var(--ui-ink-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+#so-tro .so-tro-shell-footer a {
+  color: var(--ui-ink-secondary);
 }
 
 #so-tro,

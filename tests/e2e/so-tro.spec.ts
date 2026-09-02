@@ -13,7 +13,6 @@ test.describe("Sổ Trọ Vietnamese hypothesis page", () => {
 
     const main = page.locator("#so-tro");
     await expect(main).toBeVisible();
-    await expect(main).toHaveAttribute("lang", "vi-VN");
 
     await expect(
       page.locator("#so-tro header p").filter({ hasText: /^Sổ Trọ$/ }),
@@ -112,6 +111,56 @@ test.describe("Sổ Trọ Vietnamese hypothesis page", () => {
       0,
     );
     await expect(page.getByText(/Chưa có ảnh giao diện thật/)).toBeVisible();
+  });
+
+  test("uses a product shell: html lang=vi-VN, no atelier nav, live footer ink", async ({
+    page,
+  }) => {
+    await page.goto("/so-tro", { waitUntil: "domcontentloaded" });
+
+    await expect(page.locator("html")).toHaveAttribute("lang", "vi-VN");
+
+    await expect(
+      page.getByRole("link", { name: "Begin a project" }),
+    ).toHaveCount(0);
+    await expect(page.getByRole("navigation", { name: "Primary" })).toHaveCount(
+      0,
+    );
+    await expect(
+      page.getByRole("button", { name: "Open navigation" }),
+    ).toHaveCount(0);
+    for (const label of ["Work", "Process", "About", "Contact"]) {
+      await expect(
+        page.getByRole("link", { name: label, exact: true }),
+      ).toHaveCount(0);
+    }
+
+    const htmlBg = await page
+      .locator("html")
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(htmlBg).toBe("rgb(246, 246, 243)");
+
+    const banner = page.getByRole("banner");
+    await expect(banner).toHaveCount(1);
+    const bannerBg = await banner.evaluate(
+      (el) => getComputedStyle(el).backgroundColor,
+    );
+    expect(bannerBg).not.toBe("rgb(10, 10, 10)");
+    expect(bannerBg).toBe("rgb(246, 246, 243)");
+
+    const footer = page.getByRole("contentinfo");
+    await expect(footer).toHaveCount(1);
+    const footerStyles = await footer.evaluate((el) => {
+      const styles = getComputedStyle(el);
+      return { background: styles.backgroundColor, color: styles.color };
+    });
+    expect(footerStyles.background).toBe("rgb(246, 246, 243)");
+    expect(footerStyles.background).not.toBe("rgb(10, 10, 10)");
+    expect(["rgb(15, 23, 42)", "rgb(51, 65, 85)"]).toContain(
+      footerStyles.color,
+    );
+    await expect(footer).not.toContainText("Quiet luxury, loud conviction.");
+    await expect(footer).not.toContainText("Begin a project");
   });
 
   test("applies live Experience type and teal primary, not atelier gold", async ({

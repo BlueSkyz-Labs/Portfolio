@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { MotionProvider } from "@/components/providers/MotionProvider";
 import { SITE } from "@/lib/constants";
 import { LIVE_SITE_URL } from "@/lib/site";
-import "./globals.css";
+import "../globals.css";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin", "vietnamese"],

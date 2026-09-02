@@ -108,7 +108,7 @@ test("Sổ Trọ stays a single indexable page with no unique-attribute or doorw
     .filter((path) => path.endsWith("/page.tsx"))
     .map((path) => relative(SRC_ROOT, path))
     .sort();
-  assert.deepEqual(pages, ["app/page.tsx", "app/so-tro/page.tsx"]);
+  assert.deepEqual(pages, ["app/(studio)/page.tsx", "app/so-tro/page.tsx"]);
 
   const related = srcFiles.filter((path) => path.includes("so-tro"));
   const source = related.map((path) => readFileSync(path, "utf8")).join("\n");

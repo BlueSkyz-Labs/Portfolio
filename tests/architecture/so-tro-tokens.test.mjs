@@ -8,7 +8,10 @@ const SO_TRO_ROOT = fileURLToPath(
   new URL("../../src/app/so-tro/", import.meta.url),
 );
 const HOME_LAYOUT = fileURLToPath(
-  new URL("../../src/app/layout.tsx", import.meta.url),
+  new URL("../../src/app/(studio)/layout.tsx", import.meta.url),
+);
+const SO_TRO_LAYOUT = fileURLToPath(
+  new URL("../../src/app/so-tro/layout.tsx", import.meta.url),
 );
 const HOME_TOKENS = fileURLToPath(
   new URL("../../src/app/globals.css", import.meta.url),
@@ -42,7 +45,7 @@ test(" /so-tro uses the live Experience bar, not atelier gold or the superseded 
   assert.match(source, /Be_Vietnam_Pro|Be Vietnam Pro/);
   assert.match(source, /--ui-radius-control:\s*18px/);
   assert.match(source, /--ui-radius-card:\s*24px/);
-  assert.match(source, /lang="vi-VN"/);
+  assert.match(source, /<html[\s\S]*lang=["']vi-VN["']/);
   assert.match(source, /--text-4xl:\s*2\.5rem/);
   assert.match(source, /--text-base:\s*1\.25rem/);
 
@@ -53,6 +56,16 @@ test(" /so-tro uses the live Experience bar, not atelier gold or the superseded 
   assert.doesNotMatch(source, /DM_Sans|DM Sans/);
   assert.doesNotMatch(source, /\bInter\b/);
   assert.doesNotMatch(source, /system-ui,\s*-apple-system/);
+});
+
+test("/so-tro owns its document shell and does not mount atelier Header/Footer", () => {
+  const layout = readFileSync(SO_TRO_LAYOUT, "utf8");
+  assert.match(layout, /<html[\s\S]*lang=["']vi-VN["']/);
+  assert.doesNotMatch(layout, /@\/components\/layout\/Header/);
+  assert.doesNotMatch(layout, /@\/components\/layout\/Footer/);
+  assert.doesNotMatch(layout, /Begin a project/);
+  assert.doesNotMatch(layout, /NAV_LINKS/);
+  assert.doesNotMatch(layout, /bg-ink-void/);
 });
 
 test("home atelier plane B gold and serif stay on the root chrome", () => {
