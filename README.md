@@ -51,6 +51,8 @@ In short:
 ├── lighthouserc.json
 ├── wrangler.toml              # Cloudflare Pages deployment contract
 ├── .env.example               # Environment template only; never commit secrets
+├── SECURITY.md                # Private vulnerability reporting
+├── .github/CODEOWNERS         # Default ownership map
 ├── .github/workflows/qa.yml   # Blocking repository QA workflow
 ├── src/
 │   ├── app/                   # App Router entry points + global CSS
