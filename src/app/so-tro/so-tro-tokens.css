@@ -31,11 +31,14 @@ html.so-tro-root,
 
   color-scheme: light;
   font-family: var(--font-sans);
-  font-size: var(--text-base);
   font-weight: 500;
   line-height: 1.5;
   background: var(--ui-canvas);
   color: var(--ui-ink);
+}
+
+#so-tro {
+  font-size: var(--text-base);
 }
 
 html.so-tro-root body {
