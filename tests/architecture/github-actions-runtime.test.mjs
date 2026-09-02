@@ -6,10 +6,7 @@ const workflow = readFileSync(".github/workflows/qa.yml", "utf8");
 const PNPM_ACTION_SHA = "0977fd99725f1db4007ccb2928dbb4e90d06cc86";
 const CHECKOUT_ACTION_SHA = "3d3c42e5aac5ba805825da76410c181273ba90b1";
 const FIRST_PARTY_ACTIONS = new Map([
-  [
-    "actions/checkout",
-    { version: "v7.0.1", sha: CHECKOUT_ACTION_SHA },
-  ],
+  ["actions/checkout", { version: "v7.0.1", sha: CHECKOUT_ACTION_SHA }],
   [
     "actions/setup-node",
     { version: "v7.0.0", sha: "820762786026740c76f36085b0efc47a31fe5020" },
@@ -53,7 +50,11 @@ test("checkout never persists GITHUB_TOKEN credentials into the worktree", () =>
     ...workflow.matchAll(/persist-credentials:\s*false/g),
   ];
 
-  assert.equal(checkoutUses.length, 2, "qa.yml must keep exactly two checkout steps");
+  assert.equal(
+    checkoutUses.length,
+    2,
+    "qa.yml must keep exactly two checkout steps",
+  );
   assert.equal(
     credentialOptOuts.length,
     checkoutUses.length,
