@@ -18,6 +18,7 @@ test.describe("Responsive navigation", () => {
       await page.goto("/", { waitUntil: "domcontentloaded" });
 
       const trigger = page.getByRole("button", { name: "Open navigation" });
+      await expect(trigger).toHaveCount(1, { timeout: 1_500 });
       await expect(trigger).toBeVisible();
       await expect(trigger).toHaveAttribute("aria-expanded", "false");
       await expect(
@@ -32,7 +33,9 @@ test.describe("Responsive navigation", () => {
       page,
     }) => {
       await page.goto("/", { waitUntil: "domcontentloaded" });
-      await page.getByRole("button", { name: "Open navigation" }).click();
+      const trigger = page.getByRole("button", { name: "Open navigation" });
+      await expect(trigger).toHaveCount(1, { timeout: 1_500 });
+      await trigger.click();
 
       const dialog = page.getByRole("dialog", { name: "Navigation" });
       await expect(dialog).toBeVisible();
@@ -54,14 +57,15 @@ test.describe("Responsive navigation", () => {
       page,
     }) => {
       await page.goto("/", { waitUntil: "domcontentloaded" });
-      await page.getByRole("button", { name: "Open navigation" }).click();
+      const trigger = page.getByRole("button", { name: "Open navigation" });
+      await expect(trigger).toHaveCount(1, { timeout: 1_500 });
+      await trigger.click();
       await expect(
         page.getByRole("dialog", { name: "Navigation" }),
       ).toBeVisible();
 
       await page.keyboard.press("Escape");
 
-      const trigger = page.getByRole("button", { name: "Open navigation" });
       await expect(
         page.getByRole("dialog", { name: "Navigation" }),
       ).toHaveCount(0);
@@ -72,7 +76,9 @@ test.describe("Responsive navigation", () => {
       page,
     }) => {
       await page.goto("/", { waitUntil: "domcontentloaded" });
-      await page.getByRole("button", { name: "Open navigation" }).click();
+      const trigger = page.getByRole("button", { name: "Open navigation" });
+      await expect(trigger).toHaveCount(1, { timeout: 1_500 });
+      await trigger.click();
 
       const dialog = page.getByRole("dialog", { name: "Navigation" });
       await dialog.getByRole("link", { name: "Process", exact: true }).click();
