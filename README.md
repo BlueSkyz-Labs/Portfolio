@@ -24,7 +24,7 @@ In short:
 | Layer     | Tech                                                                                                                        |
 | --------- | --------------------------------------------------------------------------------------------------------------------------- |
 | Framework | Next.js 15.5.x (App Router, React Server Components, static export)                                                         |
-| Runtime   | React 19                                                                                                                    |
+| Runtime   | React 19 + Node.js 24.20.0 LTS for build/tooling                                                                            |
 | Language  | TypeScript 5.6 (strict mode)                                                                                                |
 | Styling   | Tailwind CSS 4.3 via `@tailwindcss/postcss`, with the existing token config retained through the supported `@config` bridge |
 | Animation | Framer Motion 11 via `LazyMotion` plus native `requestAnimationFrame` for lightweight scroll effects                        |
@@ -42,6 +42,7 @@ Exact dependency versions are pinned by [`package.json`](./package.json) and [`p
 .
 ├── SPEC.md                    # Product/design truth
 ├── README.md                  # Repository entry point
+├── .node-version              # Exact Node build/runtime version for local/Cloudflare alignment
 ├── package.json
 ├── next.config.ts
 ├── tailwind.config.ts         # Design tokens consumed through Tailwind v4 @config bridge
@@ -72,7 +73,7 @@ Exact dependency versions are pinned by [`package.json`](./package.json) and [`p
 
 ### Prerequisites
 
-- Node.js ≥ 20
+- Node.js ≥ 24.20.0 (the repository and Cloudflare build are pinned to 24.20.0 LTS via `.node-version`)
 - pnpm ≥ 9
 
 ### Install & Develop
@@ -112,7 +113,7 @@ Cloudflare Pages serves the verified static Next.js export.
 4. Production branch: `main`; pull requests use preview deployments.
 5. Add `portfolio.tonydemo.com` as the production custom domain.
 
-`wrangler.toml`, `next.config.ts`, `scripts/verify-static-export.mjs`, `tests/architecture/cloudflare-pages.test.mjs`, and `public/_headers` together define and verify the deployment contract.
+`wrangler.toml`, `next.config.ts`, `scripts/verify-static-export.mjs`, `tests/architecture/cloudflare-pages.test.mjs`, `.node-version`, and `public/_headers` together define and verify the deployment contract.
 
 ## ✦ Engineering Decisions
 

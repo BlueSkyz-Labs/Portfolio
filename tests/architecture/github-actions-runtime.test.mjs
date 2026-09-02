@@ -84,6 +84,6 @@ test("workflow GITHUB_TOKEN is least privilege by default", () => {
   assert.doesNotMatch(workflow, /permissions:\s*write-all/);
 });
 
-test("action runtime modernization does not silently change the app Node test version", () => {
-  assert.match(workflow, /NODE_VERSION: "20"/);
+test("application CI uses the supported Node 24 LTS runtime", () => {
+  assert.match(workflow, /NODE_VERSION: "24\.20\.0"/);
 });
