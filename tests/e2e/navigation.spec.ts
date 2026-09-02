@@ -20,11 +20,17 @@ test.describe("Responsive navigation", () => {
       const trigger = page.getByRole("button", { name: "Open navigation" });
       await expect(trigger).toBeVisible();
       await expect(trigger).toHaveAttribute("aria-expanded", "false");
-      await expect(page.getByRole("navigation", { name: "Primary" })).toBeHidden();
-      await expect(page.getByRole("link", { name: "Begin a project" })).toBeHidden();
+      await expect(
+        page.getByRole("navigation", { name: "Primary" }),
+      ).toBeHidden();
+      await expect(
+        page.getByRole("link", { name: "Begin a project" }),
+      ).toBeHidden();
     });
 
-    test("opens a semantic menu with every primary destination", async ({ page }) => {
+    test("opens a semantic menu with every primary destination", async ({
+      page,
+    }) => {
       await page.goto("/", { waitUntil: "domcontentloaded" });
       await page.getByRole("button", { name: "Open navigation" }).click();
 
@@ -35,20 +41,30 @@ test.describe("Responsive navigation", () => {
       ).toHaveAttribute("aria-expanded", "true");
 
       for (const label of ["Work", "Process", "About", "Contact"]) {
-        await expect(dialog.getByRole("link", { name: label, exact: true })).toBeVisible();
+        await expect(
+          dialog.getByRole("link", { name: label, exact: true }),
+        ).toBeVisible();
       }
-      await expect(dialog.getByRole("link", { name: "Begin a project" })).toBeVisible();
+      await expect(
+        dialog.getByRole("link", { name: "Begin a project" }),
+      ).toBeVisible();
     });
 
-    test("Escape closes the menu and restores focus to the trigger", async ({ page }) => {
+    test("Escape closes the menu and restores focus to the trigger", async ({
+      page,
+    }) => {
       await page.goto("/", { waitUntil: "domcontentloaded" });
       await page.getByRole("button", { name: "Open navigation" }).click();
-      await expect(page.getByRole("dialog", { name: "Navigation" })).toBeVisible();
+      await expect(
+        page.getByRole("dialog", { name: "Navigation" }),
+      ).toBeVisible();
 
       await page.keyboard.press("Escape");
 
       const trigger = page.getByRole("button", { name: "Open navigation" });
-      await expect(page.getByRole("dialog", { name: "Navigation" })).toHaveCount(0);
+      await expect(
+        page.getByRole("dialog", { name: "Navigation" }),
+      ).toHaveCount(0);
       await expect(trigger).toBeFocused();
     });
 
@@ -62,16 +78,26 @@ test.describe("Responsive navigation", () => {
       await dialog.getByRole("link", { name: "Process", exact: true }).click();
 
       await expect(page).toHaveURL(/#process$/);
-      await expect(page.getByRole("dialog", { name: "Navigation" })).toHaveCount(0);
+      await expect(
+        page.getByRole("dialog", { name: "Navigation" }),
+      ).toHaveCount(0);
     });
   });
 
-  test("desktop keeps the existing primary navigation and CTA", async ({ page }) => {
+  test("desktop keeps the existing primary navigation and CTA", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
-    await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Begin a project" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Open navigation" })).toBeHidden();
+    await expect(
+      page.getByRole("navigation", { name: "Primary" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Begin a project" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Open navigation" }),
+    ).toBeHidden();
   });
 });
