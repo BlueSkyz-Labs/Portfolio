@@ -6,6 +6,7 @@
   "description": "BlueSkyz Labs Portfolio — Quiet Luxury, Loud Conviction",
   "author": "BlueSkyz Labs <hello@blueskyz.io>",
   "license": "UNLICENSED",
+  "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": ">=24.20.0",
     "pnpm": ">=9.0.0"
