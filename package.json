@@ -13,8 +13,8 @@
     "dev": "next dev",
     "build": "next build && node scripts/verify-static-export.mjs",
     "start": "node scripts/serve-static.mjs",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
     "test:architecture": "node --test tests/architecture/*.test.mjs",
     "test:e2e": "playwright test --project=chromium --project=firefox --project=webkit --project=mobile-chromium",
@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
+    "@eslint/eslintrc": "^3.3.6",
     "@lhci/cli": "0.15.1",
     "@playwright/test": "1.62.1",
     "@tailwindcss/postcss": "4.3.3",
