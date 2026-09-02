@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
+// Keep declaration packages pinned to the React 19 line validated by Next.js 15.5.24.
 test("React 19 runtime and TypeScript declarations stay on the validated Next 15.5 line", () => {
   const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
 
