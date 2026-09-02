@@ -12,7 +12,10 @@ test("React 19 runtime and TypeScript declarations stay on the validated Next 15
   assert.equal(packageJson.devDependencies["@types/react-dom"], "19.0.3");
 
   const lockfile = readFileSync("pnpm-lock.yaml", "utf8");
-  assert.match(lockfile, /'@types\/react':\n\s+specifier: 19\.0\.8\n\s+version: 19\.0\.8/);
+  assert.match(
+    lockfile,
+    /'@types\/react':\n\s+specifier: 19\.0\.8\n\s+version: 19\.0\.8/,
+  );
   assert.match(
     lockfile,
     /'@types\/react-dom':\n\s+specifier: 19\.0\.3\n\s+version: 19\.0\.3\(@types\/react@19\.0\.8\)/,
