@@ -1,4 +1,6 @@
 import type { ProcessStep, Project } from "@/types";
+import { LIVE_SITE_URL } from "@/lib/site";
+import { SO_TRO } from "@/lib/so-tro";
 
 /**
  * Site-wide constants.
@@ -11,24 +13,19 @@ export const SITE = {
   name: "BlueSkyz Labs",
   shortName: "BlueSkyz",
   edition: "Edition 2026",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://portfolio.tonydemo.com",
-  email: "hello@blueskyz.io",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? LIVE_SITE_URL,
   hero: {
     statement: "Quiet luxury,|loud conviction.",
     subline:
       "A studio building digital experiences with the discipline of a master tailor — restraint, materiality, and precision, delivered at the speed of the edge.",
   },
   nav: [
-    { label: "Work", href: "#work" },
-    { label: "Process", href: "#process" },
-    { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
+    { label: "Work", href: "/#work" },
+    { label: "Process", href: "/#process" },
+    { label: "About", href: "/#about" },
+    { label: "Contact", href: "/#contact" },
   ],
-  social: [
-    { label: "GitHub", href: "https://github.com/BlueSkyz-Labs" },
-    { label: "X", href: "https://x.com/blueskyz" },
-    { label: "LinkedIn", href: "https://linkedin.com/company/blueskyz-labs" },
-  ],
+  social: [{ label: "GitHub", href: "https://github.com/BlueSkyz-Labs" }],
 } as const;
 
 export const NAV_LINKS = SITE.nav;
@@ -47,7 +44,7 @@ export const PROJECTS: readonly Project[] = [
   {
     id: "experience-systems",
     title: "Experience Systems",
-    client: "BlueSkyz Labs",
+    client: "Studio / Internal",
     year: 2026,
     summary:
       "Design systems where brand, interaction, accessibility, and performance are treated as one product surface.",
@@ -56,7 +53,7 @@ export const PROJECTS: readonly Project[] = [
   {
     id: "agentic-delivery",
     title: "Agentic Delivery",
-    client: "BlueSkyz Labs",
+    client: "Studio / Internal",
     year: 2026,
     summary:
       "AI-assisted engineering workflows that bind plans, tests, review evidence, and safe promotion into one operating discipline.",
@@ -65,11 +62,21 @@ export const PROJECTS: readonly Project[] = [
   {
     id: "edge-native-products",
     title: "Edge-Native Products",
-    client: "BlueSkyz Labs",
+    client: "Studio / Internal",
     year: 2026,
     summary:
       "Lean digital products shaped for fast global delivery, low runtime cost, and measurable quality budgets from the first release.",
     tags: ["Architecture", "Performance", "Cloud"],
+  },
+  {
+    id: SO_TRO.slug,
+    title: "Sổ Trọ",
+    client: "Studio / Internal",
+    year: 2026,
+    summary:
+      "A Vietnamese operations ledger for self-run rooming houses: rooms, tenants, invoices, and debts.",
+    tags: ["Product", "Rental ops"],
+    href: SO_TRO.href,
   },
 ] as const;
 
@@ -112,5 +119,9 @@ export const ABOUT = {
 export const CONTACT = {
   eyebrow: "Contact",
   title: "Have something worth making?",
-  body: "Share the problem, the constraint, and what a good outcome should feel like. We’ll take it from there.",
+  body: "Share the problem, the constraint, and what a good outcome should feel like. No public mailbox is listed — use the form on this page.",
+  nameLabel: "Name",
+  emailLabel: "Email",
+  messageLabel: "Message",
+  submitLabel: "Send inquiry",
 } as const;

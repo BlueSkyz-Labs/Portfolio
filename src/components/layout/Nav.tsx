@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { NAV_LINKS, SITE } from "@/lib/constants";
+import { sectionIdFromHref } from "@/lib/site";
 
 /**
  * Nav — anchor links with active-section highlighting.
@@ -18,7 +19,7 @@ export function Nav() {
 
   useEffect(() => {
     // Only observe sections that match a nav href — avoids noise.
-    const ids = NAV_LINKS.map((link) => link.href.replace(/^#/, ""));
+    const ids = NAV_LINKS.map((link) => sectionIdFromHref(link.href));
     const sections = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -70,7 +71,7 @@ export function Nav() {
     <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
       <ul className="flex items-center gap-8">
         {NAV_LINKS.map((link) => {
-          const id = link.href.replace(/^#/, "");
+          const id = sectionIdFromHref(link.href);
           const isActive = activeId === id;
           return (
             <li key={link.href}>

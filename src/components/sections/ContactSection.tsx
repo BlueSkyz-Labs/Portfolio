@@ -3,41 +3,53 @@ import { Input } from "@/components/ui/Input";
 import { Reveal } from "@/components/ui/Reveal";
 import { Textarea } from "@/components/ui/Textarea";
 import { Container } from "@/components/layout/Container";
-import { CONTACT, SITE } from "@/lib/constants";
+import { CONTACT } from "@/lib/constants";
 
-export function ContactSection() {
+export type ContactCopy = {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly body: string;
+  readonly nameLabel: string;
+  readonly emailLabel: string;
+  readonly messageLabel: string;
+  readonly submitLabel: string;
+};
+
+interface ContactSectionProps {
+  readonly id?: string;
+  readonly fieldPrefix?: string;
+  readonly copy?: ContactCopy;
+}
+
+export function ContactSection({
+  id = "contact",
+  fieldPrefix = "contact",
+  copy = CONTACT,
+}: ContactSectionProps) {
   const endpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT;
-  const action = endpoint ?? `mailto:${SITE.email}`;
+  const action = endpoint ?? `#${id}`;
+  const titleId = `${id}-title`;
 
   return (
     <section
-      id="contact"
-      aria-labelledby="contact-title"
+      id={id}
+      aria-labelledby={titleId}
       className="border-t border-cream-offwhite/5 py-space-9 lg:py-space-10"
     >
       <Container>
         <div className="grid gap-space-7 lg:grid-cols-[0.85fr_1.15fr] lg:gap-space-8">
           <Reveal distance={8}>
             <p className="font-sans text-caption uppercase tracking-[0.18em] text-cream-muted">
-              {CONTACT.eyebrow}
+              {copy.eyebrow}
             </p>
             <h2
-              id="contact-title"
+              id={titleId}
               className="mt-space-4 max-w-xl font-display text-display-md font-light text-cream-offwhite sm:text-display-lg"
             >
-              {CONTACT.title}
+              {copy.title}
             </h2>
             <p className="mt-space-4 max-w-lg font-sans text-body-lg text-cream-muted">
-              {CONTACT.body}
-            </p>
-            <p className="mt-space-6 font-sans text-body-sm text-cream-muted">
-              Prefer email?{" "}
-              <a
-                href={`mailto:${SITE.email}`}
-                className="text-cream-offwhite underline decoration-gold-champagne/60 underline-offset-4 transition-colors duration-200 hover:text-gold-champagne focus-visible:outline-none focus-visible:shadow-focus-gold"
-              >
-                {SITE.email}
-              </a>
+              {copy.body}
             </p>
           </Reveal>
 
@@ -49,29 +61,29 @@ export function ContactSection() {
               className="space-y-space-5"
             >
               <Input
-                id="contact-name"
+                id={`${fieldPrefix}-name`}
                 name="name"
-                label="Name"
+                label={copy.nameLabel}
                 autoComplete="name"
                 required
               />
               <Input
-                id="contact-email"
+                id={`${fieldPrefix}-email`}
                 name="email"
-                label="Email"
+                label={copy.emailLabel}
                 type="email"
                 autoComplete="email"
                 required
               />
               <Textarea
-                id="contact-message"
+                id={`${fieldPrefix}-message`}
                 name="message"
-                label="Message"
+                label={copy.messageLabel}
                 rows={6}
                 required
               />
               <div className="pt-space-2">
-                <Button>Send inquiry</Button>
+                <Button>{copy.submitLabel}</Button>
               </div>
             </form>
           </Reveal>

@@ -3,10 +3,11 @@ import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MotionProvider } from "@/components/providers/MotionProvider";
+import { LIVE_SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
+  subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "500"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
@@ -14,14 +15,13 @@ const cormorant = Cormorant_Garamond({
 });
 
 const dmSans = DM_Sans({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "700"],
   variable: "--font-dm-sans",
   display: "swap",
 });
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://portfolio.tonydemo.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? LIVE_SITE_URL;
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? "BlueSkyz Labs";
 
 export const metadata: Metadata = {

@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import { existsSync, readdirSync } from "node:fs";
 
-for (const requiredFile of ["out/index.html", "out/404.html", "out/_headers"]) {
+for (const requiredFile of [
+  "out/index.html",
+  "out/so-tro.html",
+  "out/404.html",
+  "out/_headers",
+]) {
   assert.ok(
     existsSync(requiredFile),
     `Missing static export artifact: ${requiredFile}`,

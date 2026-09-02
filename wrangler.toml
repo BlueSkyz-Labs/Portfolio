@@ -3,5 +3,5 @@ pages_build_output_dir = "./out"
 compatibility_date = "2026-08-30"
 
 [vars]
-NEXT_PUBLIC_SITE_URL = "https://portfolio.tonydemo.com"
+NEXT_PUBLIC_SITE_URL = "https://blueskyz-labs-portfolio.pages.dev"
 NEXT_PUBLIC_SITE_NAME = "BlueSkyz Labs"

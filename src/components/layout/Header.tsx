@@ -123,8 +123,8 @@ export function Header() {
 
         <Nav />
 
-        <a
-          href="#contact"
+        <Link
+          href="/#contact"
           className={cn(
             "group relative hidden items-center justify-center overflow-hidden font-sans text-body-sm font-medium uppercase tracking-[0.04em] md:inline-flex",
             "border border-gold-champagne px-5 py-2 text-gold-champagne",
@@ -134,7 +134,7 @@ export function Header() {
           )}
         >
           Begin a project
-        </a>
+        </Link>
 
         <button
           ref={mobileTriggerRef}

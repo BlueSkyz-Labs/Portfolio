@@ -21,11 +21,11 @@ test.describe("V1 narrative sections", () => {
   test("work and process expose structured content", async ({ page }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
-    await expect(page.locator("#work article")).toHaveCount(3);
+    await expect(page.locator("#work article")).toHaveCount(4);
     await expect(page.locator("#process li")).toHaveCount(4);
   });
 
-  test("contact exposes labeled native controls and direct email fallback", async ({
+  test("contact exposes labeled native controls without a dead mailbox", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
@@ -33,7 +33,8 @@ test.describe("V1 narrative sections", () => {
     await expect(page.getByLabel("Name")).toBeVisible();
     await expect(page.getByLabel("Email")).toBeVisible();
     await expect(page.getByLabel("Message")).toBeVisible();
-    await expect(page.locator('#contact a[href^="mailto:"]')).toHaveCount(1);
+    await expect(page.locator("#contact form")).toBeVisible();
+    await expect(page.locator('#contact a[href^="mailto:"]')).toHaveCount(0);
   });
 
   test("reduced motion keeps narrative content visible", async ({ page }) => {

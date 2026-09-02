@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/layout/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { PROJECTS } from "@/lib/constants";
@@ -56,7 +57,16 @@ export function WorkSection() {
                   </div>
 
                   <h3 className="mt-space-3 font-display text-display-sm font-light text-cream-offwhite">
-                    {project.title}
+                    {project.href ? (
+                      <Link
+                        href={project.href}
+                        className="transition-colors duration-200 ease-out-expo hover:text-gold-champagne focus-visible:text-gold-champagne"
+                      >
+                        {project.title}
+                      </Link>
+                    ) : (
+                      project.title
+                    )}
                   </h3>
                   <p className="mt-space-3 max-w-xl font-sans text-body text-cream-muted">
                     {project.summary}

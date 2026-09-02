@@ -1,6 +1,7 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
+import Link from "next/link";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -98,8 +99,8 @@ export function MobileNavDialog({
             </ul>
           </nav>
 
-          <a
-            href="#contact"
+          <Link
+            href="/#contact"
             onClick={closeAndNavigate}
             className={cn(
               "inline-flex min-h-11 w-full items-center justify-center border border-gold-champagne px-5 py-3",
@@ -109,7 +110,7 @@ export function MobileNavDialog({
             )}
           >
             Begin a project
-          </a>
+          </Link>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

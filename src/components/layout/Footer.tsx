@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Github, Linkedin, Twitter } from "lucide-react";
+import { Github } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Container } from "./Container";
 import { SITE, SOCIAL_LINKS } from "@/lib/constants";
+import { SO_TRO } from "@/lib/so-tro";
 
 /**
  * Footer — single-row closing mark.
@@ -19,8 +20,6 @@ import { SITE, SOCIAL_LINKS } from "@/lib/constants";
  */
 const SOCIAL_ICONS: Readonly<Record<string, LucideIcon>> = {
   GitHub: Github,
-  LinkedIn: Linkedin,
-  X: Twitter,
 };
 
 export function Footer() {
@@ -55,8 +54,16 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Socials */}
+          {/* Products + remaining real socials */}
           <ul className="flex items-center gap-6">
+            <li>
+              <Link
+                href={SO_TRO.href}
+                className="font-sans text-caption uppercase tracking-[0.04em] text-cream-muted transition-colors duration-200 ease-out-expo hover:text-gold-champagne focus-visible:text-gold-champagne"
+              >
+                Sổ Trọ
+              </Link>
+            </li>
             {SOCIAL_LINKS.map((link) => {
               const Icon = SOCIAL_ICONS[link.label];
               return (
