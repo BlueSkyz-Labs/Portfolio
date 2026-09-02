@@ -1,313 +1,259 @@
 # QA Strategy — BlueSkyz Labs Portfolio
 
-> **Owner:** Thinh Nguyen · QA Engineer
-> **Project:** `PRJ_Portfolio` (Next.js 15, React 19 RC, Tailwind, Framer Motion)
-> **Source of truth for design:** [`SPEC.md`](./SPEC.md)
-> **Status:** Living document — updated as gates evolve.
+> **Project:** BlueSkyz Labs Portfolio — Next.js 15.5.24, React 19.0.8, Tailwind CSS 4.3.3
+> **Product/design source of truth:** [`../SPEC.md`](../SPEC.md)
+> **Status:** Living engineering-assurance document. This file describes what the repository actually enforces today and explicitly labels residual gaps.
 
 ---
 
 ## 1. Mission
 
-Define and enforce the quality gates that separate _"launched"_ from _"premium-grade"_ for the BlueSkyz Labs Portfolio. Every gate below is derived from a specific commitment in `SPEC.md`. If a gate fails, the PR is blocked.
+Protect the portfolio's product truth and premium user experience with deterministic, reviewable promotion evidence. A change is not considered safe because it "looks fine" or because an earlier commit passed CI: the exact candidate being promoted must satisfy the applicable gates against the exact current base.
 
-We optimize for the visitor's **first seven seconds** (SPEC §1): stillness, authority, curiosity, respect. Every check is written to defend that experience.
+Core principles:
 
----
-
-## 2. Quality Gates (Overview)
-
-| Gate                                       | Type       | Source      | Blocking?   |
-| ------------------------------------------ | ---------- | ----------- | ----------- |
-| G1 — TypeScript compiles                   | Static     | SPEC §6.2   | ✅ Yes      |
-| G2 — Lint clean (zero warnings)            | Static     | SPEC §6.6   | ✅ Yes      |
-| G3 — Prettier formatted                    | Static     | SPEC §6.6   | ✅ Yes      |
-| G4 — Production build succeeds             | Build      | SPEC §6.6   | ✅ Yes      |
-| G5 — Bundle size regression < 5%           | Build      | SPEC §6.3   | ✅ Yes      |
-| G6 — E2E smoke (Playwright)                | E2E        | This doc §3 | ✅ Yes      |
-| G7 — Accessibility: axe-core WCAG 2.1 AA   | A11y       | SPEC §4.6   | ✅ Yes      |
-| G8 — Performance: Lighthouse ≥ 90 all cats | Perf       | SPEC §6.3   | ✅ Yes      |
-| G9 — LCP < 1.2s, INP < 200ms               | Perf (RUM) | SPEC §6.3   | ✅ Yes      |
-| G10 — Visual regression: screenshot diff   | Visual     | This doc §6 | ⚠️ Advisory |
-| G11 — Cross-browser: Chrome, Edge, Firefox | E2E matrix | This doc §7 | ✅ Yes      |
-
-G1–G5 run on every push via pre-commit + CI. G6–G11 run on every PR to `main` / `develop`.
+- **PR-first promotion.** Routine delivery is developed on a branch and promoted through a pull request.
+- **Exact-head evidence.** A green run belongs to the commit SHA it tested; a moved head requires fresh evidence.
+- **Exact-base bundle comparison.** G5 compares the candidate with the pull request's exact base SHA, not an approximate historical baseline.
+- **Do not weaken gates to land a change.** Fix the root cause or explicitly escalate a real product/risk decision.
+- **Static-export truth.** Browser and Lighthouse tests exercise the same `out/` artifact that is deployable to Cloudflare Pages.
+- **Evidence before completion claims.** Mergeability, checks, review threads, and resulting `main` are refreshed before declaring a workstream complete.
 
 ---
 
-## 3. End-to-End Test Plan (Playwright)
+## 2. Current Blocking Gates
 
-### 3.1 Tooling
+The primary GitHub Actions job is named exactly:
 
-- **`@playwright/test`** — primary runner, real browsers (Chromium, Firefox, WebKit).
-- **`@axe-core/playwright`** — accessibility violations layered onto every E2E test.
-- **`@playwright/test` visual comparisons** — pixel-diff against committed baselines.
-- **`lighthouse-ci`** — Lighthouse audits in CI with assertion gates.
+`Quality Gates (architecture, lint, typecheck, build, e2e, a11y, perf)`
 
-> **Conceptual `package.json` addition** (for the implementer to wire up on the next PR):
->
-> ```jsonc
-> {
->   "devDependencies": {
->     "@playwright/test": "^1.49.0",
->     "@axe-core/playwright": "^4.10.0",
->     "axe-core": "^4.10.0",
->     "lighthouse": "^12.2.1",
->     "@lhci/cli": "^0.14.0",
->     "pixelmatch": "^6.0.0",
->     "pngjs": "^7.0.0",
->   },
-> }
-> ```
->
-> The full test dependency block also includes `typescript`, `eslint`, `prettier` (already present).
+That name is the intended required-status-check identifier once the `main` ruleset in Issue #8 is enabled.
 
-### 3.2 Test Layers
+| Gate | Current implementation | Blocking in `qa.yml`? |
+| --- | --- | --- |
+| Dependency audit | `pnpm audit --prod --audit-level=high` | Yes |
+| Architecture regressions | `pnpm test:architecture` | Yes |
+| G1 — TypeScript | `pnpm typecheck` | Yes |
+| G2 — ESLint | `pnpm lint` → `eslint .` | Yes |
+| G3 — Prettier | `pnpm format:check` | Yes |
+| G4 — Production/static-export build | `pnpm build` + `scripts/verify-static-export.mjs` | Yes |
+| G5 — Bundle regression | exact-base build + `scripts/check-bundle-regression.mjs` | Yes |
+| Product Truth initial-route JS | hard budget `< 120,000 bytes` inside G5 | Yes |
+| G6/G7 — E2E + accessibility | Playwright + `@axe-core/playwright` | Yes |
+| G11 — Cross-browser | Chromium, Firefox, WebKit, mobile Chromium | Yes |
+| G8 — Lighthouse | `pnpm lighthouse` / LHCI | Yes |
+| Edge-UA smoke | separate post-merge `main` push job | Yes for that job, not a PR gate |
+| G9 — Field INP/RUM | not yet implemented | **Residual gap** |
+| G10 — screenshot visual regression | not yet implemented as a blocking suite | Advisory / future work |
 
-```
-tests/
-├── e2e/
-│   ├── basic.spec.ts           # Smoke (home page loads, no console errors, header, hero)
-│   ├── navigation.spec.ts      # Nav anchor links scroll smoothly, active-section highlight
-│   ├── hero.spec.ts            # Hero statement visible, scroll cue pulses, reduced-motion respected
-│   ├── sections.spec.ts        # Manifesto / Work / Process / About / Contact render
-│   ├── contact-form.spec.ts    # Form validation, submit states (default → loading → success/error)
-│   ├── accessibility.spec.ts   # axe-core scan on every route, keyboard nav, focus ring
-│   └── responsive.spec.ts      # Breakpoints: sm 640, md 768, lg 1024, xl 1280, 2xl 1440
-├── visual/
-│   ├── hero.spec.ts            # Screenshot diff against baseline
-│   └── desktop-light.spec.ts
-├── fixtures/
-│   └── base.ts                 # Custom test fixture: preloaded fonts, axe auto-injected
-└── playwright.config.ts        # Browsers, base URL, web server, reporters
-```
-
-### 3.3 Smoke Test (G6) — `tests/e2e/basic.spec.ts`
-
-Defends the visitor's first seven seconds:
-
-1. **Home page loads without crash** — `page.goto('/')` returns 200, `page.title()` contains "Portfolio", no unhandled exception.
-2. **No console errors** — every page error fails the test; warnings are collected and surfaced.
-3. **Header present** — `<header>` landmark exists and is visible (per SPEC §3.1: sticky header with wordmark + nav + CTA).
-4. **Hero section visible** — `#hero` section has a non-zero bounding box and is in the viewport.
-
-### 3.4 Critical-Path Tests
-
-| Test                    | What it defends                                                              | SPEC ref   |
-| ----------------------- | ---------------------------------------------------------------------------- | ---------- |
-| `navigation.spec.ts`    | Smooth scroll, active-section highlight, skip-link works                     | §4.1, §4.6 |
-| `hero.spec.ts`          | 100vh height (desktop), scroll cue animation, hairline gold rule at 8%       | §3.2       |
-| `contact-form.spec.ts`  | All four states (default / hover / focus / loading / error) render correctly | §5.4       |
-| `accessibility.spec.ts` | axe-core scan, keyboard Tab order, focus ring (1px gold @ 2px offset)        | §4.6       |
-| `responsive.spec.ts`    | Layout shifts cleanly across breakpoints; type scale steps down correctly    | §3.4       |
-
-### 3.5 Test Rules
-
-- **No `waitForTimeout`.** Use `expect(locator).toBeVisible()` and `waitForResponse` — never arbitrary sleeps.
-- **No `nth-child` selectors** when a semantic/role selector exists.
-- **One assertion concept per test.** When it fails, the failure message tells you what broke.
-- **Mobile-first viewport in CI** (375×667) plus a desktop run (1440×900). Tablet covered in `responsive.spec.ts`.
-- **`prefers-reduced-motion`** — every test that interacts with animation must also pass under `reduce`.
+The local versioned pre-commit hook runs architecture, G1–G4. G5 deliberately remains CI-only because CI owns the authoritative base SHA.
 
 ---
 
-## 4. Performance Benchmarks (G8, G9)
+## 3. Architecture / Supply-Chain Regression Layer
 
-Targets lifted verbatim from SPEC §6.3:
+`tests/architecture/*.test.mjs` protects repository invariants before heavier browser work begins. Current coverage includes:
 
-| Metric                                  | Hard limit    | Target   | Tool                                |
-| --------------------------------------- | ------------- | -------- | ----------------------------------- |
-| **LCP** (Largest Contentful Paint)      | **< 1.2 s**   | 0.8 s    | `lhci` + Web Vitals RUM             |
-| **CLS** (Cumulative Layout Shift)       | < 0.05        | 0        | `lhci`                              |
-| **INP** (Interaction to Next Paint)     | **< 200 ms**  | 100 ms   | `web-vitals` (field) + `lhci` (lab) |
-| **TBT** (Total Blocking Time)           | < 150 ms      | < 50 ms  | `lhci`                              |
-| **Total JS** (initial route, gzipped)   | **< 120 KB**  | < 80 KB  | `next-bundle-analyzer`              |
-| **Lighthouse** (perf / a11y / bp / seo) | **≥ 90** each | 100 each | `lhci collect --assert`             |
+- hard initial-route bundle budget and regression semantics;
+- Cloudflare Pages static-export contract;
+- Tailwind CSS v4/PostCSS pipeline;
+- production framework security floors;
+- explicit ESLint CLI + flat-config bridge;
+- semantic layout ownership;
+- versioned local pre-commit gates;
+- React 19 runtime/type-declaration alignment.
 
-### 4.1 Lighthouse CI (G8)
+These tests are intentionally cheap and fail early when a toolchain or architectural invariant drifts.
 
-`lighthouserc.json` (PR-provided) will assert:
+---
 
-```jsonc
-{
-  "ci": {
-    "collect": {
-      "url": ["http://localhost:3000/"],
-      "numberOfRuns": 3,
-      "settings": {
-        "preset": "desktop",
-        "chromeFlags": "--no-sandbox --headless=new",
-      },
-    },
-    "assert": {
-      "assertions": {
-        "categories:performance": ["error", { "minScore": 0.9 }],
-        "categories:accessibility": ["error", { "minScore": 0.9 }],
-        "categories:best-practices": ["error", { "minScore": 0.9 }],
-        "categories:seo": ["error", { "minScore": 0.9 }],
-        "largest-contentful-paint": ["error", { "maxNumericValue": 1200 }],
-        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.05 }],
-        "total-blocking-time": ["warn", { "maxNumericValue": 150 }],
-      },
-    },
-  },
-}
+## 4. Static and Build Gates
+
+### G1 — TypeScript
+
+`pnpm typecheck` runs `tsc --noEmit`. Runtime React and declarations are kept on the validated React 19 line (`react`/`react-dom` 19.0.8, `@types/react` 19.0.8, `@types/react-dom` 19.0.3).
+
+### G2 — ESLint
+
+The repository uses ESLint 9 through the explicit CLI:
+
+```text
+pnpm lint     -> eslint .
+pnpm lint:fix -> eslint . --fix
 ```
 
-### 4.2 Web Vitals RUM (G9)
+`eslint.config.mjs` uses `FlatCompat` to preserve the Next.js 15.5 policy represented by `next/core-web-vitals` and `next/typescript`. The legacy `.eslintrc.json` path is intentionally removed.
 
-Inject `web-vitals` on the client and POST to `/api/vitals` so we measure real-world INP, not just lab LCP. Alert if p75 INP > 200 ms over any rolling 24 h window.
+### G3 — Prettier
 
-### 4.3 Bundle Budget (G5)
+`pnpm format:check` is blocking. On failure, CI runs the repository formatter and uploads the deterministic `prettier-output` artifact. Apply that formatter output rather than hand-guessing formatting differences.
 
-A failing build increments the JS payload by more than 5% vs. `main` (enforced by `size-limit` or a custom `next build` + bundle-analyzer script). Current baseline recorded on first merge to `main`.
+### G4 — Static export
+
+`pnpm build` runs Next.js and then `scripts/verify-static-export.mjs`. The build must produce the deployable `out/` artifact, including the expected static routes/assets and Cloudflare Pages headers contract.
 
 ---
 
-## 5. Accessibility (G7) — axe-core + WCAG 2.1 AA
+## 5. G5 — Exact-Base Bundle Assurance
 
-### 5.1 Layered Approach
+G5 is both a regression gate and a Product Truth hard-budget gate.
 
-- **Per-route axe scan** in E2E: every `*.spec.ts` ends with `await axeCheck(page)` which fails on any `serious` or `critical` violation.
-- **Standalone a11y spec** (`accessibility.spec.ts`) walks the entire keyboard flow (Tab / Shift+Tab / Enter / Space / Escape) and asserts:
-  - Every interactive element is reachable
-  - Focus ring is visible (1px `--gold-champagne` solid, 2px offset — SPEC §4.6)
-  - Skip link appears on first Tab and jumps to `<main>`
-  - No element traps focus
+For a pull request, CI reads `github.event.pull_request.base.sha`, builds that exact revision in a disposable worktree, builds the candidate, and compares the root-route First Load JS values.
 
-### 5.2 WCAG 2.1 AA Checklist (tied to SPEC)
+Promotion requires both:
 
-| Criterion                  | SPEC ref | Check                                                                    |
-| -------------------------- | -------- | ------------------------------------------------------------------------ |
-| 1.1.1 Non-text content     | §2.6, §5 | All `<img>` have `alt`; decorative use `aria-hidden`                     |
-| 1.3.1 Info & relationships | §4.6     | Semantic landmarks: `<header> <main> <nav> <section> <article> <footer>` |
-| 1.4.3 Contrast (minimum)   | §2.1     | `--cream-offwhite` on `--ink-void` = 16.8:1 (AAA) — verified by axe      |
-| 1.4.11 Non-text contrast   | §2.6     | Gold hairline borders against bg = 3:1 minimum                           |
-| 2.1.1 Keyboard             | §4.6     | Every interactive element focusable                                      |
-| 2.4.1 Bypass blocks        | §4.6     | "Skip to content" link present                                           |
-| 2.4.7 Focus visible        | §4.6     | `:focus-visible` ring required                                           |
-| 2.5.5 Target size          | —        | Min 44×44 CSS px for tap targets                                         |
-| 4.1.2 Name, role, value    | §4.6     | `aria-label` on icon-only buttons; Radix primitives handle the rest      |
+1. candidate growth does not exceed the configured regression tolerance; and
+2. candidate initial-route JS remains **strictly below 120,000 bytes**.
 
-### 5.3 axe-core Configuration
+`bundle-evidence.json` is uploaded on every run where evidence can be produced. Never replace exact-base evidence with a remembered number from another PR.
 
-```ts
-// tests/fixtures/base.ts
-import AxeBuilder from "@axe-core/playwright";
+---
 
-export const axeCheck = async (page: Page) => {
-  const results = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-    .analyze();
-  const blockers = results.violations.filter(
-    (v) => v.impact === "serious" || v.impact === "critical",
-  );
-  expect(blockers, JSON.stringify(blockers, null, 2)).toEqual([]);
-};
+## 6. Browser, Accessibility, and Responsive Coverage
+
+The current E2E suite is:
+
+```text
+tests/e2e/
+├── accessibility.spec.ts
+├── basic.spec.ts
+├── navigation.spec.ts
+└── sections.spec.ts
 ```
 
----
+`playwright.config.ts` defines:
 
-## 6. Visual Regression (G10)
+- `chromium` — Desktop Chrome profile;
+- `firefox` — Desktop Firefox profile;
+- `webkit` — Desktop Safari/WebKit profile;
+- `mobile-chromium` — Pixel 5 profile;
+- `edge-ua` — Chromium with a Microsoft Edge user agent, used by the post-merge main smoke job.
 
-### 6.1 Approach
+CI browser tests run against `pnpm start`, which serves the built static `out/` artifact. Failure artifacts retain traces/screenshots/video where Playwright produces them.
 
-Playwright's built-in screenshot diffing with committed baselines under `tests/visual/__screenshots__/`.
+Accessibility coverage uses `@axe-core/playwright` and semantic/keyboard assertions. Interactive mobile navigation must preserve keyboard operation, Escape behavior, focus restoration, appropriate accessible names, and reduced-motion behavior.
 
-- **Capture at fixed viewports:** desktop 1440×900, tablet 768×1024, mobile 375×667.
-- **`animations: 'disabled'`** — every test uses `page.emulateMedia({ reducedMotion: 'reduce' })` so hairline rule stays in place and scroll cue doesn't pulse.
-- **`mask` dynamic regions** — anything time-based (current year in footer, view counters) is masked before diff.
-- **Threshold:** `maxDiffPixels: 50` (anti-aliasing tolerance) and `maxDiffPixelRatio: 0.001` (0.1%).
+### Test authoring rules
 
-### 6.2 Baselines
-
-- Desktop + mobile baselines committed for every section: Hero, Manifesto, Work, Process, About, Contact.
-- Updated **manually** only via `npx playwright test --update-snapshots` after a design review approves the change. Never auto-update in CI.
-
-### 6.3 CI Behaviour
-
-- Diff below threshold → pass.
-- Diff above threshold → fail the build **with the diff PNG as an artifact** so reviewers can eyeball it.
-- Snapshot updates never happen automatically — they require a human review.
+- Prefer role, label, and semantic selectors over DOM-position selectors.
+- Do not use arbitrary sleeps (`waitForTimeout`) for synchronization.
+- Test observable behavior, not implementation details.
+- When animation is involved, explicitly cover `prefers-reduced-motion` where the behavior materially changes.
+- A new user-visible behavior should receive a failing test/contract before implementation whenever practical.
 
 ---
 
-## 7. Cross-Browser Matrix (G11)
+## 7. Lighthouse
 
-The portfolio must render identically (within the visual-regression tolerance) on:
+`lighthouserc.json` runs three desktop audits against the static site and currently enforces:
 
-| Browser               | Channel      | Project goal                                                           |
-| --------------------- | ------------ | ---------------------------------------------------------------------- |
-| **Chromium** (latest) | Chrome       | Primary — Lighthouse runs here                                         |
-| **Firefox** (latest)  | Firefox      | Full visual + E2E pass                                                 |
-| **WebKit** (latest)   | Safari-on-CI | Visual sanity (no E2E for now — Safari quirks are caught in QA passes) |
+- Performance ≥ 0.90
+- Accessibility ≥ 0.90
+- Best Practices ≥ 0.90
+- SEO ≥ 0.90
+- LCP ≤ 1,200 ms
+- CLS ≤ 0.05
 
-Additionally, **Microsoft Edge** (Chromium-based) is covered by Chromium runs at the engine level. SPEC and stakeholder asks call out Edge specifically; we satisfy this by running Chromium with Edge's user-agent and Edge's fonts/metrics in a separate job, plus a manual smoke before each release.
+TBT ≤ 150 ms is currently a warning, not an error.
 
-### 7.1 CI Strategy
+Reports are stored under `.lighthouseci/` and uploaded as the `lighthouse-report` artifact.
 
-`playwright.config.ts` defines three projects (`chromium`, `firefox`, `webkit`) plus a `mobile-chromium` project for the responsive suite. CI runs all projects in parallel; failure in any one blocks the PR.
-
-```ts
-// playwright.config.ts (excerpt)
-projects: [
-  { name: "chromium", use: { ...devices["Desktop Chrome"] } },
-  { name: "firefox",  use: { ...devices["Desktop Firefox"] } },
-  { name: "webkit",   use: { ...devices["Desktop Safari"] } },
-  { name: "mobile-chromium", use: { ...devices["Pixel 5"] } },
-],
-```
+Lighthouse is lab evidence. It does **not** close the G9 field-INP requirement by itself.
 
 ---
 
 ## 8. CI Pipeline — `.github/workflows/qa.yml`
 
-A dedicated `qa` job runs on every push and PR to `main` / `develop`:
+The workflow runs on pushes and pull requests targeting `main` / `develop` and cancels stale in-flight runs for the same ref.
 
-1. Checkout, setup Node 20, enable pnpm via corepack
-2. Cache pnpm store
-3. `pnpm install --frozen-lockfile`
-4. `pnpm typecheck` (G1)
-5. `pnpm lint` (G2)
-6. `pnpm format:check` (G3)
-7. `pnpm build` (G4, G5)
-8. `npx playwright install --with-deps` then `npx playwright test` (G6, G7, G10, G11)
-9. `lhci autorun` (G8, G9) — boots the built site, audits, uploads to LHCI server (optional)
-10. Upload Playwright report + Lighthouse artifacts as build artifacts
+Primary sequence:
 
-Branch protection on `main` requires the `qa` job green.
+1. checkout;
+2. install pnpm 9.15.9 and Node 20;
+3. frozen dependency install;
+4. production dependency audit;
+5. architecture regressions;
+6. G1 typecheck;
+7. G2 ESLint;
+8. G3 Prettier;
+9. G4 candidate static build;
+10. resolve and build the exact G5 base revision;
+11. G5 regression + hard-budget check;
+12. Playwright browser installation/caching;
+13. cross-browser E2E + accessibility;
+14. Lighthouse CI;
+15. upload applicable evidence artifacts.
 
----
-
-## 9. Release Gates
-
-A release to `portfolio.tonydemo.com` is permitted only when **all** of:
-
-- G1–G11 green on the release commit
-- Lighthouse desktop score ≥ 90 on all four categories
-- Manual smoke on Chrome + Safari on real devices
-- Visual diff against the last release reviewed by a designer
-- Bundle-size delta documented in the PR description
+After a successful push to `main`, the separate `Edge smoke (Chromium + Edge UA)` job builds the production artifact again and executes the `edge-ua` Playwright project.
 
 ---
 
-## 10. Reporting & Artifacts
+## 9. Promotion Discipline
 
-Every CI run uploads:
+Immediately before merge, verify:
 
-- `playwright-report/` — HTML report with traces, videos on failure
-- `lighthouse/` — `lhr.json` per route, manifest
-- `test-results/` — JUnit XML for GitHub annotations
-- `bundle-stats.html` — `next-bundle-analyzer` output for size regressions
+- PR is open, non-draft, and mergeable;
+- base SHA is still the expected current `main`;
+- head SHA is exactly the SHA that passed the fresh PR QA run;
+- the primary QA job completed successfully;
+- no unresolved review threads remain;
+- no material review finding is being bypassed;
+- merge uses the expected-head SHA guard where tooling supports it.
+
+After merge, verify the returned merge commit is the new `main` head. For changes that affect runtime/deployment behavior, also inspect the corresponding `main` workflow/deployment evidence.
+
+Historical green runs are context, not promotion authority, after either head or base changes.
 
 ---
 
-## 11. Open Questions / Follow-ups
+## 10. Governance Reality — Issue #8
 
-- **Header component missing today.** The current `page.tsx` renders the hero directly without a `<header>` landmark. The basic smoke test enforces the SPEC §3.1 requirement; until the Header component lands (planned v1.1), that assertion fails. **Action:** track as a blocker for the header-implementation ticket, not a test bug.
-- **Real-device INP** — once deployed, we need p75 INP from RUM; Lighthouse lab INP is a proxy. Wire `web-vitals` before public launch.
-- **axe-core in `package.json`** — noted above; implementer to add in the next dependency-bump PR.
+**Current state:** `main` is still technically unprotected and no active repository ruleset is enforcing PR-only promotion. The engineering process follows PR-first discipline, but repository settings do not yet make direct writes impossible.
+
+This is tracked in [Issue #8 — `governance: enforce main promotion ruleset`](https://github.com/BlueSkyz-Labs/Portfolio/issues/8).
+
+Target ruleset:
+
+- require a pull request before merge;
+- require status check `Quality Gates (architecture, lint, typecheck, build, e2e, a11y, perf)`;
+- require strict/up-to-date status checks;
+- require conversation resolution;
+- block force pushes and branch deletion;
+- keep emergency bypass narrow and explicit;
+- avoid an impossible approval-count requirement for the one-human operating model.
+
+**Do not state that branch protection blocks merges until the setting has actually been applied and read back from GitHub.** Keep Issue #8 open until direct-main rejection and a normal green-PR merge have both been verified.
 
 ---
 
-_Last updated by QA — synced with SPEC.md revision on initial release._
+## 11. Evidence Artifacts
+
+The primary workflow can publish:
+
+- `bundle-evidence` — exact-base G5 result;
+- `prettier-output` — deterministic correction, only when G3 fails;
+- `playwright-report` — HTML report;
+- `playwright-test-results` — test result artifacts/JUnit output;
+- `lighthouse-report` — `.lighthouseci/` results.
+
+Artifact absence is expected for conditional outputs that were never generated; it must not be confused with a successful gate when the underlying gate was skipped.
+
+---
+
+## 12. Explicit Residual Gaps
+
+### G9 — real-user INP / RUM
+
+The SPEC field-performance requirement is not yet mechanically verified. A future telemetry workstream should define privacy-conscious RUM collection, p75 evaluation, retention, alerting, and an operational owner before G9 can honestly become a blocking release gate.
+
+### G10 — visual regression
+
+The repository does not currently have committed screenshot baselines and a blocking visual-diff workflow. Do not describe visual regression as implemented until a deterministic baseline/review lifecycle exists.
+
+### Repository governance
+
+Issue #8 remains open until the GitHub ruleset is enabled and verified. Documentation is not remediation for this control gap.
+
+---
+
+_Last reconciled with repository reality on 2026-09-02._
