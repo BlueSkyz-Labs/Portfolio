@@ -24,6 +24,12 @@ export interface Project {
   readonly image?: string;
 }
 
+export interface ProcessStep {
+  readonly number: string;
+  readonly title: string;
+  readonly description: string;
+}
+
 export interface ContactPayload {
   readonly name: string;
   readonly email: string;
