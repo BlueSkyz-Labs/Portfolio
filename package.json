@@ -2,6 +2,7 @@
   "name": "portfolio",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "description": "BlueSkyz Labs Portfolio — Quiet Luxury, Loud Conviction",
   "author": "BlueSkyz Labs <hello@blueskyz.io>",
   "license": "UNLICENSED",
