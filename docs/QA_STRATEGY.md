@@ -29,22 +29,22 @@ The primary GitHub Actions job is named exactly:
 
 That name is the intended required-status-check identifier once the `main` ruleset in Issue #8 is enabled.
 
-| Gate | Current implementation | Blocking in `qa.yml`? |
-| --- | --- | --- |
-| Dependency audit | `pnpm audit --prod --audit-level=high` | Yes |
-| Architecture regressions | `pnpm test:architecture` | Yes |
-| G1 — TypeScript | `pnpm typecheck` | Yes |
-| G2 — ESLint | `pnpm lint` → `eslint .` | Yes |
-| G3 — Prettier | `pnpm format:check` | Yes |
-| G4 — Production/static-export build | `pnpm build` + `scripts/verify-static-export.mjs` | Yes |
-| G5 — Bundle regression | exact-base build + `scripts/check-bundle-regression.mjs` | Yes |
-| Product Truth initial-route JS | hard budget `< 120,000 bytes` inside G5 | Yes |
-| G6/G7 — E2E + accessibility | Playwright + `@axe-core/playwright` | Yes |
-| G11 — Cross-browser | Chromium, Firefox, WebKit, mobile Chromium | Yes |
-| G8 — Lighthouse | `pnpm lighthouse` / LHCI | Yes |
-| Edge-UA smoke | separate post-merge `main` push job | Yes for that job, not a PR gate |
-| G9 — Field INP/RUM | not yet implemented | **Residual gap** |
-| G10 — screenshot visual regression | not yet implemented as a blocking suite | Advisory / future work |
+| Gate                                | Current implementation                                   | Blocking in `qa.yml`?           |
+| ----------------------------------- | -------------------------------------------------------- | ------------------------------- |
+| Dependency audit                    | `pnpm audit --prod --audit-level=high`                   | Yes                             |
+| Architecture regressions            | `pnpm test:architecture`                                 | Yes                             |
+| G1 — TypeScript                     | `pnpm typecheck`                                         | Yes                             |
+| G2 — ESLint                         | `pnpm lint` → `eslint .`                                 | Yes                             |
+| G3 — Prettier                       | `pnpm format:check`                                      | Yes                             |
+| G4 — Production/static-export build | `pnpm build` + `scripts/verify-static-export.mjs`        | Yes                             |
+| G5 — Bundle regression              | exact-base build + `scripts/check-bundle-regression.mjs` | Yes                             |
+| Product Truth initial-route JS      | hard budget `< 120,000 bytes` inside G5                  | Yes                             |
+| G6/G7 — E2E + accessibility         | Playwright + `@axe-core/playwright`                      | Yes                             |
+| G11 — Cross-browser                 | Chromium, Firefox, WebKit, mobile Chromium               | Yes                             |
+| G8 — Lighthouse                     | `pnpm lighthouse` / LHCI                                 | Yes                             |
+| Edge-UA smoke                       | separate post-merge `main` push job                      | Yes for that job, not a PR gate |
+| G9 — Field INP/RUM                  | not yet implemented                                      | **Residual gap**                |
+| G10 — screenshot visual regression  | not yet implemented as a blocking suite                  | Advisory / future work          |
 
 The local versioned pre-commit hook runs architecture, G1–G4. G5 deliberately remains CI-only because CI owns the authoritative base SHA.
 
