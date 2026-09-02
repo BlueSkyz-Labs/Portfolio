@@ -28,9 +28,21 @@ test.describe("Sổ Trọ Vietnamese hypothesis page", () => {
       "Không làm căng mất khách",
     );
     await expect(page.getByText(/phòng/i).first()).toBeVisible();
-    await expect(page.getByText(/khách/i).first()).toBeVisible();
+    await expect(page.getByText(/khách thuê/i).first()).toBeVisible();
     await expect(page.getByText(/hóa đơn/i).first()).toBeVisible();
     await expect(page.getByText(/công nợ/i).first()).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Phòng", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Điện nước", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Thu và nợ", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/Excel và Zalo đang là mặc định/),
+    ).toBeVisible();
     await expect(page.getByText(/8–50 phòng/)).toBeVisible();
     await expect(page.getByText(/HCM/)).toBeVisible();
 

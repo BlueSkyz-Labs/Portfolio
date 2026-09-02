@@ -52,5 +52,7 @@ test("Sổ Trọ page exists with patched hypothesis hero, not the Excel/gõ-c�
   assert.match(source, /Chốt tiền điện từng phòng/);
   assert.match(source, /Tách phí cho rõ/);
   assert.match(source, /Không làm căng mất khách/);
+  assert.match(source, /Excel và Zalo đang là mặc định/);
   assert.doesNotMatch(source, /Hết tối mùng 1 cầm file Excel đi từng phòng/);
+  assert.doesNotMatch(source, /Sổ cho người giữ dãy/);
 });

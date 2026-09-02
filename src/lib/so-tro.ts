@@ -8,24 +8,28 @@ export const SO_TRO = {
     "Tách phí cho rõ.",
     "Không làm căng mất khách.",
   ],
-  subhero: "Một sổ tiếng Việt cho phòng, khách, hóa đơn, công nợ.",
+  subhero: "Một sổ tiếng Việt cho phòng, khách thuê, hóa đơn, công nợ.",
   icp: "Cho hộ tự vận hành khoảng 8–50 phòng tại HCM và Hà Nội.",
   hypothesis:
     "Trang giả thuyết định vị — không phải bằng chứng khách hàng, không khẳng định sản phẩm đã làm đủ các việc này.",
+  alternative: {
+    title: "Excel và Zalo đang là mặc định",
+    body: "Nhiều dãy đang ghi trên Excel và nhắc việc trên Zalo. Đó là cách đang có, không phải thứ trang này hứa thay. Việc chủ nhà nói tới ở đây là chốt điện, cho nợ, và lấp phòng.",
+  },
   jobs: {
-    title: "Việc chủ nhà đang nói tới",
+    title: "Ba việc",
     items: [
       {
-        title: "Tiền điện",
+        title: "Phòng",
+        body: "Giữ dãy: phòng trống, khách thuê, lấp phòng. Việc vận hành của hộ tự chạy nhà trọ.",
+      },
+      {
+        title: "Điện nước",
         body: "Chốt tiền điện từng phòng và tách phí cho rõ, để không dồn một cục chung.",
       },
       {
-        title: "Công nợ",
-        body: "Cho phép nợ mà vẫn giữ quan hệ: thu được tiền, không làm căng đến mức mất khách.",
-      },
-      {
-        title: "Lấp phòng",
-        body: "Giữ dãy đầy. Phòng trống là việc vận hành của hộ tự chạy nhà trọ.",
+        title: "Thu và nợ",
+        body: "Thu tiền, gạch nợ, cho phép nợ mà không làm căng đến mức mất khách.",
       },
     ],
   },

@@ -66,6 +66,18 @@ export default function SoTroPage() {
       </header>
 
       <Container className="space-y-space-9 py-space-9 lg:space-y-space-10 lg:py-space-10">
+        <section aria-labelledby="so-tro-alternative-title">
+          <h2
+            id="so-tro-alternative-title"
+            className="font-display text-display-sm font-light text-cream-offwhite sm:text-display-md"
+          >
+            {SO_TRO.alternative.title}
+          </h2>
+          <p className="mt-space-4 max-w-2xl font-sans text-body-lg text-cream-muted">
+            {SO_TRO.alternative.body}
+          </p>
+        </section>
+
         <section aria-labelledby="so-tro-jobs-title">
           <h2
             id="so-tro-jobs-title"
