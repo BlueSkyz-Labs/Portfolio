@@ -16,8 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Application compatibility target. JavaScript action runtimes use Node 24-native majors below.
-  NODE_VERSION: "20"
+  # Exact application/build runtime. First-party JavaScript actions are independently pinned below.
+  NODE_VERSION: "24.20.0"
   PNPM_VERSION: "9.15.9"
 
 jobs:
