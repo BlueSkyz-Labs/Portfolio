@@ -141,7 +141,6 @@ export function Header() {
           type="button"
           aria-label="Open navigation"
           aria-expanded={mobileOpen}
-          aria-controls="mobile-navigation"
           onClick={() => setMobileOpen(true)}
           className={cn(
             "inline-flex min-h-11 min-w-11 items-center justify-center text-cream-offwhite md:hidden",
