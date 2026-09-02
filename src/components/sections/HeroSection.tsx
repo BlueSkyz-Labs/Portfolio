@@ -85,7 +85,7 @@ export function HeroSection() {
         className="flex items-center justify-between"
       >
         <span className="font-sans text-caption text-cream-muted">
-          {SITE.name} — Portfolio
+          {SITE.name}
         </span>
         <span className="font-sans text-caption text-cream-muted">
           {SITE.edition}

@@ -5,7 +5,7 @@
 export const SO_TRO = {
   slug: "so-tro",
   href: "/so-tro",
-  title: "Sổ Trọ · BlueSkyz Labs",
+  title: "Sổ Trọ · PortfolioMKT",
   description:
     "Sổ Trọ: giả thuyết một sổ tiếng Việt cho Ba Mẹ tự giữ nhà trọ. Không cần rành công nghệ. Giá chưa chốt.",
   eyebrow: "Sổ Trọ",

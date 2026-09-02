@@ -21,7 +21,7 @@ test.describe("Smoke — Home", () => {
     expect(response!.status(), "HTTP status").toBeLessThan(400);
 
     // Title reflects the metadata in src/app/layout.tsx.
-    await expect(page).toHaveTitle(/Portfolio/i);
+    await expect(page).toHaveTitle(/PortfolioMKT/i);
   });
 
   test("no console errors during load", async ({ page }) => {

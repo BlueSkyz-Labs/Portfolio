@@ -12,7 +12,7 @@ import { WorkSection } from "@/components/sections/WorkSection";
  * The root layout owns the global Header, main landmark, and Footer.
  */
 export const metadata: Metadata = {
-  title: "Portfolio",
+  title: { absolute: "PortfolioMKT" },
   description:
     "Selected works, process, and quiet conviction. A portfolio built with restraint, materiality, and precision.",
 };

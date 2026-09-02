@@ -113,12 +113,6 @@ export function Header() {
           className="group inline-flex items-baseline gap-2 font-display text-heading-md font-light text-cream-offwhite transition-colors duration-200 ease-out-expo hover:text-gold-champagne focus-visible:text-gold-champagne"
         >
           <span>{SITE.name}</span>
-          <span
-            aria-hidden="true"
-            className="hidden text-caption text-cream-muted sm:inline"
-          >
-            — Portfolio
-          </span>
         </Link>
 
         <Nav />

@@ -48,7 +48,7 @@ test("Sổ Trọ copy kit v2.1 is the public voice — eyebrow Sổ Trọ, Ba/M�
   const related = srcFiles.filter((path) => path.includes("so-tro"));
   const source = related.map((path) => readFileSync(path, "utf8")).join("\n");
 
-  assert.match(source, /Sổ Trọ · BlueSkyz Labs/);
+  assert.match(source, /Sổ Trọ · PortfolioMKT/);
   assert.match(source, /eyebrow:\s*"Sổ Trọ"/);
   assert.match(source, /Một sổ cho Ba, cho Mẹ/);
   assert.match(source, /Giữ dãy nhà trọ cho rõ/);
@@ -89,6 +89,7 @@ test("home Sổ Trọ work card is one Vietnamese line; chrome stays English", (
   assert.doesNotMatch(src, /A Vietnamese operations ledger/);
   assert.doesNotMatch(src, /Phần mềm quản lý nhà trọ/);
   assert.match(src, /Studio \/ Internal/);
+  assert.match(src, /name:\s*"PortfolioMKT"/);
 });
 
 test("public src does not invent schema, hreflang, cobalt, or GTM-forbidden channels", () => {

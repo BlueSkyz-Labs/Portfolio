@@ -46,4 +46,20 @@ test.describe("Public marketing hygiene", () => {
       .evaluate((el) => getComputedStyle(el).color);
     expect(gold).toBe("rgb(201, 169, 98)");
   });
+
+  test("visible chrome uses PortfolioMKT and keeps the GitHub org URL", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+
+    await expect(page).toHaveTitle("PortfolioMKT");
+    await expect(
+      page.getByRole("link", { name: "PortfolioMKT — home" }).first(),
+    ).toBeVisible();
+    await expect(page.locator("#hero")).toContainText("PortfolioMKT");
+    await expect(page.locator("footer")).toContainText("PortfolioMKT");
+    await expect(
+      page.locator('a[href="https://github.com/BlueSkyz-Labs"]'),
+    ).toHaveCount(1);
+  });
 });

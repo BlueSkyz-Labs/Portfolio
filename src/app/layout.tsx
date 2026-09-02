@@ -3,6 +3,7 @@ import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MotionProvider } from "@/components/providers/MotionProvider";
+import { SITE } from "@/lib/constants";
 import { LIVE_SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -22,17 +23,18 @@ const dmSans = DM_Sans({
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? LIVE_SITE_URL;
-const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? "BlueSkyz Labs";
+const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? SITE.name;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Portfolio`,
+    default: SITE_NAME,
     template: `%s · ${SITE_NAME}`,
   },
   description:
-    "BlueSkyz Labs — Selected works, process, and quiet conviction. A portfolio built with restraint, materiality, and precision.",
+    "PortfolioMKT — Selected works, process, and quiet conviction. A studio site built with restraint, materiality, and precision.",
   keywords: [
+    "PortfolioMKT",
     "BlueSkyz Labs",
     "portfolio",
     "design",
@@ -40,14 +42,14 @@ export const metadata: Metadata = {
     "premium",
     "quiet luxury",
   ],
-  authors: [{ name: "BlueSkyz Labs" }],
-  creator: "BlueSkyz Labs",
+  authors: [{ name: SITE.studioName }],
+  creator: SITE.studioName,
   openGraph: {
     type: "website",
     locale: "en_US",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — Portfolio`,
+    title: SITE_NAME,
     description:
       "Selected works, process, and quiet conviction. Built with restraint, materiality, and precision.",
     images: [
@@ -55,13 +57,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} — Portfolio`,
+        alt: SITE_NAME,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} — Portfolio`,
+    title: SITE_NAME,
     description: "Selected works, process, and quiet conviction.",
     images: ["/og-image.png"],
   },

@@ -10,8 +10,9 @@ import { SO_TRO } from "@/lib/so-tro";
  */
 
 export const SITE = {
-  name: "BlueSkyz Labs",
-  shortName: "BlueSkyz",
+  name: "PortfolioMKT",
+  shortName: "PortfolioMKT",
+  studioName: "BlueSkyz Labs",
   edition: "Edition 2026",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? LIVE_SITE_URL,
   hero: {
