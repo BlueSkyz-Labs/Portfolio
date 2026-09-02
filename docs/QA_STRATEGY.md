@@ -34,7 +34,7 @@ That name is the intended required-status-check identifier once the `main` rules
 | Dependency audit                    | `pnpm audit --prod --audit-level=high`                   | Yes                             |
 | Architecture regressions            | `pnpm test:architecture`                                 | Yes                             |
 | G1 — TypeScript                     | `pnpm typecheck`                                         | Yes                             |
-| G2 — ESLint                         | `pnpm lint` → `eslint .`                                 | Yes                             |
+| G2 — ESLint                         | `pnpm lint` → `eslint . --max-warnings=0`                | Yes                             |
 | G3 — Prettier                       | `pnpm format:check`                                      | Yes                             |
 | G4 — Production/static-export build | `pnpm build` + `scripts/verify-static-export.mjs`        | Yes                             |
 | G5 — Bundle regression              | exact-base build + `scripts/check-bundle-regression.mjs` | Yes                             |
@@ -56,9 +56,12 @@ The local versioned pre-commit hook runs architecture, G1–G4. G5 deliberately 
 
 - hard initial-route bundle budget and regression semantics;
 - Cloudflare Pages static-export contract;
+- supported Node LTS runtime alignment across CI/repository/deploy metadata;
 - Tailwind CSS v4/PostCSS pipeline;
 - production framework security floors;
-- explicit ESLint CLI + flat-config bridge;
+- zero-warning ESLint CLI + flat-config bridge;
+- immutable GitHub Actions supply-chain pins and read-only workflow permissions;
+- checkout credential persistence opt-out;
 - semantic layout ownership;
 - versioned local pre-commit gates;
 - React 19 runtime/type-declaration alignment.
@@ -75,11 +78,11 @@ These tests are intentionally cheap and fail early when a toolchain or architect
 
 ### G2 — ESLint
 
-The repository uses ESLint 9 through the explicit CLI:
+The repository uses ESLint 9 through the explicit zero-warning CLI gate:
 
 ```text
-pnpm lint     -> eslint .
-pnpm lint:fix -> eslint . --fix
+pnpm lint     -> eslint . --max-warnings=0
+pnpm lint:fix -> eslint . --fix --max-warnings=0
 ```
 
 `eslint.config.mjs` uses `FlatCompat` to preserve the Next.js 15.5 policy represented by `next/core-web-vitals` and `next/typescript`. The legacy `.eslintrc.json` path is intentionally removed.
@@ -166,15 +169,17 @@ Lighthouse is lab evidence. It does **not** close the G9 field-INP requirement b
 
 The workflow runs on pushes and pull requests targeting `main` / `develop` and cancels stale in-flight runs for the same ref.
 
+The application/build runtime is pinned to Node 24.20.0 LTS in CI and `.node-version`; `package.json` enforces the same minimum. GitHub Actions themselves are independently pinned to reviewed immutable commit SHAs. The workflow-level `GITHUB_TOKEN` is read-only and checkout does not persist credentials into the worktree.
+
 Primary sequence:
 
-1. checkout;
-2. install pnpm 9.15.9 and Node 20;
+1. checkout without persisted credentials;
+2. install pnpm 9.15.9 and Node 24.20.0;
 3. frozen dependency install;
 4. production dependency audit;
 5. architecture regressions;
 6. G1 typecheck;
-7. G2 ESLint;
+7. G2 zero-warning ESLint;
 8. G3 Prettier;
 9. G4 candidate static build;
 10. resolve and build the exact G5 base revision;
