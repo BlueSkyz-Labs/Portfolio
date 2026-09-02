@@ -26,7 +26,10 @@ test("repository metadata pins the same pnpm release used by CI", () => {
   const workflow = readFileSync(".github/workflows/qa.yml", "utf8");
 
   assert.equal(pkg.packageManager, `pnpm@${EXPECTED_PNPM}`);
-  assert.match(workflow, new RegExp(`PNPM_VERSION: "${EXPECTED_PNPM.replaceAll(".", "\\.")}"`));
+  assert.match(
+    workflow,
+    new RegExp(`PNPM_VERSION: "${EXPECTED_PNPM.replaceAll(".", "\\.")}"`),
+  );
 });
 
 test("package declares explicit ESM semantics for Node-loaded TypeScript configuration", () => {
