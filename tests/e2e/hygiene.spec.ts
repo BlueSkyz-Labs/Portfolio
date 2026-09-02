@@ -32,5 +32,10 @@ test.describe("Public marketing hygiene", () => {
 
     const soTro = page.locator('a[href="/so-tro"]');
     await expect(soTro.first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Sổ Trọ" })).toBeVisible();
+    await expect(page.getByText("Sổ cho Ba Mẹ giữ dãy nhà trọ.")).toBeVisible();
+    await expect(page.getByText("A Vietnamese operations ledger")).toHaveCount(
+      0,
+    );
   });
 });

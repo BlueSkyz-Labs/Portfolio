@@ -73,8 +73,7 @@ export const PROJECTS: readonly Project[] = [
     title: "Sổ Trọ",
     client: "Studio / Internal",
     year: 2026,
-    summary:
-      "A Vietnamese operations ledger for self-run rooming houses: rooms, tenants, invoices, and debts.",
+    summary: "Sổ cho Ba Mẹ giữ dãy nhà trọ.",
     tags: ["Product", "Rental ops"],
     href: SO_TRO.href,
   },

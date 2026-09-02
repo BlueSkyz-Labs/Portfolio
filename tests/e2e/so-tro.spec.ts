@@ -16,15 +16,25 @@ test.describe("Sổ Trọ Vietnamese hypothesis page", () => {
     await expect(main).toHaveAttribute("lang", "vi");
 
     await expect(
-      page.getByText("Nhà trọ tự vận hành", { exact: true }).first(),
+      page.locator("#so-tro header p").filter({ hasText: /^Sổ Trọ$/ }),
     ).toBeVisible();
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Một sổ cho dãy nhà trọ",
+      "Một sổ cho Ba, cho Mẹ.",
     );
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Phòng và khách, hóa đơn và nợ",
+      "Giữ dãy nhà trọ cho rõ.",
     );
-    await expect(page.getByText("Cho hộ đang tự vận hành dãy.")).toBeVisible();
+    await expect(
+      page.getByText(
+        "Không cần rành công nghệ. Ghi phòng, khách thuê, hóa đơn và nợ cho dễ đọc.",
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        "Ba Mẹ đang tự giữ khoảng 8–50 phòng, tại TP. Hồ Chí Minh và Hà Nội.",
+      ),
+    ).toBeVisible();
+    await expect(page.getByText(/Giả thuyết định vị/)).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Trong sổ", exact: true }),
     ).toBeVisible();
@@ -38,6 +48,25 @@ test.describe("Sổ Trọ Vietnamese hypothesis page", () => {
       page.getByRole("heading", { name: "Thu và nợ", exact: true }),
     ).toBeVisible();
     await expect(page.getByText("Excel và Zalo vẫn đang dùng")).toBeVisible();
+    await expect(
+      page.getByText(
+        "Phòng trống, ai đang ở, phòng mới lấp. Nhìn dãy một cái là biết.",
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        "Tiền điện, tiền nước từng phòng. Đọc được, không dồn một cục.",
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        "Thu tiền, ghi nợ, cho phép nợ. Việc tiền rõ thì nói với khách cũng dễ.",
+      ),
+    ).toBeVisible();
+    await expect(page.getByText("Gửi lời ở đây.")).toBeVisible();
+    await expect(page.getByText("Cho Ba, cho Mẹ", { exact: true })).toHaveCount(
+      0,
+    );
     await expect(page.getByText(/8–50 phòng/)).toBeVisible();
     await expect(page.getByText(/Hồ Chí Minh/)).toBeVisible();
     await expect(page.getByText(/Hà Nội/)).toBeVisible();
@@ -56,6 +85,8 @@ test.describe("Sổ Trọ Vietnamese hypothesis page", () => {
     const body = await page.locator("body").innerText();
 
     expect(body).not.toMatch(/Phần mềm quản lý nhà trọ/);
+    expect(body).not.toMatch(/Nhà trọ tự vận hành/);
+    expect(body).not.toMatch(/Quản lý trọ/);
     expect(body).not.toMatch(/Chốt tiền điện từng phòng/);
     expect(body).not.toMatch(/Tách phí cho rõ/);
     expect(body).not.toMatch(/Không làm căng mất khách/);
