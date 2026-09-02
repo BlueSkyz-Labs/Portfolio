@@ -71,7 +71,10 @@ export function MobileNavDialog({
           >
             <ul className="border-t border-cream-offwhite/10">
               {NAV_LINKS.map((link, index) => (
-                <li key={link.href} className="border-b border-cream-offwhite/10">
+                <li
+                  key={link.href}
+                  className="border-b border-cream-offwhite/10"
+                >
                   <a
                     href={link.href}
                     onClick={closeAndNavigate}
