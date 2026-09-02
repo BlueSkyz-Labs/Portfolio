@@ -21,18 +21,18 @@ In short:
 
 ## ✦ Stack
 
-| Layer | Tech |
-| --- | --- |
-| Framework | Next.js 15.5.x (App Router, React Server Components, static export) |
-| Runtime | React 19 |
-| Language | TypeScript 5.6 (strict mode) |
-| Styling | Tailwind CSS 4.3 via `@tailwindcss/postcss`, with the existing token config retained through the supported `@config` bridge |
-| Animation | Framer Motion 11 via `LazyMotion` plus native `requestAnimationFrame` for lightweight scroll effects |
-| Icons | Lucide React |
-| Fonts | `next/font/google` (self-hosted at build time) |
-| Testing | Node architecture tests + Playwright cross-browser/a11y + Lighthouse CI |
-| Deploy | Cloudflare Pages static export (`out/`) |
-| Domain | `portfolio.tonydemo.com` |
+| Layer     | Tech                                                                                                                        |
+| --------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Framework | Next.js 15.5.x (App Router, React Server Components, static export)                                                         |
+| Runtime   | React 19                                                                                                                    |
+| Language  | TypeScript 5.6 (strict mode)                                                                                                |
+| Styling   | Tailwind CSS 4.3 via `@tailwindcss/postcss`, with the existing token config retained through the supported `@config` bridge |
+| Animation | Framer Motion 11 via `LazyMotion` plus native `requestAnimationFrame` for lightweight scroll effects                        |
+| Icons     | Lucide React                                                                                                                |
+| Fonts     | `next/font/google` (self-hosted at build time)                                                                              |
+| Testing   | Node architecture tests + Playwright cross-browser/a11y + Lighthouse CI                                                     |
+| Deploy    | Cloudflare Pages static export (`out/`)                                                                                     |
+| Domain    | `portfolio.tonydemo.com`                                                                                                    |
 
 Exact dependency versions are pinned by [`package.json`](./package.json) and [`pnpm-lock.yaml`](./pnpm-lock.yaml); those files are authoritative when this summary and the lockfile differ.
 
