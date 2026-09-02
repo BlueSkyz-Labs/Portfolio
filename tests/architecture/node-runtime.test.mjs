@@ -19,3 +19,9 @@ test("repository, CI, docs, and Cloudflare build pin the supported Node LTS runt
   assert.doesNotMatch(workflow, /NODE_VERSION: "20"/);
   assert.doesNotMatch(readme, /Node\.js ≥ 20/);
 });
+
+test("package declares explicit ESM semantics for Node-loaded TypeScript configuration", () => {
+  const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+
+  assert.equal(pkg.type, "module");
+});
