@@ -41,20 +41,26 @@ test("public src does not point canonical site copy at the NXDOMAIN tonydemo hos
   assert.deepEqual(filesMatching(/portfolio\.tonydemo\.com/i), []);
 });
 
-test("Sổ Trọ page exists with patched hypothesis hero, not the Excel/gõ-cửa lock", () => {
+test("Sổ Trọ copy kit v1 E2E is the public voice, without leftover punch-copy", () => {
   const page = srcFiles.find((path) => path.endsWith("/so-tro/page.tsx"));
   assert.ok(page, "src/app/so-tro/page.tsx must exist");
 
   const related = srcFiles.filter((path) => path.includes("so-tro"));
   const source = related.map((path) => readFileSync(path, "utf8")).join("\n");
 
-  assert.match(source, /Phần mềm quản lý nhà trọ/);
-  assert.match(source, /Chốt tiền điện từng phòng/);
-  assert.match(source, /Tách phí cho rõ/);
-  assert.match(source, /Không làm căng mất khách/);
-  assert.match(source, /Excel và Zalo đang là mặc định/);
+  assert.match(source, /Sổ Trọ · BlueSkyz Labs/);
+  assert.match(source, /Nhà trọ tự vận hành/);
+  assert.match(source, /Một sổ cho dãy nhà trọ/);
+  assert.match(source, /Phòng và khách, hóa đơn và nợ/);
+  assert.match(source, /Excel và Zalo vẫn đang dùng/);
+  assert.match(source, /Trong sổ/);
+  assert.doesNotMatch(source, /Phần mềm quản lý nhà trọ/);
+  assert.doesNotMatch(source, /Chốt tiền điện từng phòng/);
+  assert.doesNotMatch(source, /Tách phí cho rõ/);
+  assert.doesNotMatch(source, /Không làm căng mất khách/);
   assert.doesNotMatch(source, /Hết tối mùng 1 cầm file Excel đi từng phòng/);
   assert.doesNotMatch(source, /Sổ cho người giữ dãy/);
+  assert.doesNotMatch(source, /\bOwner\b/);
 });
 
 test("public src does not invent schema, hreflang, cobalt, or GTM-forbidden channels", () => {

@@ -1,54 +1,53 @@
 export const SO_TRO = {
   slug: "so-tro",
   href: "/so-tro",
-  title: "Sổ Trọ — Phần mềm quản lý nhà trọ",
-  eyebrow: "Phần mềm quản lý nhà trọ",
-  hero: [
-    "Chốt tiền điện từng phòng.",
-    "Tách phí cho rõ.",
-    "Không làm căng mất khách.",
-  ],
-  subhero: "Một sổ tiếng Việt cho phòng, khách thuê, hóa đơn, công nợ.",
-  icp: "Cho hộ tự vận hành khoảng 8–50 phòng tại HCM và Hà Nội.",
+  title: "Sổ Trọ · BlueSkyz Labs",
+  description:
+    "Sổ Trọ: giả thuyết một sổ tiếng Việt cho hộ tự vận hành nhà trọ. Phòng, khách thuê, hóa đơn, công nợ. Giá chưa chốt.",
+  eyebrow: "Nhà trọ tự vận hành",
+  hero: ["Một sổ cho dãy nhà trọ.", "Phòng và khách, hóa đơn và nợ."],
+  subhero: "Cho hộ đang tự vận hành dãy.",
+  icp: "Khoảng 8–50 phòng, tại TP. Hồ Chí Minh và Hà Nội.",
   hypothesis:
-    "Trang giả thuyết định vị — không phải bằng chứng khách hàng, không khẳng định sản phẩm đã làm đủ các việc này.",
+    "Giả thuyết định vị. Chưa phải bằng chứng khách hàng, chưa khẳng định sản phẩm đã làm đủ việc.",
   alternative: {
-    title: "Excel và Zalo đang là mặc định",
-    body: "Nhiều dãy đang ghi trên Excel và nhắc việc trên Zalo. Đó là cách đang có, không phải thứ trang này hứa thay. Việc chủ nhà nói tới ở đây là chốt điện, cho nợ, và lấp phòng.",
+    title: "Excel và Zalo vẫn đang dùng",
+    body: "Nhiều dãy ghi trên bảng tính, nhắc việc trên Zalo. Đó là cách đang có. Sổ Trọ không hứa thay. Cần một chỗ ghi phòng, hóa đơn và công nợ cho đủ.",
   },
   jobs: {
-    title: "Ba việc",
+    title: "Trong sổ",
     items: [
       {
         title: "Phòng",
-        body: "Giữ dãy: phòng trống, khách thuê, lấp phòng. Việc vận hành của hộ tự chạy nhà trọ.",
+        body: "Phòng trống, khách đang ở, phòng vừa lấp. Việc giữ dãy của hộ tự chạy.",
       },
       {
         title: "Điện nước",
-        body: "Chốt tiền điện từng phòng và tách phí cho rõ, để không dồn một cục chung.",
+        body: "Điện, nước theo từng phòng. Phí đọc được, không dồn một cục.",
       },
       {
         title: "Thu và nợ",
-        body: "Thu tiền, gạch nợ, cho phép nợ mà không làm căng đến mức mất khách.",
+        body: "Thu tiền, gạch nợ, cho phép nợ. Việc tiền được ghi, mối với khách được giữ.",
       },
     ],
   },
   notFor: {
     title: "Không dành cho",
     items: [
-      "Khách sạn, resort, hay phần mềm quản lý khách sạn.",
+      "Khách sạn, resort, hay hệ thống vận hành khách sạn.",
       "Tòa văn phòng và co-working.",
-      "Người đang thuê — sổ này cho hộ tự vận hành.",
+      "Người đang thuê. Sổ này cho hộ tự vận hành.",
     ],
   },
   pricing: {
     title: "Giá",
-    body: "Owner chưa chốt giá. Trước khi dùng sẽ nói rõ. Không tự trừ thẻ.",
+    body: "Giá chưa chốt. Sẽ nói rõ trước khi dùng. Không tự trừ thẻ.",
   },
   proof: {
     title: "Ảnh sản phẩm",
     empty:
-      "Chưa có ảnh chụp giao diện thật trong kho mã này. Ô này để trống có chủ đích — không dùng ảnh giả hay ảnh stock.",
+      "Chưa có ảnh giao diện thật. Ô để trống có chủ đích. Không ảnh giả, không ảnh stock.",
+    placeholder: "Ô trống",
   },
   cta: {
     label: "Liên hệ",
@@ -56,8 +55,8 @@ export const SO_TRO = {
   },
   contact: {
     eyebrow: "Liên hệ",
-    title: "Nói trước khi dùng.",
-    body: "Chưa công bố hộp thư. Dùng biểu mẫu trên trang này — không gửi tới địa chỉ chết.",
+    title: "Gửi lời ở đây.",
+    body: "Chưa công bố hộp thư. Dùng form trên trang, không gửi vào địa chỉ chết.",
     nameLabel: "Tên",
     emailLabel: "Email",
     messageLabel: "Nội dung",

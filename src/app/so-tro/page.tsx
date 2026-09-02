@@ -7,8 +7,8 @@ import { SO_TRO } from "@/lib/so-tro";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? LIVE_SITE_URL;
 
 export const metadata: Metadata = {
-  title: SO_TRO.title,
-  description: SO_TRO.subhero,
+  title: { absolute: SO_TRO.title },
+  description: SO_TRO.description,
   robots: {
     index: true,
     follow: true,
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     locale: "vi_VN",
     url: `${siteUrl}${SO_TRO.href}`,
     title: SO_TRO.title,
-    description: SO_TRO.subhero,
+    description: SO_TRO.description,
   },
 };
 
@@ -145,7 +145,7 @@ export default function SoTroPage() {
               </p>
             </div>
             <figcaption className="border-t border-cream-offwhite/10 px-space-5 py-space-3 font-sans text-caption uppercase tracking-[0.04em] text-cream-muted">
-              Ô minh họa trống
+              {SO_TRO.proof.placeholder}
             </figcaption>
           </figure>
         </section>
