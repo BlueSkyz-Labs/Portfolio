@@ -62,6 +62,8 @@ The local versioned pre-commit hook runs architecture, G1–G4. G5 deliberately 
 - zero-warning ESLint CLI + flat-config bridge;
 - immutable GitHub Actions supply-chain pins and read-only workflow permissions;
 - checkout credential persistence opt-out;
+- SECURITY.md private vulnerability reporting and CODEOWNERS ownership map;
+- committed Wrangler vars / `.env.example` secret hygiene;
 - semantic layout ownership;
 - versioned local pre-commit gates;
 - React 19 runtime/type-declaration alignment.
