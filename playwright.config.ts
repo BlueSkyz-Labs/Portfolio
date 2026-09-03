@@ -4,6 +4,9 @@ const edgeUserAgent =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
   "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0";
 
+const remoteBaseURL = process.env.PLAYWRIGHT_BASE_URL?.trim();
+const baseURL = remoteBaseURL || "http://127.0.0.1:3000";
+
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: true,
@@ -21,19 +24,23 @@ export default defineConfig({
         ["html", { outputFolder: "playwright-report", open: "never" }],
       ],
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
   },
-  webServer: {
-    command: "pnpm start",
-    url: "http://127.0.0.1:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-    stdout: "pipe",
-    stderr: "pipe",
-  },
+  ...(remoteBaseURL
+    ? {}
+    : {
+        webServer: {
+          command: "pnpm start",
+          url: "http://127.0.0.1:3000",
+          reuseExistingServer: !process.env.CI,
+          timeout: 120_000,
+          stdout: "pipe" as const,
+          stderr: "pipe" as const,
+        },
+      }),
   projects: [
     {
       name: "chromium",

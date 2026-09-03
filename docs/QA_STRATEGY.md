@@ -191,7 +191,7 @@ Primary sequence:
 14. Lighthouse CI;
 15. upload applicable evidence artifacts.
 
-After a successful push to `main`, the separate `Edge smoke (Chromium + Edge UA)` job builds the production artifact again and executes the `edge-ua` Playwright project.
+After a successful push to `main`, the separate `Edge smoke (Chromium + Edge UA)` job verifies the live Cloudflare Pages production host (`https://portfolio.tonydemo.com`) under an Edge user-agent. It does **not** rebuild the static site in Actions — deploy evidence comes from Cloudflare Pages.
 
 ---
 
@@ -217,7 +217,7 @@ Historical green runs are context, not promotion authority, after either head or
 
 **Current state:** `main` is still technically unprotected and no active repository ruleset is enforcing PR-only promotion. The engineering process follows PR-first discipline, but repository settings do not yet make direct writes impossible.
 
-This is tracked in [Issue #8 — `governance: enforce main promotion ruleset`](https://github.com/BlueSkyz-Labs/Portfolio/issues/8).
+This is tracked in [Issue #8 — `governance: enforce main promotion ruleset`](https://github.com/BlueSkyz-Labs/SGPS-Marketing/issues/8).
 
 Target ruleset:
 
