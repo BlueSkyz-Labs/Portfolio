@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Github, Linkedin, Twitter } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import type { ComponentType, SVGProps } from "react";
 import { Container } from "./Container";
+import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/ui/SocialIcons";
 import { SITE, SOCIAL_LINKS } from "@/lib/constants";
 
 /**
@@ -16,11 +16,15 @@ import { SITE, SOCIAL_LINKS } from "@/lib/constants";
  *
  * On smaller screens this collapses to a stacked column with a hairline
  * divider above the copyright row.
+ *
+ * Brand marks use first-party SVGs because Lucide React v1 removed them.
  */
-const SOCIAL_ICONS: Readonly<Record<string, LucideIcon>> = {
-  GitHub: Github,
-  LinkedIn: Linkedin,
-  X: Twitter,
+const SOCIAL_ICONS: Readonly<
+  Record<string, ComponentType<SVGProps<SVGSVGElement>>>
+> = {
+  GitHub: GitHubIcon,
+  LinkedIn: LinkedInIcon,
+  X: XIcon,
 };
 
 export function Footer() {
