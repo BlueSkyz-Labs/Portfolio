@@ -191,7 +191,7 @@ Primary sequence:
 14. Lighthouse CI;
 15. upload applicable evidence artifacts.
 
-After a successful push to `main`, the separate `Edge smoke (Chromium + Edge UA)` job verifies the live Cloudflare Pages production host (`https://portfolio.tonydemo.com`) under an Edge user-agent. It does **not** rebuild the static site in Actions — deploy evidence comes from Cloudflare Pages.
+After a successful push to `main`, the separate `Edge smoke (Chromium + Edge UA)` job verifies the live Cloudflare Pages production host (`https://blueskyz-labs-portfolio.pages.dev`) under an Edge user-agent. It does **not** rebuild the static site in Actions — deploy evidence comes from Cloudflare Pages. The marketing custom domain remains documentation intent until public DNS resolves.
 
 ---
 

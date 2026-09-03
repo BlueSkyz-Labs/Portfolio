@@ -22,8 +22,10 @@ browser runtime). Workers remain ideal for edge product logic, not browser QA.
    architecture, lint/typecheck, exact-base G5, Playwright, Lighthouse — until
    an external/self-hosted or Cloudflare Containers runner can host browsers.
 3. **Post-merge Edge smoke** must not rebuild the site. It verifies the live
-   production URL (or the Pages production host) under an Edge user-agent,
-   reducing duplicate Actions compute.
+   Cloudflare Pages production host
+   (`https://blueskyz-labs-portfolio.pages.dev`) under an Edge user-agent,
+   reducing duplicate Actions compute. Do not point CI at
+   `portfolio.tonydemo.com` until that custom domain resolves in public DNS.
 4. No new GitHub Actions automation is added when Cloudflare Pages, Workers,
    or agent-local verification can provide equivalent evidence more cheaply.
 

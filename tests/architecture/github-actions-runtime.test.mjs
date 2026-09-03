@@ -91,6 +91,10 @@ test("application CI uses the supported Node 24 LTS runtime", () => {
 test("edge smoke verifies Cloudflare production without a second Actions build", () => {
   assert.match(
     workflow,
+    /PLAYWRIGHT_BASE_URL:\s*https:\/\/blueskyz-labs-portfolio\.pages\.dev/,
+  );
+  assert.doesNotMatch(
+    workflow,
     /PLAYWRIGHT_BASE_URL:\s*https:\/\/portfolio\.tonydemo\.com/,
   );
   assert.doesNotMatch(
