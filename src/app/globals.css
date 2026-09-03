@@ -7,10 +7,10 @@
 
    CSS variables (per SPEC.md §2.1 and the SA-portfolio contract):
      --bg-primary:    #0A0A0A   page background (ink void)
-     --bg-secondary:  #111111   raised surface (slightly lifted)
+     --bg-secondary:  #1A1A1A   raised surface (ink charcoal)
      --border:        #1F1F1F   hairline divider color
      --text-primary:  #F5F5F0   body / headline color (cream offwhite)
-     --text-muted:    #6B6B6B   secondary text
+     --text-muted:    #A8A8A0   secondary text (cream muted)
      --accent-gold:   #C9A962   champagne gold — used sparingly
    ============================================================================ */
 
@@ -18,7 +18,7 @@
   :root {
     /* ── Color: Ink (backgrounds) — SPEC §2.1 ── */
     --bg-primary: #0a0a0a;
-    --bg-secondary: #111111;
+    --bg-secondary: #1a1a1a;
     --border-color: #1f1f1f;
 
     /* ── Color: Gold (accent — used sparingly) ── */
@@ -27,15 +27,15 @@
 
     /* ── Color: Cream (text) ── */
     --text-primary: #f5f5f0;
-    --text-muted: #6b6b6b;
+    --text-muted: #a8a8a0;
 
     /* ── Legacy aliases (kept for back-compat with existing tokens) ── */
     --ink-void: var(--bg-primary);
-    --ink-charcoal: #1a1a1a;
+    --ink-charcoal: var(--bg-secondary);
     --ink-graphite: #2a2a2a;
     --gold-champagne: var(--accent-gold);
     --cream-offwhite: var(--text-primary);
-    --cream-muted: #a8a8a0;
+    --cream-muted: var(--text-muted);
 
     /* ── Semantic tokens (used by components) ── */
     --background: var(--bg-primary);
