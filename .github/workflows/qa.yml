@@ -241,7 +241,9 @@ jobs:
         run: pnpm exec playwright install chromium
 
       # Cloudflare Pages is the deploy authority. Do not rebuild in Actions —
-      # verify the live production host under an Edge user-agent instead.
+      # verify the live Pages production host under an Edge user-agent.
+      # Use *.pages.dev (publicly resolvable). The custom domain in SPEC/README
+      # is not yet live in public DNS (NXDOMAIN), so CI must not target it.
       - name: Run smoke against Cloudflare production
         run: >-
           pnpm exec playwright test
@@ -249,5 +251,5 @@ jobs:
           --reporter=line
           --grep "Smoke"
         env:
-          PLAYWRIGHT_BASE_URL: https://portfolio.tonydemo.com
+          PLAYWRIGHT_BASE_URL: https://blueskyz-labs-portfolio.pages.dev
           NEXT_TELEMETRY_DISABLED: "1"
