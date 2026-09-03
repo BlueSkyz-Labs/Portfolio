@@ -4,9 +4,9 @@
 
 **Goal:** Replace the legacy BlueSkyz portfolio/atelier website with the C1.1 trust-forward product-house experience, using an evidence-gated frontier-stable stack and Cloudflare-native delivery.
 
-**Architecture:** The preferred path is Astro 7 + Vite 8/Rolldown + Tailwind CSS 4, static HTML/CSS by default, Astro islands only when interaction earns client JavaScript, and a typed/evidence-aware Product Content Collection. A mandatory first task benchmarks Astro 7 against Next.js 16.3 static on the same representative C1.1 fixture; Tasks 2+ execute only if Astro meets the promotion criteria. Cloudflare Workers Static Assets hosts the generated `dist/` output and Cloudflare Workers Builds replaces GitHub Actions as the required remote build/deploy path.
+**Architecture:** Astro 7 is the preferred implementation path: static HTML/CSS by default, Astro islands only when interaction earns client JavaScript, Tailwind CSS 4 through Vite, and Astro Content Collections for evidence-aware product truth. Task 1 is a mandatory benchmark against Next.js 16.3 static; Tasks 2–14 execute only if the committed evidence selects Astro. Cloudflare Workers Static Assets hosts `dist/`, Cloudflare Workers Builds handles remote build/deploy, and GitHub remains source control + PR review rather than required CI compute.
 
-**Tech Stack:** Astro 7 candidate; Vite 8/Rolldown; TypeScript 6 stable baseline; Node 24 LTS; pnpm 11; Tailwind CSS 4 via `@tailwindcss/vite`; Astro Content Collections + `astro/zod`; Node native tests; Playwright + axe; Lighthouse CI; Cloudflare Workers Static Assets / Workers Builds.
+**Tech Stack:** Astro 7 candidate; Vite 8/Rolldown; TypeScript 6 stable baseline; Node 24 LTS; pnpm 11; Tailwind CSS 4 + `@tailwindcss/vite`; Astro Content Collections + `astro/zod`; Node native tests; Playwright + axe; Lighthouse CI; Cloudflare Workers Static Assets / Workers Builds.
 
 **Spec:** `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md`
 
@@ -18,8 +18,8 @@
 - Gold/champagne, Cormorant-led typography, digital-atelier/Savile-Row language, custom cursor, decorative parallax, agency-style contact copy, and legacy Work/Manifesto/Process semantics are superseded.
 - WCAG 2.2 AA is the launch baseline; primary touch targets generally target ≥44×44 CSS px; keyboard and reduced-motion paths are first-class.
 - Field goals: LCP ≤2.5s p75, INP ≤200ms p75, CLS ≤0.1 p75; internal CLS ambition ≤0.05.
-- Initial client JavaScript must remain below the legacy hard ceiling of 120 kB and should be near-zero by default if Astro wins.
-- Product lifecycle, availability, CTA, evidence, and public visibility are modeled truth. Unsupported claims are **Do not publish**, never filler.
+- Initial client JavaScript must remain below the legacy 120 kB hard ceiling and should be near-zero by default if Astro wins.
+- Product lifecycle, availability, CTA, evidence, and public visibility are modeled truth. Unsupported claims are **Do not publish**.
 - Generated product mockups must not masquerade as runtime product evidence.
 - Do not invent canonical domain, corporate email, product status, screenshots, legal wording, social proof, certifications, user counts, or founder/company claims.
 - `BlueSkyz Labs` is the public masterbrand; preferred product endorsement is `A BlueSkyz Labs product`.
@@ -27,47 +27,37 @@
 - Prefer browser-native capabilities before libraries: CSS, View Transitions, Container Queries, native Dialog/Popover where appropriate.
 - No CMS, database, KV, D1, R2, Durable Objects, Workers AI, runtime API, or full-stack framework runtime in V1 unless a later approved requirement earns it.
 - Node 24 LTS remains the runtime/tooling baseline.
-- pnpm 11 is the target supported package-manager line; pin the exact resolved 11.x version in `packageManager` and the lockfile during Task 2.
-- TypeScript 6 is the production baseline for this plan. TypeScript 7 remains a separate PILOT and must not be mixed into the migration unless ecosystem/tooling compatibility is separately proven.
-- GitHub remains source control + PR/review. GitHub Actions must not be a required execution dependency after migration.
+- pnpm 11 is the target package-manager line; pin the exact resolved 11.x version in `packageManager` and `pnpm-lock.yaml` during Task 2.
+- TypeScript 6 is the production baseline for this plan. TypeScript 7 remains a separate PILOT.
+- GitHub Actions must not remain a required execution dependency after migration.
 - Cloudflare Workers Static Assets + Workers Builds are the target remote delivery path.
-- Production promotion is blocked until canonical corporate domain, truthful public product inventory/status, real public product artifacts, approved privacy/support/security destinations, and approved founder/company wording exist.
-- Work on an isolated worktree at execution time; do not implement directly in the primary working tree.
+- Public promotion remains blocked until canonical domain, truthful product inventory/status, real public artifacts, approved privacy/support/security destinations, and approved founder/company wording exist.
+- Use an isolated worktree at execution time; do not implement in the primary working tree.
 
 ---
 
-## File Structure Target
-
-The Astro path should converge toward the following responsibilities. Do not create empty directories solely to match this tree.
+## Target File Structure
 
 ```text
 .
-├── astro.config.mjs                 # Astro + Tailwind/Vite build contract
-├── eslint.config.mjs                # Supported flat lint config for Astro/TS
-├── package.json                     # exact toolchain, scripts, dependencies
-├── pnpm-lock.yaml                   # authoritative resolved graph
-├── tsconfig.json                    # strict TS + Astro env
-├── wrangler.toml                    # Workers Static Assets contract
+├── astro.config.mjs
+├── eslint.config.mjs
+├── package.json
+├── pnpm-lock.yaml
+├── tsconfig.json
+├── wrangler.toml
 ├── public/
-│   ├── _headers                     # static security/cache headers
-│   ├── brand/blueskyz/r4d/          # approved public R4d projection + manifest
-│   ├── products/                    # verified public screenshots/artwork only
-│   └── social/                      # verified OG/social assets
+│   ├── _headers
+│   ├── brand/blueskyz/r4d/
+│   ├── products/
+│   └── social/
 ├── src/
-│   ├── content.config.ts            # Product Content Collection schema
-│   ├── content/products/            # one evidence-backed YAML/JSON entry per public product
-│   ├── data/site.ts                 # public site config + environment truth helpers
-│   ├── layouts/BaseLayout.astro     # document shell, metadata, skip link, header/footer
-│   ├── components/
-│   │   ├── brand/                   # R4d usage primitives
-│   │   ├── layout/                  # Header/Footer/Container
-│   │   ├── product/                 # ProductCard/Status/ProductProof
-│   │   ├── sections/                # homepage narrative sections
-│   │   └── ui/                      # Button/Link/Section/Reveal primitives
-│   ├── lib/
-│   │   ├── products.ts              # collection queries + editorial ordering
-│   │   ├── seo.ts                   # metadata/JSON-LD helpers
-│   │   └── truth.ts                 # production-promotion truth validation
+│   ├── content.config.ts
+│   ├── content/products/
+│   ├── data/site.ts
+│   ├── layouts/BaseLayout.astro
+│   ├── components/{brand,layout,product,sections,ui}/
+│   ├── lib/{products,seo,truth}.ts
 │   ├── pages/
 │   │   ├── index.astro
 │   │   ├── products/index.astro
@@ -78,48 +68,44 @@ The Astro path should converge toward the following responsibilities. Do not cre
 │   │   ├── privacy.astro
 │   │   ├── security.astro
 │   │   └── 404.astro
-│   └── styles/global.css            # Tailwind import + brand/semantic tokens + global rules
+│   └── styles/global.css
 ├── scripts/
-│   ├── verify-static-export.mjs     # framework-neutral dist validation
-│   ├── check-client-budget.mjs      # generated-client-JS budget gate
-│   └── validate-public-truth.mjs    # production-promotion truth gate
-├── tests/
-│   ├── architecture/                # source/deploy/security/truth contracts
-│   └── e2e/                         # customer behavior + a11y/browser contracts
-└── docs/evidence/                   # framework decision + E4 evidence
+│   ├── verify-static-export.mjs
+│   ├── check-client-budget.mjs
+│   └── validate-public-truth.mjs
+├── tests/{architecture,e2e}/
+└── docs/evidence/
 ```
 
 ---
 
-### Task 1: Run the mandatory Astro 7 vs Next 16.3 framework benchmark and lock the decision
+### Task 1: Benchmark Astro 7 vs Next 16.3 static and commit the framework decision
 
 **Files:**
-- Create temporarily, do not commit: `.tmp/framework-benchmark/astro/`
-- Create temporarily, do not commit: `.tmp/framework-benchmark/next/`
+- Create temporarily, never commit: `.tmp/framework-benchmark/astro/`
+- Create temporarily, never commit: `.tmp/framework-benchmark/next/`
 - Create: `docs/evidence/2026-09-04-framework-benchmark.md`
 - Create: `docs/decisions/0004-web-framework-selection.md`
 - Create: `tests/architecture/framework-decision.test.mjs`
 - Modify: `.gitignore`
 
 **Interfaces:**
-- Consumes: approved design spec and R4d reference assets from `BlueSkyz-Labs/sgps-core/standards/experience/brand/assets/blueskyz/r4d-v1.1/`.
-- Produces: a committed framework decision `ASTRO_7` or `NEXT_16_3_STATIC` with comparable measurements and a hard execution branch for the remaining tasks.
+- Consumes: approved spec and the same R4d asset/content fixture for both frameworks.
+- Produces: `Decision: ASTRO_7` or `Decision: NEXT_16_3_STATIC` backed by measured local evidence.
 
-- [ ] **Step 1: Write the failing architecture test for a complete framework decision record**
-
-Create `tests/architecture/framework-decision.test.mjs`:
+- [ ] **Step 1: Write the failing decision-record test**
 
 ```js
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-const decisionPath = "docs/decisions/0004-web-framework-selection.md";
+const path = "docs/decisions/0004-web-framework-selection.md";
 
-test("framework selection is evidence-backed and executable", () => {
-  const decision = readFileSync(decisionPath, "utf8");
-  assert.match(decision, /Decision:\s+(ASTRO_7|NEXT_16_3_STATIC)/);
-  for (const required of [
+test("framework decision is measured and executable", () => {
+  const text = readFileSync(path, "utf8");
+  assert.match(text, /Decision:\s+(ASTRO_7|NEXT_16_3_STATIC)/);
+  for (const label of [
     "Cold build median",
     "Warm build median",
     "Initial compressed JavaScript",
@@ -128,226 +114,161 @@ test("framework selection is evidence-backed and executable", () => {
     "Accessibility parity",
     "Cloudflare preview",
     "Migration effort",
-  ]) {
-    assert.match(decision, new RegExp(required));
-  }
-  assert.doesNotMatch(decision, /TBD|TODO|placeholder/i);
+  ]) assert.match(text, new RegExp(label));
+  assert.doesNotMatch(text, /TBD|TODO|placeholder/i);
 });
 ```
 
-- [ ] **Step 2: Run the test and verify it fails because the decision file does not exist**
-
-Run:
+- [ ] **Step 2: Run it and verify the expected failure**
 
 ```bash
 node --test tests/architecture/framework-decision.test.mjs
 ```
 
-Expected: FAIL with `ENOENT` for `docs/decisions/0004-web-framework-selection.md`.
+Expected: FAIL with `ENOENT` because ADR 0004 does not exist.
 
-- [ ] **Step 3: Add benchmark scratch output to `.gitignore`**
+- [ ] **Step 3: Ignore the throwaway benchmark fixture**
 
-Append exactly:
+Append:
 
 ```gitignore
 # one-time framework benchmark fixtures
 .tmp/framework-benchmark/
 ```
 
-- [ ] **Step 4: Create equivalent Astro and Next fixtures**
+- [ ] **Step 4: Build the same C1.1 fixture twice**
 
-Both fixtures must contain the same content and visual workload:
+Both fixtures contain exactly:
 
 ```text
-Hero
+Hero:
 - BlueSkyz Labs
 - We build products that make complex things feel naturally clear.
 - Explore products
 - About BlueSkyz
-- same copied R4d symbol SVG
+- same copied R4d symbol
 
-Product grid
-- one large flagship card
-- two secondary cards
-- two ecosystem cards
+Product grid:
+- 1 flagship
+- 2 secondary
+- 2 ecosystem cards
 - status text and CTA text
 
-Styles
-- Ink / Porcelain / Cobalt
-- identical responsive grid
-- identical typography fallback stack
-- no animation library
+Styling:
+- same Ink/Porcelain/Cobalt tokens
+- same responsive grid
+- same system font stack
+- no animation framework
 - no remote fonts
 ```
 
-Astro fixture requirements:
+Astro fixture: Astro 7, Tailwind 4 via `@tailwindcss/vite`, no React integration, no client directives.
+
+Next fixture: Next 16.3, React 19.2, App Router, `output: "export"`, Tailwind 4, no `"use client"`.
+
+- [ ] **Step 5: Measure five cold and five warm builds per candidate**
+
+Use the same Node 24 / pnpm 11 machine. Cold runs delete build output/cache; warm runs preserve framework cache. Record every run and median in `docs/evidence/2026-09-04-framework-benchmark.md` together with:
 
 ```text
-Astro 7
-Vite 8/Rolldown as supplied by Astro 7
-Tailwind CSS 4 via @tailwindcss/vite
-no React integration
-no client directives
+HTML bytes
+CSS bytes
+initial Brotli/gzip JavaScript bytes
+critical asset bytes
+Lighthouse performance median
+Lighthouse accessibility median
 ```
 
-Next fixture requirements:
+Only local measurements count; vendor benchmark numbers do not.
+
+- [ ] **Step 6: Verify browser/a11y parity on both fixtures**
+
+Record PASS/FAIL for:
 
 ```text
-Next.js 16.3
-React 19.2
-App Router
-output: "export"
-Tailwind CSS 4
-server/static components only
-no "use client"
+H1 visible without JS reveal
+Explore products keyboard reachable
+all five product cards expose name/status/action
+320px has no horizontal overflow
+reduced-motion does not hide content
+axe has zero critical/serious violations
 ```
 
-Do not port legacy Framer Motion, Radix, custom cursor, contact form, or old sections into either fixture.
+- [ ] **Step 7: Deploy both fixtures to temporary Cloudflare previews**
 
-- [ ] **Step 5: Build both fixtures five cold and five warm times**
+Record PASS/FAIL for preview build, asset routing, 404 behavior, and security headers. Remove one-time preview projects after evidence capture.
 
-Use the same machine, Node 24 LTS, pnpm 11, and no unrelated workloads. Record raw times and calculate medians. A cold run must remove framework build cache/output before the run; a warm run keeps build cache but rebuilds the unchanged fixture.
+- [ ] **Step 8: Apply the exact promotion gate**
 
-Example capture shape in the evidence document:
-
-```markdown
-| Metric | Astro 7 | Next 16.3 static |
-|---|---:|---:|
-| Cold build runs (s) |  |  |
-| Cold build median (s) |  |  |
-| Warm build runs (s) |  |  |
-| Warm build median (s) |  |  |
-| HTML bytes |  |  |
-| CSS bytes |  |  |
-| Initial compressed JavaScript bytes |  |  |
-| Critical asset bytes |  |  |
-| Lighthouse performance median |  |  |
-| Lighthouse accessibility median |  |  |
-```
-
-Do not fill this table from vendor benchmarks. Only local measurements count.
-
-- [ ] **Step 6: Run functional/a11y parity on both fixtures**
-
-For each fixture, verify with Playwright or equivalent browser checks:
+Astro wins only if all six are true:
 
 ```text
-- H1 is visible without JavaScript-dependent reveal
-- Explore products is keyboard reachable
-- all five product cards expose name, status, and action text
-- 320px viewport has no horizontal overflow
-- reduced-motion mode does not hide content
-- axe reports no critical/serious violations on the fixture
+1. no customer-experience regression
+2. accessibility and SEO parity or improvement
+3. clean Cloudflare deployment
+4. browser/QA contracts remain portable
+5. materially lower initial JS and/or meaningful complexity reduction
+6. bounded migration effort that does not jeopardize C1.1 delivery
 ```
 
-Record PASS/FAIL per item.
+Otherwise select `NEXT_16_3_STATIC`.
 
-- [ ] **Step 7: Deploy each fixture as a temporary Cloudflare preview and record result**
+- [ ] **Step 9: Write ADR 0004 using only measured values**
 
-Expected evidence per candidate:
+The ADR must contain these headings/labels with the exact values copied from the evidence document:
 
 ```text
-preview build: PASS/FAIL
-asset routing: PASS/FAIL
-404 behavior: PASS/FAIL
-security headers observable: PASS/FAIL
-```
-
-Delete preview projects after evidence is captured if they are one-time benchmark projects.
-
-- [ ] **Step 8: Apply the spec promotion gate without subjective weighting**
-
-Astro may win only if all are true:
-
-```text
-1. no customer-experience regression;
-2. accessibility and SEO parity or improvement;
-3. clean Cloudflare deployment;
-4. browser/QA contracts are portable;
-5. materially lower initial JS and/or meaningful implementation complexity reduction;
-6. migration effort remains bounded and does not jeopardize C1.1 delivery.
-```
-
-If Astro does not satisfy all six, decision is `NEXT_16_3_STATIC`.
-
-- [ ] **Step 9: Write the evidence and decision records**
-
-`docs/decisions/0004-web-framework-selection.md` must use this exact skeleton with real measured values:
-
-```markdown
 # ADR 0004 — BlueSkyz Web V1 Framework Selection
-
-Decision: ASTRO_7
+Decision: ASTRO_7   OR   Decision: NEXT_16_3_STATIC
 Date: 2026-09-04
 Spec: docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md
 Evidence: docs/evidence/2026-09-04-framework-benchmark.md
-
-Cold build median: <measured value copied from evidence>
-Warm build median: <measured value copied from evidence>
-Initial compressed JavaScript: <measured value copied from evidence>
-Critical asset bytes: <measured value copied from evidence>
-Lighthouse performance: <measured value copied from evidence>
-Accessibility parity: PASS
-Cloudflare preview: PASS
-Migration effort: BOUNDED
-
-Rationale: <one concise evidence-based paragraph>
-Rollback: If the Astro migration later violates the promotion criteria before public launch, revert the migration PR and execute a Next 16.3 static replacement plan from the same canonical spec.
+Cold build median:
+Warm build median:
+Initial compressed JavaScript:
+Critical asset bytes:
+Lighthouse performance:
+Accessibility parity:
+Cloudflare preview:
+Migration effort:
+Rationale:
+Rollback:
 ```
 
-Replace `Decision: ASTRO_7` with `Decision: NEXT_16_3_STATIC` if Next wins. Angle-bracketed lines above describe values to copy from measured evidence; do not commit angle brackets or placeholder text.
+Every label must have a real value in the committed ADR. `Rationale` is one evidence-based paragraph. `Rollback` states that an Astro regression before public launch reverts the migration and returns to Next 16.3 static from the same canonical spec.
 
-- [ ] **Step 10: Remove the throwaway fixtures**
-
-Run:
+- [ ] **Step 10: Delete the benchmark fixtures and verify the record**
 
 ```bash
 rm -rf .tmp/framework-benchmark
-```
-
-Confirm only evidence, ADR, test, and `.gitignore` changes remain.
-
-- [ ] **Step 11: Run the architecture test**
-
-```bash
 node --test tests/architecture/framework-decision.test.mjs
 ```
 
 Expected: PASS.
 
-- [ ] **Step 12: Commit the framework decision**
+- [ ] **Step 11: Commit**
 
 ```bash
 git add .gitignore docs/evidence/2026-09-04-framework-benchmark.md docs/decisions/0004-web-framework-selection.md tests/architecture/framework-decision.test.mjs
 git commit -m "docs: lock evidence-backed web framework decision"
 ```
 
-**Execution branch:** If the ADR says `ASTRO_7`, continue to Task 2. If it says `NEXT_16_3_STATIC`, STOP. Do not execute Tasks 2–16; create a replacement Next-specific implementation plan from the same spec and the committed benchmark evidence.
+**Hard branch:** if ADR 0004 says `NEXT_16_3_STATIC`, STOP this plan after Task 1 and write a Next-specific replacement plan before touching migration code. Continue below only for `ASTRO_7`.
 
 ---
 
-### Task 2: Migrate the build/tooling foundation to Astro 7 without changing customer content yet
+### Task 2: Migrate the build/tooling foundation to Astro 7
 
 **Files:**
-- Modify: `package.json`
-- Modify: `pnpm-lock.yaml`
-- Create: `astro.config.mjs`
-- Modify: `tsconfig.json`
-- Modify: `eslint.config.mjs`
-- Create: `src/env.d.ts`
-- Create: `src/styles/global.css`
-- Create: `tests/architecture/astro-toolchain.test.mjs`
-- Delete after replacement is verified: `next.config.ts`
-- Delete after replacement is verified: `postcss.config.mjs`
-- Delete after replacement is verified: `tailwind.config.ts`
+- Modify: `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `eslint.config.mjs`
+- Create: `astro.config.mjs`, `src/env.d.ts`, `src/styles/global.css`, `tests/architecture/astro-toolchain.test.mjs`
+- Delete after green replacement: `next.config.ts`, `postcss.config.mjs`, `tailwind.config.ts`
 
 **Interfaces:**
-- Consumes: `Decision: ASTRO_7` from ADR 0004.
-- Produces: an Astro 7 project that installs, typechecks, lints, builds, and preserves strict TypeScript discipline without yet porting legacy experience semantics.
+- Consumes: `Decision: ASTRO_7`.
+- Produces: strict Astro static project with Tailwind/Vite and no Next/Framer runtime.
 
-- [ ] **Step 1: Write a failing toolchain contract test**
-
-Create `tests/architecture/astro-toolchain.test.mjs`:
+- [ ] **Step 1: Write the failing toolchain contract**
 
 ```js
 import assert from "node:assert/strict";
@@ -356,30 +277,26 @@ import test from "node:test";
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
 const astro = readFileSync("astro.config.mjs", "utf8");
-const tsconfig = readFileSync("tsconfig.json", "utf8");
+const ts = readFileSync("tsconfig.json", "utf8");
 
-test("V1 uses Astro static + Tailwind Vite with no Next runtime dependency", () => {
+test("Astro static foundation replaces the Next runtime", () => {
   assert.match(pkg.dependencies.astro, /^\^?7\./);
   assert.equal(pkg.dependencies.next, undefined);
   assert.equal(pkg.dependencies["framer-motion"], undefined);
   assert.match(pkg.devDependencies["@tailwindcss/vite"], /./);
   assert.match(astro, /@tailwindcss\/vite/);
   assert.match(astro, /output:\s*["']static["']/);
-  assert.match(tsconfig, /astro\/tsconfigs\/strict/);
+  assert.match(ts, /astro\/tsconfigs\/strict/);
 });
 ```
 
-- [ ] **Step 2: Run the new test and verify it fails against the Next project**
+- [ ] **Step 2: Verify it fails on the current Next project**
 
 ```bash
 node --test tests/architecture/astro-toolchain.test.mjs
 ```
 
-Expected: FAIL because `astro.config.mjs` and Astro dependencies do not exist.
-
-- [ ] **Step 3: Pin pnpm 11 and replace the framework dependency set**
-
-Run from Node 24 LTS:
+- [ ] **Step 3: Pin pnpm 11 and replace framework packages**
 
 ```bash
 corepack enable
@@ -389,11 +306,9 @@ pnpm add astro@^7
 pnpm add -D @astrojs/check @tailwindcss/vite tailwindcss eslint eslint-plugin-astro typescript prettier @playwright/test @axe-core/playwright @lhci/cli
 ```
 
-Do not add React integration in this task. Preserve `class-variance-authority`, `clsx`, `tailwind-merge`, or `lucide-react` only if a later task proves a surviving use; otherwise remove them during Task 15 cleanup.
+Keep the exact pnpm version written by `corepack use` in `packageManager`.
 
-- [ ] **Step 4: Replace framework scripts in `package.json`**
-
-Target script contract:
+- [ ] **Step 4: Replace package scripts**
 
 ```json
 {
@@ -413,11 +328,7 @@ Target script contract:
 }
 ```
 
-Keep `packageManager` at the exact pnpm 11.x version produced by `corepack use`.
-
-- [ ] **Step 5: Create Astro + Tailwind Vite configuration**
-
-Create `astro.config.mjs`:
+- [ ] **Step 5: Create Astro/Tailwind config**
 
 ```js
 import { defineConfig } from "astro/config";
@@ -426,13 +337,11 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   output: "static",
   trailingSlash: "always",
-  vite: {
-    plugins: [tailwindcss()],
-  },
+  vite: { plugins: [tailwindcss()] },
 });
 ```
 
-- [ ] **Step 6: Replace `tsconfig.json` with strict Astro inheritance**
+- [ ] **Step 6: Replace TypeScript config**
 
 ```json
 {
@@ -442,85 +351,50 @@ export default defineConfig({
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "paths": { "@/*": ["src/*"] }
   }
 }
 ```
 
-Create `src/env.d.ts`:
+`src/env.d.ts`:
 
 ```ts
 /// <reference types="astro/client" />
 ```
 
-- [ ] **Step 7: Create the minimal Tailwind v4 global stylesheet**
+- [ ] **Step 7: Replace legacy lint compatibility with Astro flat config**
 
-`src/styles/global.css` initially:
+Use the installed current `eslint-plugin-astro` flat-config export and preserve these invariants:
+
+```js
+{
+  ignores: ["dist/**", ".astro/**", "node_modules/**", "playwright-report/**", "test-results/**"]
+}
+```
+
+The final config must lint `.astro` and TS/JS source, must not use `FlatCompat`, and must not reference `next/core-web-vitals` or `next/typescript`.
+
+- [ ] **Step 8: Create minimal Astro page and Tailwind import**
+
+`src/styles/global.css`:
 
 ```css
 @import "tailwindcss";
-
-:root {
-  color-scheme: light;
-}
-
-html {
-  text-rendering: optimizeLegibility;
-}
-
-body {
-  margin: 0;
-}
+:root { color-scheme: light; }
+body { margin: 0; }
 ```
 
-Design tokens are added in Task 5, not here.
-
-- [ ] **Step 8: Replace ESLint Next compatibility with a supported Astro flat config**
-
-Use the current versions installed in Step 3 and configure:
-
-```js
-import eslint from "@eslint/js";
-import astro from "eslint-plugin-astro";
-
-export default [
-  {
-    ignores: ["dist/**", ".astro/**", "node_modules/**", "playwright-report/**", "test-results/**"],
-  },
-  eslint.configs.recommended,
-  ...astro.configs.recommended,
-];
-```
-
-If the installed `eslint-plugin-astro` exports the recommended flat config under a version-specific key, use the documented current flat-config export while preserving the exact two behaviors above: Astro files are linted and generated output is ignored. Do not retain `FlatCompat` or `next/*` configs.
-
-- [ ] **Step 9: Add a minimal Astro page so build validation is meaningful**
-
-Create temporary `src/pages/index.astro`:
+`src/pages/index.astro`:
 
 ```astro
 ---
 import "@/styles/global.css";
 ---
-
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>BlueSkyz Labs</title>
-  </head>
-  <body>
-    <main id="main-content"><h1>BlueSkyz Labs</h1></main>
-  </body>
-</html>
+<html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>BlueSkyz Labs</title></head><body><main id="main-content"><h1>BlueSkyz Labs</h1></main></body></html>
 ```
 
-This is a migration scaffold only and is replaced by the real layout/homepage in Tasks 6–7.
-
-- [ ] **Step 10: Run install/type/lint/build gates**
+- [ ] **Step 9: Run green gates, then remove Next-only config**
 
 ```bash
 pnpm install --frozen-lockfile
@@ -528,45 +402,33 @@ pnpm typecheck
 pnpm lint
 pnpm build
 node --test tests/architecture/astro-toolchain.test.mjs
-```
-
-Expected: all PASS.
-
-- [ ] **Step 11: Remove obsolete Next-only config after the Astro build passes**
-
-```bash
-rm next.config.ts postcss.config.mjs tailwind.config.ts
-```
-
-Run `pnpm build` again. Expected: PASS.
-
-- [ ] **Step 12: Commit the isolated framework/toolchain migration**
-
-```bash
-git add package.json pnpm-lock.yaml astro.config.mjs tsconfig.json eslint.config.mjs src/env.d.ts src/styles/global.css src/pages/index.astro tests/architecture/astro-toolchain.test.mjs
 git rm next.config.ts postcss.config.mjs tailwind.config.ts
+pnpm build
+```
+
+Expected: PASS.
+
+- [ ] **Step 10: Commit**
+
+```bash
+git add -A
 git commit -m "build: migrate BlueSkyz web foundation to Astro 7"
 ```
 
 ---
 
-### Task 3: Replace Cloudflare Pages/GitHub Actions delivery assumptions with Workers Static Assets
+### Task 3: Move deployment from Pages/GitHub Actions to Workers Static Assets
 
 **Files:**
-- Modify: `wrangler.toml`
-- Modify: `public/_headers`
-- Modify: `scripts/verify-static-export.mjs`
-- Create: `tests/architecture/cloudflare-workers.test.mjs`
-- Delete: `tests/architecture/cloudflare-pages.test.mjs`
-- Delete: `tests/architecture/github-actions-runtime.test.mjs`
-- Delete: `.github/workflows/qa.yml`
-- Modify: `README.md` only for deployment/tooling facts touched by this task
+- Modify: `wrangler.toml`, `public/_headers`, `scripts/verify-static-export.mjs`, `README.md`
+- Create: `tests/architecture/cloudflare-workers.test.mjs`, `src/pages/404.astro`
+- Delete: `tests/architecture/cloudflare-pages.test.mjs`, `tests/architecture/github-actions-runtime.test.mjs`, `.github/workflows/qa.yml`
 
 **Interfaces:**
-- Consumes: Astro build output `dist/`.
-- Produces: static Workers deployment contract and no required GitHub Actions execution path.
+- Consumes: Astro `dist/`.
+- Produces: Workers Static Assets contract and no required GitHub Actions pipeline.
 
-- [ ] **Step 1: Write the new Workers deployment contract test**
+- [ ] **Step 1: Write the failing Workers contract test**
 
 ```js
 import assert from "node:assert/strict";
@@ -574,39 +436,24 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const wrangler = readFileSync("wrangler.toml", "utf8");
-const headers = readFileSync("public/_headers", "utf8");
 
-test("Cloudflare deploys Astro dist as Workers Static Assets", () => {
+test("Workers serves the Astro static build", () => {
   assert.match(wrangler, /\[assets\]/);
-  assert.match(wrangler, /directory\s*=\s*["']\.\/dist\/?["']/);
+  assert.match(wrangler, /directory\s*=\s*["']\.\/dist["']/);
   assert.match(wrangler, /not_found_handling\s*=\s*["']404-page["']/);
   assert.match(wrangler, /html_handling\s*=\s*["']auto-trailing-slash["']/);
   assert.doesNotMatch(wrangler, /pages_build_output_dir/);
   assert.equal(existsSync(".github/workflows/qa.yml"), false);
 });
-
-test("static security headers remain explicit", () => {
-  for (const value of [
-    "X-Content-Type-Options: nosniff",
-    "Referrer-Policy: strict-origin-when-cross-origin",
-    "Permissions-Policy: camera=(), microphone=(), geolocation=()",
-  ]) assert.match(headers, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
-});
 ```
 
-Save as `tests/architecture/cloudflare-workers.test.mjs`.
-
-- [ ] **Step 2: Run the test and verify it fails against the Pages config**
+- [ ] **Step 2: Verify it fails**
 
 ```bash
 node --test tests/architecture/cloudflare-workers.test.mjs
 ```
 
-Expected: FAIL on missing `[assets]` and existing workflow.
-
-- [ ] **Step 3: Replace `wrangler.toml` Pages config**
-
-Use:
+- [ ] **Step 3: Replace `wrangler.toml`**
 
 ```toml
 name = "blueskyz-web"
@@ -618,11 +465,9 @@ not_found_handling = "404-page"
 html_handling = "auto-trailing-slash"
 ```
 
-Do not add `main`, bindings, D1, KV, or Worker runtime code.
+Do not add `main`, bindings, D1, KV, or a Worker runtime.
 
-- [ ] **Step 4: Make static export verification framework-neutral**
-
-Replace `scripts/verify-static-export.mjs` so it validates the expected Astro output:
+- [ ] **Step 4: Replace static export verification**
 
 ```js
 import assert from "node:assert/strict";
@@ -632,15 +477,14 @@ for (const file of ["dist/index.html", "dist/404.html"]) {
   assert.ok(existsSync(file), `${file} must exist`);
   assert.ok(statSync(file).size > 0, `${file} must not be empty`);
 }
-
-console.log("Static export verified: dist/index.html + dist/404.html");
+console.log("Static export verified");
 ```
 
-The 404 check will become green after Task 6 creates `src/pages/404.astro`; until then create a minimal `src/pages/404.astro` with a plain heading and home link.
+Create a minimal `src/pages/404.astro` before running the build.
 
-- [ ] **Step 5: Preserve and tighten `public/_headers`**
+- [ ] **Step 5: Preserve explicit static security headers**
 
-Keep existing safe headers and ensure the root rule contains at least:
+At minimum:
 
 ```text
 /*
@@ -650,48 +494,36 @@ Keep existing safe headers and ensure the root rule contains at least:
   Permissions-Policy: camera=(), microphone=(), geolocation=()
 ```
 
-Do not add a CSP until Task 13 knows the final fonts/scripts/analytics sources; a wrong CSP is not security.
+CSP waits until Task 12 when actual script/font sources are known.
 
-- [ ] **Step 6: Remove required GitHub Actions files/tests**
+- [ ] **Step 6: Remove obsolete remote-CI assumptions and run gates**
 
 ```bash
 git rm .github/workflows/qa.yml tests/architecture/cloudflare-pages.test.mjs tests/architecture/github-actions-runtime.test.mjs
-```
-
-Keep `.github/CODEOWNERS` and Dependabot unless a later task deliberately replaces them.
-
-- [ ] **Step 7: Run architecture/build gates**
-
-```bash
 pnpm build
 node --test tests/architecture/cloudflare-workers.test.mjs
 pnpm test:architecture
 ```
 
-Expected: PASS.
-
-- [ ] **Step 8: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
-git add wrangler.toml public/_headers scripts/verify-static-export.mjs src/pages/404.astro tests/architecture/cloudflare-workers.test.mjs README.md
+git add -A
 git commit -m "build: move delivery contract to Workers Static Assets"
 ```
 
 ---
 
-### Task 4: Project the approved R4d reference assets into the public website with provenance
+### Task 4: Import the exact R4d reference assets with SGPS provenance
 
 **Files:**
-- Create: `public/brand/blueskyz/r4d/symbol_mono_ink.svg`
-- Create: `public/brand/blueskyz/r4d/micro_mark_ink.svg`
-- Create: `public/brand/blueskyz/r4d/brand_tokens.json`
-- Create: `public/brand/blueskyz/r4d/brand-manifest.json`
+- Create: `public/brand/blueskyz/r4d/{symbol_mono_ink.svg,micro_mark_ink.svg,brand_tokens.json,brand-manifest.json}`
 - Create: `tests/architecture/brand-provenance.test.mjs`
-- Delete/replace if stale: `scripts/generate-brand-assets.py`
+- Delete or rewrite if stale: `scripts/generate-brand-assets.py`
 
 **Interfaces:**
-- Consumes: SGPS source record `standards/experience/brand/BLUESKYZ_MASTERBRAND_CANDIDATE.json` and reference directory `standards/experience/brand/assets/blueskyz/r4d-v1.1/`.
-- Produces: a deterministic public asset projection that explicitly records candidate status and source revision.
+- Consumes: exact `sgps-core` main SHA and R4d v1.1 reference paths.
+- Produces: deterministic public projection; no redrawing/reinterpretation.
 
 - [ ] **Step 1: Write the failing provenance test**
 
@@ -700,137 +532,98 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-const manifest = JSON.parse(readFileSync("public/brand/blueskyz/r4d/brand-manifest.json", "utf8"));
+const m = JSON.parse(readFileSync("public/brand/blueskyz/r4d/brand-manifest.json", "utf8"));
 
-test("R4d public projection preserves SGPS candidate provenance", () => {
-  assert.equal(manifest.assetId, "BLUESKYZ-MASTERBRAND-R4D");
-  assert.equal(manifest.assetVersion, "1.1.0");
-  assert.equal(manifest.canonicalName, "BlueSkyz Labs");
-  assert.equal(manifest.status, "IDENTITY_PROTOTYPE_READY");
-  assert.equal(manifest.designState, "DESIGN_FREEZE_CANDIDATE");
-  assert.match(manifest.sourceRevision, /^[0-9a-f]{40}$/);
-  assert.equal(manifest.runtimeFontDependencyForWordmark, "NONE_VECTOR_OUTLINES");
+test("R4d projection preserves candidate provenance", () => {
+  assert.equal(m.assetId, "BLUESKYZ-MASTERBRAND-R4D");
+  assert.equal(m.assetVersion, "1.1.0");
+  assert.equal(m.canonicalName, "BlueSkyz Labs");
+  assert.equal(m.status, "IDENTITY_PROTOTYPE_READY");
+  assert.equal(m.designState, "DESIGN_FREEZE_CANDIDATE");
+  assert.match(m.sourceRevision, /^[0-9a-f]{40}$/);
+  assert.equal(m.runtimeFontDependencyForWordmark, "NONE_VECTOR_OUTLINES");
 });
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
+- [ ] **Step 2: Resolve one exact SGPS revision and copy files from that revision**
 
 ```bash
-node --test tests/architecture/brand-provenance.test.mjs
+SGPS_REVISION="$(git ls-remote https://github.com/BlueSkyz-Labs/sgps-core.git refs/heads/main | cut -f1)"
+test "${#SGPS_REVISION}" -eq 40
+mkdir -p public/brand/blueskyz/r4d
+for file in symbol_mono_ink.svg micro_mark_ink.svg brand_tokens.json; do
+  curl -fsSL "https://raw.githubusercontent.com/BlueSkyz-Labs/sgps-core/${SGPS_REVISION}/standards/experience/brand/assets/blueskyz/r4d-v1.1/${file}" -o "public/brand/blueskyz/r4d/${file}"
+done
 ```
 
-Expected: FAIL because the public manifest does not exist.
+- [ ] **Step 3: Generate the manifest from the resolved SHA**
 
-- [ ] **Step 3: Fetch the SGPS reference source at one exact commit**
-
-Resolve the current `sgps-core` main commit once. Copy the two SVGs and `brand_tokens.json` from that exact revision, not from moving `main` across separate commands:
-
-```text
-standards/experience/brand/assets/blueskyz/r4d-v1.1/symbol_mono_ink.svg
-standards/experience/brand/assets/blueskyz/r4d-v1.1/micro_mark_ink.svg
-standards/experience/brand/assets/blueskyz/r4d-v1.1/brand_tokens.json
+```bash
+SGPS_REVISION="$SGPS_REVISION" node <<'NODE'
+import { writeFileSync } from "node:fs";
+const sourceRevision = process.env.SGPS_REVISION;
+if (!/^[0-9a-f]{40}$/.test(sourceRevision ?? "")) throw new Error("invalid SGPS revision");
+const manifest = {
+  assetId: "BLUESKYZ-MASTERBRAND-R4D",
+  assetVersion: "1.1.0",
+  canonicalName: "BlueSkyz Labs",
+  status: "IDENTITY_PROTOTYPE_READY",
+  designState: "DESIGN_FREEZE_CANDIDATE",
+  sourceRepository: "BlueSkyz-Labs/sgps-core",
+  sourcePath: "standards/experience/brand/assets/blueskyz/r4d-v1.1/",
+  sourceRevision,
+  runtimeFontDependencyForWordmark: "NONE_VECTOR_OUTLINES"
+};
+writeFileSync("public/brand/blueskyz/r4d/brand-manifest.json", JSON.stringify(manifest, null, 2) + "\n");
+NODE
 ```
 
-Read candidate fields from:
+- [ ] **Step 4: Define safe lockup behavior**
 
-```text
-standards/experience/brand/BLUESKYZ_MASTERBRAND_CANDIDATE.json
-```
+Until an approved full outlined lockup with matching provenance exists in source control, Header/Footer use the exact R4d symbol + live text `BlueSkyz Labs`. Do not synthesize a vector wordmark or use an AI-redrawn mark.
 
-Do not redraw, simplify, trace, or reinterpret the symbol.
+- [ ] **Step 5: Remove any legacy asset generator that can emit a different mark**
 
-- [ ] **Step 4: Write `brand-manifest.json` from source truth**
+If `scripts/generate-brand-assets.py` reconstructs old geometry, delete it. If it remains useful, rewrite it to consume the committed R4d SVG rather than recreate geometry.
 
-Required shape:
-
-```json
-{
-  "assetId": "BLUESKYZ-MASTERBRAND-R4D",
-  "assetVersion": "1.1.0",
-  "canonicalName": "BlueSkyz Labs",
-  "status": "IDENTITY_PROTOTYPE_READY",
-  "designState": "DESIGN_FREEZE_CANDIDATE",
-  "sourceRepository": "BlueSkyz-Labs/sgps-core",
-  "sourcePath": "standards/experience/brand/assets/blueskyz/r4d-v1.1/",
-  "sourceRevision": "40-char commit captured in Step 3",
-  "runtimeFontDependencyForWordmark": "NONE_VECTOR_OUTLINES"
-}
-```
-
-The `sourceRevision` value must be the actual resolved SHA, not the explanatory text shown above.
-
-- [ ] **Step 5: Define lockup fallback behavior**
-
-Until an approved full outlined wordmark/lockup asset with matching provenance is available in source control, Header/Footer must render the exact R4d symbol plus live text `BlueSkyz Labs`. Do not synthesize a new vector wordmark or use an AI-redrawn asset. When an approved full lockup is later imported, it must receive the same provenance treatment.
-
-- [ ] **Step 6: Remove legacy generated-brand code if it can produce a different mark**
-
-If `scripts/generate-brand-assets.py` generates a legacy or non-R4d symbol, delete it. If it is still needed for a verified R4d derivative, rewrite it to consume the committed reference asset rather than reconstructing geometry from memory.
-
-- [ ] **Step 7: Run provenance + architecture tests**
+- [ ] **Step 6: Run tests and commit**
 
 ```bash
 node --test tests/architecture/brand-provenance.test.mjs
 pnpm test:architecture
-```
-
-Expected: PASS.
-
-- [ ] **Step 8: Commit**
-
-```bash
-git add public/brand/blueskyz/r4d tests/architecture/brand-provenance.test.mjs
-git add -u scripts/generate-brand-assets.py
+git add -A
 git commit -m "feat: project R4d brand assets with SGPS provenance"
 ```
 
 ---
 
-### Task 5: Build the semantic token and typography foundation
+### Task 5: Establish semantic C1.1 tokens and accessible typography defaults
 
 **Files:**
 - Modify: `src/styles/global.css`
 - Create: `tests/architecture/c1-tokens.test.mjs`
-- Create when approved: `public/fonts/<approved-ui-font-files>`
 
 **Interfaces:**
-- Consumes: R4d primitives and the final approved UI font when available.
-- Produces: semantic CSS tokens used by all later components; no component reads raw marketing-era gold tokens.
+- Produces: semantic tokens consumed by every page/component.
 
-- [ ] **Step 1: Write a failing token contract test**
+- [ ] **Step 1: Write the failing token test**
 
 ```js
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-const css = readFileSync("src/styles/global.css", "utf8");
+const css = readFileSync("src/styles/global.css", "utf8").toLowerCase();
 
-test("C1.1 semantic tokens use R4d primitives without legacy gold", () => {
-  for (const token of [
-    "--brand-ink: #0b1020",
-    "--brand-porcelain: #f7f8fa",
-    "--brand-cobalt: #2568ff",
-    "--surface-primary",
-    "--surface-inverse",
-    "--text-primary",
-    "--text-muted",
-    "--action-primary",
-    "--focus-ring",
-  ]) assert.match(css.toLowerCase(), new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+test("C1.1 tokens use R4d primitives without legacy gold", () => {
+  for (const value of ["--brand-ink: #0b1020", "--brand-porcelain: #f7f8fa", "--brand-cobalt: #2568ff", "--surface-primary", "--surface-inverse", "--text-primary", "--text-muted", "--action-primary", "--focus-ring"]) {
+    assert.match(css, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
   assert.doesNotMatch(css, /#c9a962|champagne|gold/i);
 });
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
-
-```bash
-node --test tests/architecture/c1-tokens.test.mjs
-```
-
-- [ ] **Step 3: Add brand primitives and semantic aliases**
-
-Add to `src/styles/global.css`:
+- [ ] **Step 2: Add brand primitives and semantic aliases**
 
 ```css
 @import "tailwindcss";
@@ -862,35 +655,15 @@ Add to `src/styles/global.css`:
   --radius-card: 0.625rem;
   color-scheme: light;
 }
-```
 
-`--action-primary` is intentionally a semantic accessible action token rather than assuming raw Cobalt is valid for every text/control context.
-
-- [ ] **Step 4: Add global accessibility/typography defaults**
-
-```css
 html {
   background: var(--surface-primary);
   color: var(--text-primary);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   text-rendering: optimizeLegibility;
 }
-
-body {
-  margin: 0;
-  min-width: 320px;
-  background: var(--surface-primary);
-}
-
-:focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 3px;
-}
-
-::selection {
-  background: color-mix(in srgb, var(--brand-cobalt) 22%, transparent);
-}
-
+body { margin: 0; min-width: 320px; background: var(--surface-primary); }
+:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;
@@ -901,83 +674,51 @@ body {
 }
 ```
 
-- [ ] **Step 5: Gate the production font instead of guessing it**
+- [ ] **Step 3: Keep the production font evidence-gated**
 
-Do not download or commit a font merely because Inter is the current candidate. Before production promotion, test the chosen font with Vietnamese specimen text containing `ă â ê ô ơ ư đ` and tone-mark combinations, mobile rendering, file size, license, and fallbacks. Until that evidence exists, the system stack above is valid for implementation and E4 preview.
+Do not commit/download Inter merely because it is the candidate. The production font is promoted only after Vietnamese specimen (`ă â ê ô ơ ư đ` + tone combinations), mobile rendering, license, fallback metrics, and payload review. System sans remains valid for previews.
 
-- [ ] **Step 6: Run tests**
+- [ ] **Step 4: Run and commit**
 
 ```bash
 node --test tests/architecture/c1-tokens.test.mjs
 pnpm build
-```
-
-- [ ] **Step 7: Commit**
-
-```bash
 git add src/styles/global.css tests/architecture/c1-tokens.test.mjs
 git commit -m "feat: establish C1.1 semantic visual tokens"
 ```
 
 ---
 
-### Task 6: Build the base document shell, semantic navigation, footer, and truthful site configuration
+### Task 6: Build the accessible site shell and environment-backed corporate truth
 
 **Files:**
-- Create: `src/data/site.ts`
-- Create: `src/layouts/BaseLayout.astro`
-- Create: `src/components/layout/Container.astro`
-- Create: `src/components/layout/Header.astro`
-- Create: `src/components/layout/Footer.astro`
+- Create: `src/data/site.ts`, `src/layouts/BaseLayout.astro`
+- Create: `src/components/layout/{Container,Header,Footer}.astro`
 - Create: `src/components/ui/ButtonLink.astro`
 - Replace: `src/pages/404.astro`
 - Create: `tests/e2e/shell.spec.ts`
 
 **Interfaces:**
-- Consumes: semantic tokens, R4d public assets.
-- Produces: reusable page shell and `SITE` config for all routes.
+- Produces: `SITE` config + shared shell for all routes.
 
-- [ ] **Step 1: Write failing shell browser tests**
-
-Create `tests/e2e/shell.spec.ts`:
+- [ ] **Step 1: Write failing shell tests**
 
 ```ts
 import { expect, test } from "@playwright/test";
 
-for (const path of ["/", "/404-does-not-exist/"]) {
-  test(`shell is accessible at ${path}`, async ({ page }) => {
-    await page.goto(path);
-    await expect(page.getByRole("link", { name: /skip to main content/i })).toBeAttached();
-    await expect(page.getByRole("link", { name: /BlueSkyz Labs.*Home/i })).toBeVisible();
-  });
-}
-
-test("primary navigation is small and product-led", async ({ page }) => {
+test("shell exposes skip link and product-led nav", async ({ page }) => {
   await page.goto("/");
+  await expect(page.getByRole("link", { name: /skip to main content/i })).toBeAttached();
   const nav = page.getByRole("navigation", { name: /primary/i });
-  await expect(nav.getByRole("link", { name: "Products" })).toBeVisible();
-  await expect(nav.getByRole("link", { name: "About" })).toBeVisible();
-  await expect(nav.getByRole("link", { name: "Contact" })).toBeVisible();
+  for (const name of ["Products", "About", "Contact"]) await expect(nav.getByRole("link", { name })).toBeVisible();
   await expect(nav.getByText(/Work|Process|Manifesto/)).toHaveCount(0);
 });
 ```
 
-- [ ] **Step 2: Run the shell tests and verify they fail**
-
-```bash
-pnpm build
-pnpm test:e2e -- shell.spec.ts
-```
-
-Expected: FAIL because the new shell does not exist.
-
-- [ ] **Step 3: Create environment-safe site config**
-
-`src/data/site.ts`:
+- [ ] **Step 2: Create safe site config**
 
 ```ts
 const localFallback = "http://localhost:4321";
-
 export const SITE = {
   name: "BlueSkyz Labs",
   proposition: "We build products that make complex things feel naturally clear.",
@@ -987,44 +728,33 @@ export const SITE = {
 } as const;
 ```
 
-Do not put `blueskyz.io`, `portfolio.tonydemo.com`, or any other guessed production domain into source defaults.
+Never hard-code a guessed production domain/email.
 
-- [ ] **Step 4: Create semantic Container and ButtonLink primitives**
+- [ ] **Step 3: Build Container/ButtonLink/Header/Footer with no React island**
 
-`Container.astro` must provide a centered max-width wrapper with responsive 20–24px mobile gutters and larger desktop gutters. `ButtonLink.astro` must render an `<a>` with at least a 44px minimum interactive height and preserve visible focus.
+Requirements:
 
-- [ ] **Step 5: Build Header with zero client framework JS**
+```text
+Container: max 1280–1360px, 20–24px mobile gutters
+ButtonLink: semantic <a>, min-height 44px, visible focus
+Header: R4d symbol + text BlueSkyz Labs; Products/About/Contact only
+Mobile menu: native details/dialog if needed; no Radix/React
+Footer: Products/About/Contact/Support/Privacy/Security; social links only when verified
+```
 
-Use an accessible semantic header/nav. For V1 mobile, prefer a simple `<details>` menu or native dialog only if required; do not add React/Radix. The visible navigation labels are exactly Products / About / Contact. The home link renders the exact R4d symbol and text `BlueSkyz Labs` unless an approved full lockup asset exists.
-
-- [ ] **Step 6: Build Footer with only real destinations**
-
-Always show Products / About / Contact / Support / Privacy / Security. Only render external social links if verified configuration exists; do not render empty GitHub/LinkedIn icons.
-
-- [ ] **Step 7: Build `BaseLayout.astro`**
-
-Required shell shape:
+- [ ] **Step 4: Build `BaseLayout.astro`**
 
 ```astro
 ---
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
 import "@/styles/global.css";
-
-interface Props {
-  title: string;
-  description: string;
-}
+interface Props { title: string; description: string; }
 const { title, description } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
-    <title>{title}</title>
-  </head>
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><meta name="description" content={description} /><title>{title}</title></head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <Header />
@@ -1034,53 +764,32 @@ const { title, description } = Astro.props;
 </html>
 ```
 
-SEO/canonical/JSON-LD enrichment is added in Task 11.
+- [ ] **Step 5: Replace 404 with restrained error content**
 
-- [ ] **Step 8: Replace 404 page with a restrained known-state error**
+Use exactly the semantic intent: `Page not found.`, short explanatory sentence, `Go home`, `Explore products`.
 
-Content:
-
-```text
-Page not found.
-The page may have moved or no longer exist.
-Go home
-Explore products
-```
-
-No creative animation requirement.
-
-- [ ] **Step 9: Run browser/build tests**
+- [ ] **Step 6: Run and commit**
 
 ```bash
 pnpm build
 pnpm test:e2e -- shell.spec.ts
-```
-
-Expected: PASS.
-
-- [ ] **Step 10: Commit**
-
-```bash
-git add src/data/site.ts src/layouts src/components/layout src/components/ui/ButtonLink.astro src/pages/404.astro tests/e2e/shell.spec.ts
+git add src/data src/layouts src/components/layout src/components/ui/ButtonLink.astro src/pages/404.astro tests/e2e/shell.spec.ts
 git commit -m "feat: add accessible BlueSkyz site shell"
 ```
 
 ---
 
-### Task 7: Create the evidence-aware Public Product Collection and query helpers
+### Task 7: Create the evidence-aware Product Content Collection
 
 **Files:**
-- Create: `src/content.config.ts`
-- Create as evidence permits: `src/content/products/*.yaml`
-- Create: `src/lib/products.ts`
+- Create: `src/content.config.ts`, `src/content/products/*.yaml`, `src/lib/products.ts`
 - Create: `docs/evidence/2026-09-04-public-product-audit.md`
 - Create: `tests/architecture/product-truth.test.mjs`
 
 **Interfaces:**
-- Consumes: candidate product repositories and public artifacts.
-- Produces: validated `products` collection plus `getPublicProducts()` and `getFlagshipProduct()`.
+- Produces: `getPublicProducts()` and `getFlagshipProduct()` over validated content.
 
-- [ ] **Step 1: Write the source-level truth contract test**
+- [ ] **Step 1: Write the failing source contract**
 
 ```js
 import assert from "node:assert/strict";
@@ -1088,34 +797,13 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const config = readFileSync("src/content.config.ts", "utf8");
-
-test("product collection models lifecycle, availability, evidence, and actions", () => {
-  for (const field of [
-    "lifecycle",
-    "availability",
-    "publicLabel",
-    "audience",
-    "jobs",
-    "platforms",
-    "primaryAction",
-    "proof",
-    "featuredTier",
-    "sourceRevision",
-    "lastReviewedAt",
-  ]) assert.match(config, new RegExp(field));
+test("product truth models lifecycle, availability, proof and CTA", () => {
+  for (const field of ["lifecycle", "availability", "publicLabel", "audience", "jobs", "platforms", "primaryAction", "proof", "featuredTier", "sourceRevision", "lastReviewedAt"]) assert.match(config, new RegExp(field));
   assert.match(config, /A BlueSkyz Labs product/);
 });
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
-
-```bash
-node --test tests/architecture/product-truth.test.mjs
-```
-
-- [ ] **Step 3: Define the Astro Content Collection**
-
-Create `src/content.config.ts` using Astro 7 build-time content collections:
+- [ ] **Step 2: Implement the collection schema**
 
 ```ts
 import { defineCollection } from "astro:content";
@@ -1128,12 +816,7 @@ const publicLabel = z.enum(["Preview", "In development", "Beta", "Available", "S
 const platform = z.enum(["web", "android", "ios", "macos", "windows", "api"]);
 const audience = z.enum(["individual", "professional", "team", "business", "organization"]);
 const actionType = z.enum(["open", "try", "explore", "preview", "waitlist", "get-started", "github", "contact"]);
-
-const action = z.object({
-  type: actionType,
-  label: z.string().min(1).max(40),
-  href: z.string().url(),
-});
+const action = z.object({ type: actionType, label: z.string().min(1).max(40), href: z.string().url() });
 
 const productSchema = z.object({
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -1155,156 +838,90 @@ const productSchema = z.object({
     privacyUrl: z.string().url().optional(),
     securityUrl: z.string().url().optional(),
     supportUrl: z.string().url().optional(),
-  }).refine((value) => Object.values(value).some(Boolean), "public product requires at least one proof artifact"),
+  }).refine((v) => Object.values(v).some(Boolean), "public product requires at least one proof artifact"),
   endorsement: z.literal("A BlueSkyz Labs product"),
   featuredTier: z.enum(["hero", "featured", "ecosystem", "hidden"]),
   displayOrder: z.number().int().nonnegative(),
   public: z.boolean(),
   sourceRevision: z.string().regex(/^[0-9a-f]{7,40}$/),
   lastReviewedAt: z.coerce.date(),
-}).superRefine((value, ctx) => {
-  if (value.lifecycle === "development" && value.primaryAction.type === "try") {
-    ctx.addIssue({ code: "custom", path: ["primaryAction", "type"], message: "development product cannot claim Try without matching availability truth" });
-  }
+}).superRefine((v, ctx) => {
+  if (v.lifecycle === "development" && v.primaryAction.type === "try") ctx.addIssue({ code: "custom", path: ["primaryAction", "type"], message: "development product cannot claim Try" });
 });
 
-const products = defineCollection({
-  loader: glob({ pattern: "**/*.{yaml,yml,json}", base: "./src/content/products" }),
-  schema: productSchema,
-});
-
+const products = defineCollection({ loader: glob({ pattern: "**/*.{yaml,yml,json}", base: "./src/content/products" }), schema: productSchema });
 export const collections = { products };
 ```
 
-- [ ] **Step 4: Audit each candidate product before creating public data**
+- [ ] **Step 3: Audit each candidate repo before creating its entry**
 
-For ApexAgent, Sổ Tâm, Sổ Trọ, FluentArc, and Vững Tay Lái, inspect current repository/release/public runtime evidence. Record in `docs/evidence/2026-09-04-public-product-audit.md`:
+For ApexAgent, Sổ Tâm, Sổ Trọ, FluentArc, and Vững Tay Lái, record exact repo revision, customer job, lifecycle evidence, availability evidence, public URL, real screenshot/artifact, privacy/security/support paths, and final `PUBLIC` or `HIDDEN` decision.
 
-```text
-product
-source repo + exact revision
-customer job supported by repo/product truth
-lifecycle evidence
-availability evidence
-public URL evidence
-real screenshot/artifact evidence
-privacy path
-security path when applicable
-support path
-promotion decision: PUBLIC / HIDDEN
-reason
-```
+Rules: no evidence → do not infer; no proof artifact → hidden; never publish all five merely to fill a layout.
 
-Rules:
+- [ ] **Step 4: Create YAML only from verified facts**
 
-```text
-- No evidence -> do not infer.
-- No proof artifact -> HIDDEN.
-- Development-only product may be public only with truthful Preview/In development presentation and matching CTA.
-- Never make all five public merely to fill the layout.
-```
+Each public entry must pass the schema and match the audit. No fake URLs, lorem ipsum, invented status, or generated screenshot. Hidden candidates may be omitted or set `public: false` + `featuredTier: hidden`.
 
-- [ ] **Step 5: Create collection entries only for products passing the audit**
-
-Each YAML file must contain real values supported by the audit. Do not create files with fake URLs, lorem ipsum, placeholder screenshots, or invented statuses. A hidden product may be omitted entirely; if retained for future editorial work, set `public: false` and `featuredTier: hidden` with no route generation.
-
-- [ ] **Step 6: Create query helpers**
-
-`src/lib/products.ts`:
+- [ ] **Step 5: Add query helpers**
 
 ```ts
 import { getCollection } from "astro:content";
-
 export async function getPublicProducts() {
   const products = await getCollection("products", ({ data }) => data.public);
   return products.sort((a, b) => a.data.displayOrder - b.data.displayOrder);
 }
-
 export async function getFlagshipProduct() {
-  const products = await getPublicProducts();
-  return products.find((product) => product.data.featuredTier === "hero") ?? null;
+  return (await getPublicProducts()).find((p) => p.data.featuredTier === "hero") ?? null;
 }
 ```
 
-- [ ] **Step 7: Build to force schema validation**
+- [ ] **Step 6: Run build/schema gate and commit**
 
 ```bash
 pnpm typecheck
 pnpm build
 node --test tests/architecture/product-truth.test.mjs
-```
-
-Expected: PASS. Any invalid product content must fail the build.
-
-- [ ] **Step 8: Commit**
-
-```bash
 git add src/content.config.ts src/content/products src/lib/products.ts docs/evidence/2026-09-04-public-product-audit.md tests/architecture/product-truth.test.mjs
 git commit -m "feat: add evidence-aware public product registry"
 ```
 
 ---
 
-### Task 8: Build the C1.1 homepage narrative with real product data and no brand theatre
+### Task 8: Build the C1.1 homepage in the canonical customer order
 
 **Files:**
-- Create: `src/components/sections/Hero.astro`
-- Create: `src/components/sections/FeaturedProducts.astro`
-- Create: `src/components/sections/OneHouse.astro`
-- Create: `src/components/sections/FlagshipProof.astro`
-- Create: `src/components/sections/Trust.astro`
-- Create: `src/components/sections/AboutBlueSkyz.astro`
-- Create: `src/components/sections/NextStep.astro`
-- Create: `src/components/product/ProductCard.astro`
-- Create: `src/components/product/ProductStatus.astro`
+- Create: `src/components/sections/{Hero,FeaturedProducts,OneHouse,FlagshipProof,Trust,AboutBlueSkyz,NextStep}.astro`
+- Create: `src/components/product/{ProductCard,ProductStatus}.astro`
 - Replace: `src/pages/index.astro`
 - Create: `tests/e2e/home-c1.spec.ts`
 
 **Interfaces:**
-- Consumes: `getPublicProducts()`, `getFlagshipProduct()`, R4d assets, site shell.
+- Consumes: public products + flagship query.
 - Produces: canonical C1.1 homepage.
 
-- [ ] **Step 1: Write failing customer-journey browser tests**
-
-`tests/e2e/home-c1.spec.ts`:
+- [ ] **Step 1: Write failing journey tests**
 
 ```ts
 import { expect, test } from "@playwright/test";
 
- test("homepage explains BlueSkyz before brand theatre", async ({ page }) => {
+test("homepage explains BlueSkyz and rejects old positioning", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/build products.*complex.*clear/i);
   await expect(page.getByRole("link", { name: /Explore products/i })).toBeVisible();
   await expect(page.getByText(/Quiet luxury|digital atelier|Savile Row|Selected works/i)).toHaveCount(0);
 });
 
-test("products appear before house philosophy", async ({ page }) => {
-  await page.goto("/");
-  const products = page.locator("#products");
-  const house = page.locator("#one-house");
-  expect(await products.evaluate((el) => el.compareDocumentPosition(document.querySelector("#one-house")!) & Node.DOCUMENT_POSITION_FOLLOWING)).toBeTruthy();
-  await expect(products.getByText(/Available|Beta|Preview|In development/).first()).toBeVisible();
-});
-
-test("homepage remains usable at 320px", async ({ page }) => {
+test("320px homepage has no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto("/");
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
-  expect(overflow).toBe(false);
-  await expect(page.getByRole("link", { name: /Explore products/i }).first()).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)).toBe(false);
 });
 ```
 
-- [ ] **Step 2: Run and verify failure**
+- [ ] **Step 2: Implement Hero with immediate HTML content**
 
-```bash
-pnpm build
-pnpm test:e2e -- home-c1.spec.ts
-```
-
-- [ ] **Step 3: Implement Hero**
-
-Required visible content:
+Visible content:
 
 ```text
 BlueSkyz Labs
@@ -1314,24 +931,15 @@ Explore products
 About BlueSkyz
 ```
 
-Render content immediately in HTML. R4d symbol may be visually prominent but cannot delay content. No splash, custom cursor, parallax, or Framer dependency.
+R4d may be focal; no splash, custom cursor, parallax, Framer, or JS-gated reveal.
 
-- [ ] **Step 4: Implement FeaturedProducts from collection data**
+- [ ] **Step 3: Implement Featured Products from registry truth**
 
-Rules:
+Render `hero` tier as one editorial flagship card, up to two `featured`, and selected `ecosystem`. Never render hidden entries. ProductCard consumes public status and CTA directly from content.
 
-```text
-hero tier -> one large editorial card
-featured tier -> up to two secondary cards
-ecosystem tier -> remaining selected public products
-hidden/public=false -> never render
-```
+- [ ] **Step 4: Implement One House**
 
-A ProductCard reads its public label and CTA from content data. It never derives `Available` from visual assumptions.
-
-- [ ] **Step 5: Implement OneHouse**
-
-Use plain customer language and the approved principle direction:
+Use plain customer language:
 
 ```text
 We don’t build around one category. We build around a way of thinking.
@@ -1341,64 +949,40 @@ Respect human agency.
 Build for real-world use.
 ```
 
-Do not expose SGPS/BPXS/VCDI terminology.
+- [ ] **Step 5: Implement Flagship Proof only when real evidence exists**
 
-- [ ] **Step 6: Implement FlagshipProof with real evidence only**
+If flagship has a verified screenshot, render it with real product value/capability evidence. If not, omit the whole section rather than substitute generated art.
 
-If `getFlagshipProduct()` returns a product with a verified screenshot, render the screenshot and real capability/proof copy from approved product data. If no product satisfies flagship proof requirements, omit the entire section; do not fill it with generated art.
+- [ ] **Step 6: Implement Trust, About, Next Step and compose order**
 
-- [ ] **Step 7: Implement compact Trust/About/NextStep sections**
+Order: Hero → Featured Products → One House → optional Flagship Proof → Trust → About → Next Step. Trust links to `/privacy/`, `/security/`, `/support/`. About may state `Tony Nguyen — Founder & CEO`; do not invent biography/team scale.
 
-Trust links to real routes `/privacy/`, `/security/`, `/support/`. About uses factual copy and may show `Tony Nguyen — Founder & CEO` only because the owner approved that attribution in the design process. Do not add team-size/global-office claims.
-
-- [ ] **Step 8: Compose the page in the canonical order**
-
-```astro
-<BaseLayout ...>
-  <Hero />
-  <FeaturedProducts products={products} />
-  <OneHouse />
-  {flagship && <FlagshipProof product={flagship} />}
-  <Trust />
-  <AboutBlueSkyz />
-  <NextStep />
-</BaseLayout>
-```
-
-- [ ] **Step 9: Run E2E/build/a11y smoke**
+- [ ] **Step 7: Run and commit**
 
 ```bash
 pnpm build
 pnpm test:e2e -- home-c1.spec.ts
 pnpm test:e2e -- accessibility.spec.ts
-```
-
-- [ ] **Step 10: Commit**
-
-```bash
 git add src/components/sections src/components/product src/pages/index.astro tests/e2e/home-c1.spec.ts
 git commit -m "feat: build C1.1 product-house homepage"
 ```
 
 ---
 
-### Task 9: Build product discovery and static product profile routes
+### Task 9: Build product discovery and static product profiles
 
 **Files:**
-- Create: `src/pages/products/index.astro`
-- Create: `src/pages/products/[slug].astro`
-- Create: `tests/e2e/products.spec.ts`
+- Create: `src/pages/products/index.astro`, `src/pages/products/[slug].astro`, `tests/e2e/products.spec.ts`
 
 **Interfaces:**
-- Consumes: public product collection/query helpers.
-- Produces: `/products/` discovery and one static profile page per public product.
+- Produces: `/products/` + one route per public product.
 
-- [ ] **Step 1: Write failing route tests**
+- [ ] **Step 1: Write failing route test**
 
 ```ts
 import { expect, test } from "@playwright/test";
 
- test("products index exposes truthful status and actions", async ({ page }) => {
+test("products index exposes truthful status", async ({ page }) => {
   await page.goto("/products/");
   await expect(page.getByRole("heading", { level: 1, name: /Products/i })).toBeVisible();
   const cards = page.locator("[data-product-card]");
@@ -1407,22 +991,11 @@ import { expect, test } from "@playwright/test";
 });
 ```
 
-Add one generated product-profile assertion using the first public product URL discovered from `/products/` rather than hard-coding an unverified product slug.
+- [ ] **Step 2: Implement `/products/` without premature filters**
 
-- [ ] **Step 2: Run and verify failure**
+Render public entries ordered by `displayOrder`; no search/filter for a five-product-scale portfolio.
 
-```bash
-pnpm build
-pnpm test:e2e -- products.spec.ts
-```
-
-- [ ] **Step 3: Implement `/products/`**
-
-No search/filter for the current small portfolio. Render a clear editorial list/grid ordered by `displayOrder`, preserving Product DNA through real product artwork while BlueSkyz controls layout/status/action semantics.
-
-- [ ] **Step 4: Implement static `[slug]` routes**
-
-Use:
+- [ ] **Step 3: Implement static profile paths**
 
 ```ts
 export async function getStaticPaths() {
@@ -1431,82 +1004,34 @@ export async function getStaticPaths() {
 }
 ```
 
-Each profile page must render:
+Profile contract: identity/value, status/platform/action, real proof, customer job, verified capability/evidence, trust links that exist, `A BlueSkyz Labs product`, next action. Do not generate unapproved feature prose.
 
-```text
-identity + short value
-status / platform / action
-proof artifact
-customer job / core problem
-verified capability/evidence content available in the registry
-trust links that exist
-A BlueSkyz Labs product
-next action
-```
-
-Do not create feature prose not present in approved content.
-
-- [ ] **Step 5: Run tests**
+- [ ] **Step 4: Run and commit**
 
 ```bash
 pnpm build
 pnpm test:e2e -- products.spec.ts
-```
-
-- [ ] **Step 6: Commit**
-
-```bash
 git add src/pages/products tests/e2e/products.spec.ts
 git commit -m "feat: add product discovery and profile routes"
 ```
 
 ---
 
-### Task 10: Add About, Contact, Support, Privacy, and Security trust routes with production truth gates
+### Task 10: Add factual About/Contact/Support/Privacy/Security routes and production truth gate
 
 **Files:**
-- Create: `src/pages/about.astro`
-- Create: `src/pages/contact.astro`
-- Create: `src/pages/support.astro`
-- Create: `src/pages/privacy.astro`
-- Create: `src/pages/security.astro`
-- Create: `src/lib/truth.ts`
-- Create: `scripts/validate-public-truth.mjs`
-- Create: `tests/architecture/public-truth-gate.test.mjs`
-- Create: `tests/e2e/trust-routes.spec.ts`
+- Create: `src/pages/{about,contact,support,privacy,security}.astro`
+- Create: `src/lib/truth.ts`, `scripts/validate-public-truth.mjs`
+- Create: `tests/architecture/public-truth-gate.test.mjs`, `tests/e2e/trust-routes.spec.ts`
 
 **Interfaces:**
-- Consumes: `SITE` env-backed public identity and product support/privacy/security URLs.
-- Produces: factual corporate trust surfaces and a hard production validation command.
+- Consumes: `SITE` + product proof links.
+- Produces: trust surfaces and a production promotion gate.
 
-- [ ] **Step 1: Write a failing public-truth gate test**
-
-```js
-import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import test from "node:test";
-
-const script = readFileSync("scripts/validate-public-truth.mjs", "utf8");
-
-test("production truth gate requires external corporate facts instead of defaults", () => {
-  for (const name of ["PUBLIC_SITE_URL", "PUBLIC_CONTACT_EMAIL", "PUBLIC_SECURITY_EMAIL"]) {
-    assert.match(script, new RegExp(name));
-  }
-  assert.doesNotMatch(script, /portfolio\.tonydemo\.com/);
-});
-```
-
-- [ ] **Step 2: Create `src/lib/truth.ts`**
-
-Expose pure validation:
+- [ ] **Step 1: Add pure truth validation**
 
 ```ts
-export interface PublicTruthInput {
-  siteUrl?: string;
-  contactEmail?: string;
-  securityEmail?: string;
-}
-
+export interface PublicTruthInput { siteUrl?: string; contactEmail?: string; securityEmail?: string; }
 export function validatePublicTruth(input: PublicTruthInput): string[] {
   const errors: string[] = [];
   if (!input.siteUrl?.startsWith("https://")) errors.push("PUBLIC_SITE_URL must be an https URL");
@@ -1516,152 +1041,103 @@ export function validatePublicTruth(input: PublicTruthInput): string[] {
 }
 ```
 
-- [ ] **Step 3: Create production validation script**
+- [ ] **Step 2: Create `validate-public-truth.mjs` and architecture test**
 
-`scripts/validate-public-truth.mjs` must call equivalent checks against process env and exit 1 with one line per missing/invalid fact. It must never supply a fallback production domain/email.
-
-Add script:
+The script validates `PUBLIC_SITE_URL`, `PUBLIC_CONTACT_EMAIL`, `PUBLIC_SECURITY_EMAIL`, prints each error, and exits 1 on any error. It must never supply `portfolio.tonydemo.com` or another production fallback. Add:
 
 ```json
 "validate:public-truth": "node scripts/validate-public-truth.mjs"
 ```
 
-Do not add it to local preview build yet; add it to Cloudflare production build configuration during Task 14 when real variables exist.
+- [ ] **Step 3: Implement factual routes**
 
-- [ ] **Step 4: Implement trust pages using only factual statements**
+About: approved proposition + founder attribution only.
 
-About may explain the approved product-house proposition and `Tony Nguyen — Founder & CEO`, but no invented biography milestones.
+Contact: mailto only when configured; preview without email shows neutral configuration-state copy, not an invented address.
 
-Contact behavior:
+Support: product-specific support URLs where verified; corporate contact fallback only when configured.
 
-```text
-- If `SITE.contactEmail` exists, render a mailto action.
-- If absent in local/preview, render explanatory non-production text: “Contact details are configured for the production release.”
-- No agency “Have something worth making?” copy.
-```
+Security: reporting email when configured; no bug bounty/SLA/certification/bank-grade claim.
 
-Support lists only public products with verified `proof.supportUrl`; otherwise directs to corporate contact when available.
+Privacy: only factual corporate-site behavior; do not claim analytics until enabled and do not invent legal guarantees.
 
-Security exposes `SITE.securityEmail` only when configured and makes no bug-bounty/SLA/certification promise.
+- [ ] **Step 4: Add browser tests for trust anti-patterns**
 
-Privacy describes only website practices that implementation can prove. If Cloudflare Web Analytics is not yet enabled, do not claim that it is. Do not add legal terms beyond factual site behavior without owner/legal approval.
+Verify all routes are reachable and runtime text contains none of: `global offices`, `bank-grade`, `military-grade`, unsupported `ISO`, unsupported `SOC`, or `Have something worth making?`.
 
-- [ ] **Step 5: Write trust-route browser tests**
-
-Assert:
-
-```text
-/about/ identifies BlueSkyz and founder without “global team/offices” language
-/contact/ has no agency-style headline
-/security/ has no bank-grade/military-grade/ISO/SOC claim
-/privacy/ is reachable
-/support/ is reachable
-```
-
-- [ ] **Step 6: Run tests**
+- [ ] **Step 5: Run and commit**
 
 ```bash
 node --test tests/architecture/public-truth-gate.test.mjs
 pnpm build
 pnpm test:e2e -- trust-routes.spec.ts
-```
-
-- [ ] **Step 7: Commit**
-
-```bash
-git add src/pages/about.astro src/pages/contact.astro src/pages/support.astro src/pages/privacy.astro src/pages/security.astro src/lib/truth.ts scripts/validate-public-truth.mjs package.json tests/architecture/public-truth-gate.test.mjs tests/e2e/trust-routes.spec.ts
+git add src/pages src/lib/truth.ts scripts/validate-public-truth.mjs package.json tests/architecture/public-truth-gate.test.mjs tests/e2e/trust-routes.spec.ts
 git commit -m "feat: add factual trust and contact surfaces"
 ```
 
 ---
 
-### Task 11: Add canonical SEO, structured data, sitemap, and social metadata without staging leakage
+### Task 11: Add canonical SEO, structured data, sitemap, and social metadata
 
 **Files:**
-- Create: `src/lib/seo.ts`
+- Create: `src/lib/seo.ts`, `src/pages/robots.txt.ts`, `src/pages/sitemap.xml.ts`
 - Modify: `src/layouts/BaseLayout.astro`
-- Create: `src/pages/robots.txt.ts`
-- Create: `src/pages/sitemap.xml.ts`
-- Create/replace after approval: `public/social/og-default.*`
-- Create: `tests/architecture/seo-contract.test.mjs`
-- Create: `tests/e2e/seo.spec.ts`
+- Create when approved: `public/social/og-default.*`
+- Create: `tests/architecture/seo-contract.test.mjs`, `tests/e2e/seo.spec.ts`
 
 **Interfaces:**
-- Consumes: `SITE.url`, public product collection.
-- Produces: canonical metadata and public-only discovery documents.
+- Consumes: `SITE.url` + public products.
+- Produces: canonical/entity/product SEO with zero staging leakage.
 
-- [ ] **Step 1: Write failing SEO contract test**
-
-The test must assert source contains `Organization`, `WebSite`, canonical URL handling, public-only sitemap generation, and zero `portfolio.tonydemo.com` strings.
-
-- [ ] **Step 2: Implement `src/lib/seo.ts`**
-
-Provide:
+- [ ] **Step 1: Create SEO helpers**
 
 ```ts
-export function absoluteUrl(base: string, path: string) {
-  return new URL(path, base).toString();
-}
-
+export function absoluteUrl(base: string, path: string) { return new URL(path, base).toString(); }
 export function organizationJsonLd(siteUrl: string) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "BlueSkyz Labs",
-    url: siteUrl,
-  } as const;
+  return { "@context": "https://schema.org", "@type": "Organization", name: "BlueSkyz Labs", url: siteUrl } as const;
 }
 ```
 
-Only add social/profile fields when verified.
+- [ ] **Step 2: Extend BaseLayout**
 
-- [ ] **Step 3: Extend BaseLayout props**
+Add canonical path, OG image, Organization + WebSite JSON-LD. Canonical always derives from `SITE.url`; never request host or staging hard-code.
 
-Add `canonicalPath`, optional `image`, and structured-data support. Canonical must be generated from `SITE.url`, never from request host or a hard-coded staging domain.
+- [ ] **Step 3: Add robots and sitemap**
 
-- [ ] **Step 4: Add robots and sitemap routes**
+Sitemap contains only public routes/products. Robots references the canonical sitemap. Hidden products and preview/test paths are absent.
 
-`robots.txt` references the canonical sitemap. Sitemap contains `/`, `/products/`, public product profile routes, `/about/`, `/contact/`, `/support/`, `/privacy/`, `/security/`; it excludes hidden products and internal preview/test paths.
+- [ ] **Step 4: Add OG asset only from approved brand/product art**
 
-- [ ] **Step 5: Add OG assets only from approved brand/product artwork**
+If product-specific proof is not approved, use masterbrand-only R4d art; never generated fake product UI.
 
-Do not use generated product UI as proof. If the final corporate OG image is not yet approved, use a restrained R4d masterbrand-only image and record its provenance.
-
-- [ ] **Step 6: Run tests**
+- [ ] **Step 5: Test and commit**
 
 ```bash
 pnpm build
 node --test tests/architecture/seo-contract.test.mjs
 pnpm test:e2e -- seo.spec.ts
-```
-
-- [ ] **Step 7: Commit**
-
-```bash
 git add src/lib/seo.ts src/layouts/BaseLayout.astro src/pages/robots.txt.ts src/pages/sitemap.xml.ts public/social tests/architecture/seo-contract.test.mjs tests/e2e/seo.spec.ts
 git commit -m "feat: add truthful entity and product SEO"
 ```
 
 ---
 
-### Task 12: Add native motion/progressive enhancement and prove reduced-motion behavior
+### Task 12: Add progressive native motion, framework-neutral JS budget, and final security headers
 
 **Files:**
-- Create: `src/components/ui/Reveal.astro`
-- Modify: `src/styles/global.css`
-- Modify: homepage sections only where signature reveal is used
-- Create: `tests/e2e/motion.spec.ts`
+- Create: `src/components/ui/Reveal.astro`, `scripts/check-client-budget.mjs`, `tests/e2e/motion.spec.ts`
+- Modify: `src/styles/global.css`, `public/_headers`, `tests/architecture/bundle-budget.test.mjs`, `tests/architecture/security-headers.test.mjs`, `package.json`
+- Delete/replace: `scripts/check-bundle-regression.mjs`
 
 **Interfaces:**
-- Consumes: static HTML homepage.
-- Produces: optional CSS/View-Transition enhancement with no global animation framework.
+- Produces: CSS/native motion and framework-neutral client-JS/security gates.
 
-- [ ] **Step 1: Write failing reduced-motion tests**
+- [ ] **Step 1: Write reduced-motion test**
 
 ```ts
 import { expect, test } from "@playwright/test";
 
-test("reduced motion keeps all hero content immediately visible", async ({ browser }) => {
+test("reduced motion keeps hero content immediately visible", async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: "reduce" });
   const page = await context.newPage();
   await page.goto("/");
@@ -1671,122 +1147,54 @@ test("reduced motion keeps all hero content immediately visible", async ({ brows
 });
 ```
 
-- [ ] **Step 2: Implement `Reveal.astro` as a semantic wrapper, not a client island**
+- [ ] **Step 2: Implement `Reveal.astro` as a semantic wrapper**
 
-The component should render plain content with an optional class/data attribute. Visibility must never default to hidden when JavaScript is absent.
+It renders visible HTML by default. CSS may enhance opacity/clip-path on decorative layers only. Reduced-motion removes transforms. View Transitions are enabled only if cross-browser fallback remains clean; they are not mandatory.
 
-- [ ] **Step 3: Add CSS-only reveal/signature behavior**
+- [ ] **Step 3: Replace Next build-log JS accounting with output accounting**
 
-Use opacity/clip-path only when supported and only on non-critical decorative layers. Do not animate the H1 from `display:none`, `visibility:hidden`, or an offscreen state that can delay comprehension.
-
-Use `@media (prefers-reduced-motion: reduce)` to eliminate transforms/clip transitions.
-
-- [ ] **Step 4: Evaluate View Transitions progressively**
-
-If cross-document View Transitions improve navigation without increasing JS or breaking Safari/Firefox fallback, enable them through CSS/HTML opt-in. If not, omit them; the spec says progressive adoption, not mandatory novelty.
-
-- [ ] **Step 5: Run tests**
-
-```bash
-pnpm build
-pnpm test:e2e -- motion.spec.ts
-```
-
-- [ ] **Step 6: Commit**
-
-```bash
-git add src/components/ui/Reveal.astro src/styles/global.css src/components/sections tests/e2e/motion.spec.ts
-git commit -m "feat: add native progressive motion grammar"
-```
-
----
-
-### Task 13: Rebuild security headers, client-JS budget, and asset gates for the final static architecture
-
-**Files:**
-- Modify: `public/_headers`
-- Create: `scripts/check-client-budget.mjs`
-- Replace: `tests/architecture/bundle-budget.test.mjs`
-- Replace/remove: `scripts/check-bundle-regression.mjs`
-- Modify: `tests/architecture/security-headers.test.mjs`
-
-**Interfaces:**
-- Consumes: final static output and known external asset/script sources.
-- Produces: framework-neutral client-JS budget and deployable security-header contract.
-
-- [ ] **Step 1: Write a framework-neutral generated-JS budget test**
-
-Replace the old Next build-log parser test with a test that creates a temporary `dist/_astro/` fixture and calls `sumClientJavaScriptBytes(distPath)` exported by `scripts/check-client-budget.mjs`.
-
-Required behavior:
-
-```text
-- sum all generated .js files referenced by dist/index.html
-- compressed measurement uses Brotli or gzip consistently
-- homepage initial referenced JS must be <120000 bytes
-- target is zero/near-zero; hard ceiling remains 120000
-```
-
-- [ ] **Step 2: Implement `check-client-budget.mjs`**
-
-Read `dist/index.html`, extract local `.js` script `src` values, read those files, Brotli-compress with Node `zlib.brotliCompressSync`, sum bytes, print evidence, and exit 1 at `>= 120_000`.
-
-Add package script:
+`check-client-budget.mjs` reads `dist/index.html`, finds local `.js` script `src`s, Brotli-compresses the referenced JS with Node `zlib.brotliCompressSync`, sums bytes, prints evidence, and exits 1 at `>= 120000` bytes. Add:
 
 ```json
 "check:client-budget": "node scripts/check-client-budget.mjs"
 ```
 
-- [ ] **Step 3: Replace old Next-specific bundle regression script/test**
+Update `bundle-budget.test.mjs` to validate this behavior using a temporary fake `dist/` directory; remove Next route-table parsing.
 
-Delete `parseRootFirstLoadBytes`/Next route-table parsing. If exact-base regression remains useful, compare the framework-neutral JSON evidence files produced by `check-client-budget.mjs`; otherwise retain only the hard ceiling and let Lighthouse/PR evidence detect regressions.
+- [ ] **Step 4: Finalize CSP from actual sources**
 
-- [ ] **Step 4: Finalize CSP only from actual sources**
-
-For a static site with no third-party scripts, prefer a CSP close to:
+If no third-party scripts are enabled, use a strict static policy close to:
 
 ```text
 Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; form-action 'self'
 ```
 
-If Astro inline scripts, Cloudflare Web Analytics, or another verified source requires a change, adjust narrowly and document the exact reason in `SECURITY.md`. Do not add wildcard origins.
+If Astro inline output or approved Cloudflare analytics requires a change, widen only the exact directive/source and document why in `SECURITY.md`. No wildcard origins.
 
-- [ ] **Step 5: Run the budget/security gates**
+- [ ] **Step 5: Run and commit**
 
 ```bash
 pnpm build
 pnpm check:client-budget
 pnpm test:architecture
-```
-
-Expected: PASS.
-
-- [ ] **Step 6: Commit**
-
-```bash
-git add public/_headers scripts/check-client-budget.mjs scripts/check-bundle-regression.mjs tests/architecture/bundle-budget.test.mjs tests/architecture/security-headers.test.mjs package.json SECURITY.md
-git commit -m "test: enforce static security and client-JS budgets"
+pnpm test:e2e -- motion.spec.ts
+git add -A
+git commit -m "test: enforce native motion, security and client-JS budgets"
 ```
 
 ---
 
-### Task 14: Align Playwright, Lighthouse, and Cloudflare Workers Builds with the new deployment flow
+### Task 13: Align Playwright, Lighthouse, local gates, and Workers Builds promotion flow
 
 **Files:**
-- Modify: `playwright.config.ts`
-- Modify: `lighthouserc.json`
-- Modify: `.githooks/pre-commit`
-- Modify: `tests/architecture/local-gates.test.mjs`
-- Create: `docs/QA_STRATEGY_C1.md` or replace `docs/QA_STRATEGY.md` if the old document is fully obsolete
-- Modify: `README.md`
+- Modify: `playwright.config.ts`, `lighthouserc.json`, `.githooks/pre-commit`, `tests/architecture/local-gates.test.mjs`, `docs/QA_STRATEGY.md`, `README.md`
 
 **Interfaces:**
-- Consumes: final build scripts and Cloudflare preview URL convention.
-- Produces: local canonical gate + remote preview verification without GitHub Actions.
+- Produces: local canonical source gate + Cloudflare preview/production workflow without GitHub Actions.
 
-- [ ] **Step 1: Update the local gate test first**
+- [ ] **Step 1: Update pre-commit contract**
 
-Required pre-commit commands:
+Required local commands:
 
 ```text
 pnpm test:architecture
@@ -1797,62 +1205,46 @@ pnpm build
 pnpm check:client-budget
 ```
 
-Do not put full multi-browser Playwright or Lighthouse into every Git commit hook; those remain promotion/preview gates because they are slower.
+Do not put full browser matrix/Lighthouse into every commit hook.
 
-- [ ] **Step 2: Update `.githooks/pre-commit` to match the test**
+- [ ] **Step 2: Keep Playwright local/remote dual mode**
 
-Run the commands above with `set -eu` so the first failure blocks the commit.
+Retain `PLAYWRIGHT_BASE_URL`; local `webServer.command` remains `pnpm start`. Remove GitHub-specific reporter when no longer useful; retain list/html/junit outputs useful to agents.
 
-- [ ] **Step 3: Keep Playwright local/remote dual mode**
+- [ ] **Step 3: Update Lighthouse to the Astro preview server**
 
-Retain `PLAYWRIGHT_BASE_URL` behavior. Local `webServer.command` remains `pnpm start`. Remove GitHub-specific reporter if it no longer provides value outside Actions; keep `list/html/junit` reporters useful to local/Cloudflare-run agents.
-
-- [ ] **Step 4: Update Lighthouse collection for the Astro preview server**
-
-Keep three runs and current quality floors or stronger. Preserve:
-
-```json
-"categories:performance": ["error", { "minScore": 0.9 }]
-"categories:accessibility": ["error", { "minScore": 0.9 }]
-"categories:best-practices": ["error", { "minScore": 0.9 }]
-"categories:seo": ["error", { "minScore": 0.9 }]
-"cumulative-layout-shift": ["error", { "maxNumericValue": 0.05 }]
-```
-
-Do not preserve an unrealistically framework-specific LCP number solely because it existed before; set the lab LCP budget from actual C1.1 baseline evidence while keeping the field goal ≤2.5s p75.
-
-- [ ] **Step 5: Configure Cloudflare Workers Builds outside repository source**
-
-In Cloudflare Git integration:
+Keep three runs and at least:
 
 ```text
-repository: BlueSkyz-Labs/SGPS-Marketing
-production branch: main
-build command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget
+performance ≥0.90
+accessibility ≥0.90
+best-practices ≥0.90
+SEO ≥0.90
+CLS ≤0.05 lab
+```
+
+Set lab LCP budget from measured C1.1 baseline rather than blindly carrying a framework-era value; the field contract remains ≤2.5s p75.
+
+- [ ] **Step 4: Configure Workers Builds in Cloudflare Git integration**
+
+Production:
+
+```text
+repo: BlueSkyz-Labs/SGPS-Marketing
+branch: main
+command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget
 preview branches: enabled
-output/deploy: Wrangler/Workers Static Assets using wrangler.toml
 ```
 
-For preview builds where production truth variables are intentionally unavailable, use a preview build command that omits `validate:public-truth` but still builds/tests static content. Production must include the truth gate.
+Preview builds may omit `validate:public-truth` when production-only domain/email variables are intentionally absent, but must still build and pass static gates. Do not re-create this pipeline in `.github/workflows`.
 
-Do not recreate the same pipeline in `.github/workflows`.
-
-- [ ] **Step 6: Document exact promotion flow**
-
-`docs/QA_STRATEGY.md` must describe:
+- [ ] **Step 5: Document promotion flow**
 
 ```text
-feature branch
-→ local source gate
-→ PR
-→ Cloudflare preview
-→ Playwright browser/a11y + Lighthouse + human/E4 review
-→ merge main
-→ production truth gate + production build
-→ post-deploy smoke
+feature branch → local source gate → PR → Cloudflare preview → Playwright/axe + Lighthouse + E4 review → merge main → production truth gate/build → post-deploy smoke
 ```
 
-- [ ] **Step 7: Run local QA**
+- [ ] **Step 6: Run full local gate and commit**
 
 ```bash
 pnpm test:architecture
@@ -1863,71 +1255,46 @@ pnpm build
 pnpm check:client-budget
 pnpm test:e2e
 pnpm lighthouse
-```
-
-Expected: PASS.
-
-- [ ] **Step 8: Commit**
-
-```bash
 git add playwright.config.ts lighthouserc.json .githooks/pre-commit tests/architecture/local-gates.test.mjs docs/QA_STRATEGY.md README.md
 git commit -m "chore: align QA with Cloudflare-native promotion"
 ```
 
 ---
 
-### Task 15: Remove legacy Next/React experience code and unused dependencies only after parity is green
+### Task 14: Remove legacy runtime code, run E4 red team, and record launch readiness
 
 **Files:**
-- Delete obsolete: `src/app/**`
-- Delete obsolete: old `src/components/sections/AboutSection.tsx`, `ContactSection.tsx`, `HeroSection.tsx`, `ManifestoSection.tsx`, `ProcessSection.tsx`, `WorkSection.tsx`
-- Delete obsolete: old React layout/ui/provider files superseded by Astro equivalents
-- Delete obsolete: `src/lib/motion-features.ts`
-- Delete/replace: legacy `src/lib/constants.ts`
-- Modify: `package.json`
-- Modify: `pnpm-lock.yaml`
-- Modify: `tests/architecture/ui-inventory.test.mjs`
-- Delete or rewrite framework-specific tests that no longer represent customer/product truth
+- Delete obsolete: `src/app/**`, old React layout/section/ui/provider files, `src/lib/motion-features.ts`, stale legacy constants
+- Modify: `package.json`, `pnpm-lock.yaml`, `tests/architecture/ui-inventory.test.mjs`
+- Create: `docs/evidence/2026-09-04-e4-web-validation.md`, `docs/evidence/2026-09-04-launch-readiness.md`
 
 **Interfaces:**
-- Consumes: complete Astro route/component replacement from Tasks 6–14.
-- Produces: no dead Next/React/Framer/Cormorant/gold architecture.
+- Consumes: complete Astro replacement and deployed preview.
+- Produces: clean runtime + explicit PASS/BLOCKED promotion evidence.
 
-- [ ] **Step 1: Write/update inventory test to prohibit legacy experience dependencies**
+- [ ] **Step 1: Update inventory test before deletion**
 
-The architecture test must assert:
+Assert runtime source/dependencies contain none of:
 
 ```text
-no next dependency
-no framer-motion dependency
-no CustomCursor source
-no MotionProvider source
-no Cormorant_Garamond string
-no Quiet luxury / digital atelier / Savile Row strings in runtime source
-no champagne #C9A962 token
+next
+framer-motion
+CustomCursor
+MotionProvider
+Cormorant_Garamond
+Quiet luxury
+digital atelier
+Savile Row
+#C9A962
 ```
 
-It must not ban React generically if a future audited island genuinely exists; it should ban unused/global React runtime assumptions.
+Do not ban React generically if a future evidence-backed island exists; ban unused/global React assumptions.
 
-- [ ] **Step 2: Run the test and confirm legacy files make it fail**
+- [ ] **Step 2: Delete superseded source only after replacement tests are green**
 
-```bash
-node --test tests/architecture/ui-inventory.test.mjs
-```
+Use `git rm` for old Next app tree and superseded TSX components. Search imports for `lucide-react`, `class-variance-authority`, `clsx`, `tailwind-merge`; remove each package with zero surviving imports.
 
-- [ ] **Step 3: Delete superseded runtime source**
-
-Use `git rm` for old Next app tree and old React experience components only after all equivalent routes/tests are green. Preserve any generic source file only if it has a real caller after migration.
-
-- [ ] **Step 4: Run unused-dependency audit**
-
-Search source imports for `lucide-react`, `class-variance-authority`, `clsx`, and `tailwind-merge`. Remove a package if there are zero surviving imports. Do not retain a design-system dependency merely because it was once used.
-
-- [ ] **Step 5: Remove Next-specific architecture tests**
-
-Delete or rewrite tests such as old React-type/Next layout assumptions only after verifying their customer-value intent is covered by the Astro toolchain/browser tests.
-
-- [ ] **Step 6: Run the full local gate**
+- [ ] **Step 3: Run the exact final automated gate and record candidate SHA**
 
 ```bash
 pnpm install --frozen-lockfile
@@ -1941,70 +1308,13 @@ pnpm test:e2e
 pnpm lighthouse
 ```
 
-Expected: PASS.
+Record the exact git SHA and all results in `docs/evidence/2026-09-04-e4-web-validation.md`.
 
-- [ ] **Step 7: Commit cleanup separately**
+- [ ] **Step 4: Run browser/viewport E4 matrix**
 
-```bash
-git add -A
-git commit -m "refactor: remove superseded portfolio and React runtime code"
-```
+Verify 320, 360, 390/393, 430, 1280, 1440, 1920 widths; 200% zoom; Chromium, Firefox, WebKit; reduced motion; keyboard-only. Record exact route/viewport/browser for every defect.
 
----
-
-### Task 16: Execute the E4 launch-readiness red team and record promotion blockers without faking completion
-
-**Files:**
-- Create: `docs/evidence/2026-09-04-e4-web-validation.md`
-- Create: `docs/evidence/2026-09-04-launch-readiness.md`
-- Modify only if evidence finds defects: runtime/test files from earlier tasks
-
-**Interfaces:**
-- Consumes: deployed Cloudflare preview candidate and all automated gates.
-- Produces: explicit PASS/BLOCKED launch evidence; does not force public launch when external truth is missing.
-
-- [ ] **Step 1: Capture automated evidence from the exact candidate commit**
-
-Record commit SHA and results for:
-
-```text
-pnpm test:architecture
-pnpm typecheck
-pnpm lint
-pnpm format:check
-pnpm build
-pnpm check:client-budget
-pnpm test:e2e
-pnpm lighthouse
-```
-
-Also record Cloudflare preview URL and deployment status.
-
-- [ ] **Step 2: Run viewport/browser matrix**
-
-At minimum:
-
-```text
-320px mobile
-360px Android-class
-390/393px iPhone-class
-430px large phone
-1280 desktop
-1440 desktop
-1920 desktop
-200% browser zoom
-Chromium
-Firefox
-WebKit
-reduced motion
-keyboard only
-```
-
-Record defects with exact route/viewport/browser and severity.
-
-- [ ] **Step 3: Run the seven customer tasks from the spec**
-
-Use real people where possible:
+- [ ] **Step 5: Run the seven customer tasks**
 
 ```text
 1. Five-second test: What does BlueSkyz do?
@@ -2016,31 +1326,21 @@ Use real people where possible:
 7. Identify anything exaggerated or fake.
 ```
 
-Do not convert visual preference into a P0 unless it causes comprehension, trust, accessibility, navigation, or conversion failure.
+Credibility/comprehension failures outrank visual preference.
 
-- [ ] **Step 4: Run visual red-team checks**
+- [ ] **Step 6: Run visual red team**
 
-Record results for:
+Record blur hierarchy, grayscale, no-Cobalt, no-logo, and competitor-logo substitution thought experiment. The site must retain hierarchy without effects and must not collapse into a generic premium-tech template.
 
-```text
-blur hierarchy
-full grayscale
-remove/ignore Cobalt
-inspect without R4d mark
-competitor-logo substitution thought experiment
-```
+- [ ] **Step 7: Record launch blockers precisely**
 
-The page must retain hierarchy without color/effects, while still having enough distinctive composition/brand behavior to avoid generic template substitution.
-
-- [ ] **Step 5: Evaluate the P0 public-promotion blockers**
-
-`docs/evidence/2026-09-04-launch-readiness.md` must mark each as `PASS` or `BLOCKED` with evidence:
+`docs/evidence/2026-09-04-launch-readiness.md` marks each item `PASS` or `BLOCKED` with evidence:
 
 ```text
 canonical corporate domain supplied
 no staging-domain metadata leakage
 public product inventory/status reviewed
-real screenshots/artifacts available for promoted products
+real public artifacts available for promoted products
 all CTAs work
 founder/company copy approved
 privacy path factual/approved
@@ -2051,59 +1351,53 @@ critical broken links = 0
 generated fake product proof = 0
 ```
 
-If the owner has not supplied a required external fact, mark `BLOCKED — owner/evidence dependency`; never manufacture a PASS.
+Missing owner/external facts are `BLOCKED — owner/evidence dependency`; never manufacture a pass.
 
-- [ ] **Step 6: Fix only evidence-backed defects and rerun affected gates**
+- [ ] **Step 8: Fix only evidence-backed defects, rerun affected gates, then run the full gate once more**
 
-Each P0/P1 defect gets its own small fix/test/commit. Do not perform a visual redesign because one tester expresses a preference.
+Each P0/P1 defect gets a small fix/test/commit. Do not redesign from aesthetic preference alone.
 
-- [ ] **Step 7: Final verification before calling the implementation converged**
-
-Run the full gate again on the exact final commit and verify Cloudflare preview smoke after the build.
-
-- [ ] **Step 8: Commit E4 evidence**
+- [ ] **Step 9: Commit cleanup and E4 evidence**
 
 ```bash
-git add docs/evidence/2026-09-04-e4-web-validation.md docs/evidence/2026-09-04-launch-readiness.md
-git commit -m "docs: record BlueSkyz Web V1 E4 validation"
+git add -A
+git commit -m "docs: converge BlueSkyz Web V1 and record E4 evidence"
 ```
 
-The implementation may be technically complete while public promotion remains `BLOCKED` on owner/evidence dependencies. Report that state precisely.
+Technical implementation may be complete while public promotion remains blocked on external truth. Report that distinction exactly.
 
 ---
 
-## Plan Self-Review Result
+## Plan Self-Review
 
 ### Spec coverage
 
-- Customer mission and 5–90 second comprehension: Tasks 6, 8, 16.
-- Homepage IA/order: Task 8.
-- Porcelain/Ink/Cobalt semantic visual system: Task 5.
-- R4d provenance and non-reinterpretation: Task 4.
-- Product lifecycle/availability/action/evidence model: Task 7.
-- Product discovery/profile pages: Task 9.
-- Trust/privacy/security/support/founder surfaces: Task 10.
-- Progressive enhancement, reduced motion, browser-native motion: Task 12.
-- WCAG/browser/mobile QA: Tasks 6, 8–12, 14, 16.
-- Performance/client JS/CWV assurance: Tasks 1, 13, 14, 16.
-- SEO/canonical/structured data: Task 11.
-- Cloudflare Workers Static Assets/Builds and no required GitHub Actions: Tasks 3 and 14.
-- Legacy experience removal: Task 15.
-- External launch truth dependencies and E4 promotion gate: Tasks 10, 14, 16.
-- Astro-vs-Next evidence gate: Task 1.
+- Customer mission/comprehension → Tasks 6, 8, 14.
+- Homepage IA/order → Task 8.
+- Visual tokens/R4d → Tasks 4–5.
+- Product lifecycle/availability/evidence/CTA → Task 7.
+- Product discovery/profiles → Task 9.
+- Trust/privacy/security/support/founder → Task 10.
+- SEO/canonical/entity data → Task 11.
+- Native motion/reduced motion/accessibility → Tasks 6, 8, 12, 14.
+- Performance/client-JS/CWV → Tasks 1, 12–14.
+- Workers Static Assets/Builds; no required GitHub Actions → Tasks 3 and 13.
+- Legacy experience removal → Task 14.
+- External truth/public-promotion blockers → Tasks 10, 13, 14.
+- Mandatory Astro-vs-Next gate → Task 1.
 
-### Placeholder policy
+### Placeholder scan
 
-The plan intentionally contains no values that executors are allowed to invent. Where production truth is externally unresolved (domain, emails, product maturity, legal content, approved screenshots/font), the implementation either derives from evidence, omits the claim/surface, or fails the production-promotion gate. Benchmark measurement slots are generated during Task 1 and must be replaced with actual values before the decision commit; placeholder text is not permitted in committed evidence.
+The plan contains no value an executor is permitted to invent. Measurements are generated by Task 1 and copied verbatim into evidence/ADR. SGPS source revision is generated from `git ls-remote`. Domain/email/product/legal facts are either derived from evidence, omitted from public output, or cause the production-promotion gate to block.
 
-### Type/interface consistency
+### Interface consistency
 
-- `SITE` is defined once in `src/data/site.ts` and consumed by layout/trust/SEO.
-- Product truth is defined once in `src/content.config.ts` and queried only through `getPublicProducts()` / `getFlagshipProduct()`.
-- Build output is `dist/` consistently across Astro, verification, Wrangler, Playwright preview, and client-budget scripts.
-- Production truth environment names are consistently `PUBLIC_SITE_URL`, `PUBLIC_CONTACT_EMAIL`, and `PUBLIC_SECURITY_EMAIL`.
+- `SITE` lives only in `src/data/site.ts`.
+- Product truth lives in `src/content.config.ts`; callers use `getPublicProducts()` / `getFlagshipProduct()`.
+- Static output is consistently `dist/` across Astro, verification, Wrangler, Playwright, and budget tooling.
+- Production truth env names are consistently `PUBLIC_SITE_URL`, `PUBLIC_CONTACT_EMAIL`, `PUBLIC_SECURITY_EMAIL`.
 - Framework decision values are consistently `ASTRO_7` / `NEXT_16_3_STATIC`.
 
 ## Execution Gate
 
-This plan is Astro-forward by the approved design decision, but **Task 1 is a hard stop gate**. Tasks 2–16 are valid only after committed evidence selects `ASTRO_7`. A `NEXT_16_3_STATIC` result ends this plan after Task 1 and requires a Next-specific replacement plan before implementation proceeds.
+Task 1 is a hard stop gate. Tasks 2–14 are valid only when committed benchmark evidence selects `ASTRO_7`. A `NEXT_16_3_STATIC` decision ends this plan after Task 1 and requires a Next-specific replacement plan before migration work continues.
