@@ -1,6 +1,6 @@
 # QA Strategy — BlueSkyz Labs Portfolio
 
-> **Project:** BlueSkyz Labs Portfolio — Next.js 15.5.24, React 19.0.8, Tailwind CSS 4.3.3
+> **Project:** BlueSkyz Labs Portfolio — Next.js 15.5.24, React 19.2.8, Tailwind CSS 4.3.3
 > **Product/design source of truth:** [`../SPEC.md`](../SPEC.md)
 > **Status:** Living engineering-assurance document. This file describes what the repository actually enforces today and explicitly labels residual gaps.
 
@@ -76,7 +76,7 @@ These tests are intentionally cheap and fail early when a toolchain or architect
 
 ### G1 — TypeScript
 
-`pnpm typecheck` runs `tsc --noEmit`. Runtime React and declarations are kept on the validated React 19 line (`react`/`react-dom` 19.0.8, `@types/react` 19.0.8, `@types/react-dom` 19.0.3).
+`pnpm typecheck` runs `tsc --noEmit`. Runtime React and declarations are kept on the validated React 19.2 line (`react`/`react-dom` 19.2.8, `@types/react` 19.2.18, `@types/react-dom` 19.2.5).
 
 ### G2 — ESLint
 
@@ -263,4 +263,4 @@ Issue #8 remains open until the GitHub ruleset is enabled and verified. Document
 
 ---
 
-_Last reconciled with repository reality on 2026-09-02._
+_Last reconciled with repository reality on 2026-09-03._
