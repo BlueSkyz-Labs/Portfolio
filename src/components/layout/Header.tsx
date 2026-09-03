@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Container } from "./Container";
 import { Nav } from "./Nav";
+import { Button } from "@/components/ui/Button";
 import { SITE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -123,18 +124,13 @@ export function Header() {
 
         <Nav />
 
-        <a
-          href="#contact"
-          className={cn(
-            "group relative hidden items-center justify-center overflow-hidden font-sans text-body-sm font-medium uppercase tracking-[0.04em] md:inline-flex",
-            "border border-gold-champagne px-5 py-2 text-gold-champagne",
-            "transition-all duration-300 ease-out-expo",
-            "hover:bg-gold-champagne hover:text-ink-void",
-            "focus-visible:bg-gold-champagne focus-visible:text-ink-void",
-          )}
+        <Button
+          asChild
+          variant="secondary"
+          className="hidden px-5 py-2 md:inline-flex"
         >
-          Begin a project
-        </a>
+          <a href="#contact">Begin a project</a>
+        </Button>
 
         <button
           ref={mobileTriggerRef}
