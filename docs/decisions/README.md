@@ -4,6 +4,7 @@ This directory holds architectural and design decisions in [SGPS](https://en.wik
 
 Each file: `NNNN-short-slug.md` — chronological, never edited, only added.
 
-| #    | Date       | Title                        | Status   |
-| ---- | ---------- | ---------------------------- | -------- |
-| 0001 | 2026-08-29 | Adopt Quiet Luxury aesthetic | Accepted |
+| #    | Date       | Title                         | Status   |
+| ---- | ---------- | ----------------------------- | -------- |
+| 0001 | 2026-08-29 | Adopt Quiet Luxury aesthetic  | Accepted |
+| 0002 | 2026-09-03 | Cloudflare-first CI economics | Accepted |

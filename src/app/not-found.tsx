@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center bg-ink-void px-6">
+    <div className="relative flex min-h-[70vh] flex-col items-center justify-center bg-ink-void px-6">
       <div
         aria-hidden="true"
         className="absolute left-0 top-[20%] h-px w-full bg-gold-champagne/40"
@@ -31,6 +31,6 @@ export default function NotFound() {
       >
         Return home
       </Link>
-    </main>
+    </div>
   );
 }

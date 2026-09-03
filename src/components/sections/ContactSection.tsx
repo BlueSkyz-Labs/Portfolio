@@ -16,28 +16,19 @@ export function ContactSection() {
       className="border-t border-cream-offwhite/5 py-space-9 lg:py-space-10"
     >
       <Container>
-        <div className="grid gap-space-7 lg:grid-cols-[0.85fr_1.15fr] lg:gap-space-8">
+        <div className="mx-auto max-w-[720px] text-center">
           <Reveal distance={8}>
             <p className="font-sans text-caption uppercase tracking-[0.18em] text-cream-muted">
               {CONTACT.eyebrow}
             </p>
             <h2
               id="contact-title"
-              className="mt-space-4 max-w-xl font-display text-display-md font-light text-cream-offwhite sm:text-display-lg"
+              className="mt-space-4 font-display text-display-md font-light text-cream-offwhite sm:text-display-lg"
             >
               {CONTACT.title}
             </h2>
-            <p className="mt-space-4 max-w-lg font-sans text-body-lg text-cream-muted">
+            <p className="mx-auto mt-space-4 max-w-lg font-sans text-body-lg text-cream-muted">
               {CONTACT.body}
-            </p>
-            <p className="mt-space-6 font-sans text-body-sm text-cream-muted">
-              Prefer email?{" "}
-              <a
-                href={`mailto:${SITE.email}`}
-                className="text-cream-offwhite underline decoration-gold-champagne/60 underline-offset-4 transition-colors duration-200 hover:text-gold-champagne focus-visible:outline-none focus-visible:shadow-focus-gold"
-              >
-                {SITE.email}
-              </a>
             </p>
           </Reveal>
 
@@ -46,7 +37,7 @@ export function ContactSection() {
               action={action}
               method="post"
               encType={endpoint ? undefined : "text/plain"}
-              className="space-y-space-5"
+              className="mt-space-7 space-y-space-5 text-left"
             >
               <Input
                 id="contact-name"
@@ -71,9 +62,19 @@ export function ContactSection() {
                 required
               />
               <div className="pt-space-2">
-                <Button>Send inquiry</Button>
+                <Button className="w-full sm:w-auto">Send inquiry</Button>
               </div>
             </form>
+
+            <p className="mt-space-6 font-sans text-body-sm text-cream-muted">
+              Prefer email?{" "}
+              <a
+                href={`mailto:${SITE.email}`}
+                className="text-cream-offwhite underline decoration-gold-champagne/60 underline-offset-4 transition-colors duration-200 hover:text-gold-champagne focus-visible:outline-none focus-visible:shadow-focus-gold"
+              >
+                {SITE.email}
+              </a>
+            </p>
           </Reveal>
         </div>
       </Container>

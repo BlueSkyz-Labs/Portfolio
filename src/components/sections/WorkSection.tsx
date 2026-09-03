@@ -33,8 +33,8 @@ export function WorkSection() {
               }
             >
               <Reveal
-                delay={index * 0.05}
-                className="h-full border border-cream-offwhite/10 bg-ink-charcoal/60"
+                delay={index * 0.08}
+                className="relative h-full overflow-hidden border border-cream-offwhite/10 bg-ink-charcoal/60 transition-[border-color] duration-300 ease-out-expo after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-gold-champagne after:transition-transform after:duration-300 after:ease-out-expo group-hover:border-cream-offwhite/20 group-hover:after:scale-x-100"
               >
                 <div className="flex aspect-[16/10] flex-col justify-between overflow-hidden border-b border-cream-offwhite/10 bg-gradient-to-br from-ink-graphite/80 via-ink-charcoal to-ink-void p-space-5 sm:p-space-6">
                   <span className="font-sans text-caption text-cream-muted">
@@ -42,7 +42,7 @@ export function WorkSection() {
                   </span>
                   <p
                     aria-hidden="true"
-                    className="max-w-lg font-display text-display-sm font-light italic text-cream-offwhite/25 transition-colors duration-300 ease-out-expo group-hover:text-gold-champagne/40 sm:text-display-md"
+                    className="max-w-lg origin-left scale-100 font-display text-display-sm font-light italic text-cream-offwhite/25 transition-transform duration-300 ease-out-expo group-hover:scale-[1.02] group-hover:text-gold-champagne/40 sm:text-display-md motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                   >
                     {project.title}
                   </p>
@@ -69,7 +69,7 @@ export function WorkSection() {
                     {project.tags.map((tag) => (
                       <li
                         key={tag}
-                        className="border border-cream-offwhite/10 px-3 py-1.5 font-sans text-caption text-cream-muted"
+                        className="rounded-full border border-cream-offwhite/10 px-3 py-1.5 font-sans text-caption text-cream-muted"
                       >
                         {tag}
                       </li>

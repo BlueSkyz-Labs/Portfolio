@@ -3,6 +3,7 @@ import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MotionProvider } from "@/components/providers/MotionProvider";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -98,8 +99,9 @@ export default function RootLayout({
       className={`${cormorant.variable} ${dmSans.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-ink-void text-cream-offwhite font-sans antialiased">
+      <body className="bg-ink-void font-sans text-cream-offwhite antialiased">
         <MotionProvider>
+          <CustomCursor />
           <Header />
           <main id="main" className="relative min-h-screen">
             {children}

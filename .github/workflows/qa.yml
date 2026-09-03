@@ -202,7 +202,7 @@ jobs:
   edge-smoke:
     name: Edge smoke (Chromium + Edge UA)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     needs: qa
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
@@ -223,9 +223,6 @@ jobs:
           cache: "pnpm"
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-        env:
-          NEXT_TELEMETRY_DISABLED: "1"
 
       - name: Cache Playwright Chromium
         id: playwright-cache
@@ -243,9 +240,14 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install chromium
 
-      - name: Run smoke under Edge user-agent
+      # Cloudflare Pages is the deploy authority. Do not rebuild in Actions —
+      # verify the live production host under an Edge user-agent instead.
+      - name: Run smoke against Cloudflare production
         run: >-
           pnpm exec playwright test
           --project=edge-ua
           --reporter=line
           --grep "Smoke"
+        env:
+          PLAYWRIGHT_BASE_URL: https://portfolio.tonydemo.com
+          NEXT_TELEMETRY_DISABLED: "1"

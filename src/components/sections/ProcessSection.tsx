@@ -22,14 +22,20 @@ export function ProcessSection() {
           </h2>
         </Reveal>
 
-        <ol className="grid border-t border-cream-offwhite/10 md:grid-cols-2 lg:grid-cols-4">
+        <ol className="grid gap-space-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-0">
           {PROCESS_STEPS.map((step, index) => (
             <li
               key={step.number}
-              className="relative border-b border-cream-offwhite/10 py-space-6 md:px-space-4 md:[&:nth-child(odd)]:border-r lg:border-r lg:px-space-5 lg:last:border-r-0"
+              className="relative lg:px-space-5 lg:first:pl-0 lg:last:pr-0"
             >
-              <Reveal delay={index * 0.05} distance={8}>
-                <span className="font-sans text-caption text-gold-champagne">
+              {index < PROCESS_STEPS.length - 1 ? (
+                <span
+                  aria-hidden="true"
+                  className="absolute right-0 top-3 hidden h-px w-full max-w-[calc(100%-1.5rem)] translate-x-1/2 bg-gold-champagne/40 lg:block"
+                />
+              ) : null}
+              <Reveal delay={index * 0.08} distance={8}>
+                <span className="relative z-10 inline-block bg-ink-void pr-space-3 font-sans text-caption text-gold-champagne">
                   {step.number}
                 </span>
                 <h3 className="mt-space-4 font-display text-display-sm font-light text-cream-offwhite">

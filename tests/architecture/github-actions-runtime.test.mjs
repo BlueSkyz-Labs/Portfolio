@@ -87,3 +87,14 @@ test("workflow GITHUB_TOKEN is least privilege by default", () => {
 test("application CI uses the supported Node 24 LTS runtime", () => {
   assert.match(workflow, /NODE_VERSION: "24\.20\.0"/);
 });
+
+test("edge smoke verifies Cloudflare production without a second Actions build", () => {
+  assert.match(
+    workflow,
+    /PLAYWRIGHT_BASE_URL:\s*https:\/\/portfolio\.tonydemo\.com/,
+  );
+  assert.doesNotMatch(
+    workflow.split("edge-smoke:")[1] ?? "",
+    /^\s+- run: pnpm build$/m,
+  );
+});
