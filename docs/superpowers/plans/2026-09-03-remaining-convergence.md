@@ -3,13 +3,16 @@
 > **For agentic workers:** Execute only items that are still open and safe.
 > Do not merge #33 or claim Issue #8 closed without verified GitHub ruleset reads.
 
-**Goal:** Finish SGPS:Experience FULL / production convergence for items that
-remain after the 2026-09-03 autonomous pass.
+**Goal:** Finish residual atelier-era gaps only where they do not conflict with
+C1.1. Canonical product direction is now
+`docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` and
+`docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`
+(ADR 0004: `ASTRO_7`). Do not invest further in Quiet Luxury atelier polish
+except owner-gated holds below.
 
-**Current `main` baseline (verified this session):** narrative sections shipped,
-JS budget &lt;120 kB (112 kB First Load), brand OG/favicon, custom cursor,
-Button/Dialog inventory, Cloudflare-first Edge smoke on `pages.dev`, Dependabot
-lucide remediation merged. Open: draft #33 (hold), Issue #8 (ruleset).
+**Current `main` baseline (verified this session):** atelier narrative sections
+still live on `main` pending C1.1 Task 2+ migration; Task 1 framework decision
+locked to Astro 7. Open: draft #33 (hold), Issue #8 (ruleset), C1.1 Tasks 2–14.
 
 ---
 

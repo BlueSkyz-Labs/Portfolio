@@ -998,23 +998,23 @@ The canonical domain is intentionally treated as an external owner/business depe
 
 ## 13. E4 acceptance matrix
 
-| Domain | Minimum acceptance |
-|---|---|
-| Brand clarity | Real users understand BlueSkyz builds products |
-| Ecosystem clarity | Visitors understand there are distinct products under one house |
-| Product discovery | Relevant product can be found in ≤2 interactions |
-| Product truth | Status/availability understood without guessing |
-| Trust | Support/privacy/security/identity paths are findable |
-| Accessibility | WCAG 2.2 AA + manual keyboard checks |
-| Reduced motion | PASS |
-| Mobile | PASS on representative narrow widths and real touch behavior |
-| Performance | CWV good thresholds targeted; no decorative regression accepted |
-| Client JS | Minimal; near-zero by default if Astro path wins |
-| SEO | Canonical/entity/product fundamentals PASS |
-| Broken critical links | 0 |
-| Unsupported public claims | 0 |
-| Fake/generated product proof | 0 |
-| Skeptical-user red team | no unresolved P0 credibility issue |
+| Domain                       | Minimum acceptance                                              |
+| ---------------------------- | --------------------------------------------------------------- |
+| Brand clarity                | Real users understand BlueSkyz builds products                  |
+| Ecosystem clarity            | Visitors understand there are distinct products under one house |
+| Product discovery            | Relevant product can be found in ≤2 interactions                |
+| Product truth                | Status/availability understood without guessing                 |
+| Trust                        | Support/privacy/security/identity paths are findable            |
+| Accessibility                | WCAG 2.2 AA + manual keyboard checks                            |
+| Reduced motion               | PASS                                                            |
+| Mobile                       | PASS on representative narrow widths and real touch behavior    |
+| Performance                  | CWV good thresholds targeted; no decorative regression accepted |
+| Client JS                    | Minimal; near-zero by default if Astro path wins                |
+| SEO                          | Canonical/entity/product fundamentals PASS                      |
+| Broken critical links        | 0                                                               |
+| Unsupported public claims    | 0                                                               |
+| Fake/generated product proof | 0                                                               |
+| Skeptical-user red team      | no unresolved P0 credibility issue                              |
 
 E4 validates runtime experience in context. It does not prove unprompted standalone brand recognition; that remains a later E5 evidence domain.
 

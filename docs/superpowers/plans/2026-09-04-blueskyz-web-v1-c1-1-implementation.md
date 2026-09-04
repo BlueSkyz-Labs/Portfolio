@@ -82,6 +82,7 @@
 ### Task 1: Benchmark Astro 7 vs Next 16.3 static and commit the framework decision
 
 **Files:**
+
 - Create temporarily, never commit: `.tmp/framework-benchmark/astro/`
 - Create temporarily, never commit: `.tmp/framework-benchmark/next/`
 - Create: `docs/evidence/2026-09-04-framework-benchmark.md`
@@ -90,6 +91,7 @@
 - Modify: `.gitignore`
 
 **Interfaces:**
+
 - Consumes: approved spec and the same R4d asset/content fixture for both frameworks.
 - Produces: `Decision: ASTRO_7` or `Decision: NEXT_16_3_STATIC` backed by measured local evidence.
 
@@ -114,7 +116,8 @@ test("framework decision is measured and executable", () => {
     "Accessibility parity",
     "Cloudflare preview",
     "Migration effort",
-  ]) assert.match(text, new RegExp(label));
+  ])
+    assert.match(text, new RegExp(label));
   assert.doesNotMatch(text, /TBD|TODO|placeholder/i);
 });
 ```
@@ -260,11 +263,13 @@ git commit -m "docs: lock evidence-backed web framework decision"
 ### Task 2: Migrate the build/tooling foundation to Astro 7
 
 **Files:**
+
 - Modify: `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `eslint.config.mjs`
 - Create: `astro.config.mjs`, `src/env.d.ts`, `src/styles/global.css`, `tests/architecture/astro-toolchain.test.mjs`
 - Delete after green replacement: `next.config.ts`, `postcss.config.mjs`, `tailwind.config.ts`
 
 **Interfaces:**
+
 - Consumes: `Decision: ASTRO_7`.
 - Produces: strict Astro static project with Tailwind/Vite and no Next/Framer runtime.
 
@@ -368,7 +373,13 @@ Use the installed current `eslint-plugin-astro` flat-config export and preserve 
 
 ```js
 {
-  ignores: ["dist/**", ".astro/**", "node_modules/**", "playwright-report/**", "test-results/**"]
+  ignores: [
+    "dist/**",
+    ".astro/**",
+    "node_modules/**",
+    "playwright-report/**",
+    "test-results/**",
+  ];
 }
 ```
 
@@ -380,8 +391,12 @@ The final config must lint `.astro` and TS/JS source, must not use `FlatCompat`,
 
 ```css
 @import "tailwindcss";
-:root { color-scheme: light; }
-body { margin: 0; }
+:root {
+  color-scheme: light;
+}
+body {
+  margin: 0;
+}
 ```
 
 `src/pages/index.astro`:
@@ -420,11 +435,13 @@ git commit -m "build: migrate BlueSkyz web foundation to Astro 7"
 ### Task 3: Move deployment from Pages/GitHub Actions to Workers Static Assets
 
 **Files:**
+
 - Modify: `wrangler.toml`, `public/_headers`, `scripts/verify-static-export.mjs`, `README.md`
 - Create: `tests/architecture/cloudflare-workers.test.mjs`, `src/pages/404.astro`
 - Delete: `tests/architecture/cloudflare-pages.test.mjs`, `tests/architecture/github-actions-runtime.test.mjs`, `.github/workflows/qa.yml`
 
 **Interfaces:**
+
 - Consumes: Astro `dist/`.
 - Produces: Workers Static Assets contract and no required GitHub Actions pipeline.
 
@@ -517,11 +534,13 @@ git commit -m "build: move delivery contract to Workers Static Assets"
 ### Task 4: Import the exact R4d reference assets with SGPS provenance
 
 **Files:**
+
 - Create: `public/brand/blueskyz/r4d/{symbol_mono_ink.svg,micro_mark_ink.svg,brand_tokens.json,brand-manifest.json}`
 - Create: `tests/architecture/brand-provenance.test.mjs`
 - Delete or rewrite if stale: `scripts/generate-brand-assets.py`
 
 **Interfaces:**
+
 - Consumes: exact `sgps-core` main SHA and R4d v1.1 reference paths.
 - Produces: deterministic public projection; no redrawing/reinterpretation.
 
@@ -532,7 +551,9 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-const m = JSON.parse(readFileSync("public/brand/blueskyz/r4d/brand-manifest.json", "utf8"));
+const m = JSON.parse(
+  readFileSync("public/brand/blueskyz/r4d/brand-manifest.json", "utf8"),
+);
 
 test("R4d projection preserves candidate provenance", () => {
   assert.equal(m.assetId, "BLUESKYZ-MASTERBRAND-R4D");
@@ -600,10 +621,12 @@ git commit -m "feat: project R4d brand assets with SGPS provenance"
 ### Task 5: Establish semantic C1.1 tokens and accessible typography defaults
 
 **Files:**
+
 - Modify: `src/styles/global.css`
 - Create: `tests/architecture/c1-tokens.test.mjs`
 
 **Interfaces:**
+
 - Produces: semantic tokens consumed by every page/component.
 
 - [ ] **Step 1: Write the failing token test**
@@ -616,7 +639,17 @@ import test from "node:test";
 const css = readFileSync("src/styles/global.css", "utf8").toLowerCase();
 
 test("C1.1 tokens use R4d primitives without legacy gold", () => {
-  for (const value of ["--brand-ink: #0b1020", "--brand-porcelain: #f7f8fa", "--brand-cobalt: #2568ff", "--surface-primary", "--surface-inverse", "--text-primary", "--text-muted", "--action-primary", "--focus-ring"]) {
+  for (const value of [
+    "--brand-ink: #0b1020",
+    "--brand-porcelain: #f7f8fa",
+    "--brand-cobalt: #2568ff",
+    "--surface-primary",
+    "--surface-inverse",
+    "--text-primary",
+    "--text-muted",
+    "--action-primary",
+    "--focus-ring",
+  ]) {
     assert.match(css, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
   assert.doesNotMatch(css, /#c9a962|champagne|gold/i);
@@ -659,13 +692,29 @@ test("C1.1 tokens use R4d primitives without legacy gold", () => {
 html {
   background: var(--surface-primary);
   color: var(--text-primary);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   text-rendering: optimizeLegibility;
 }
-body { margin: 0; min-width: 320px; background: var(--surface-primary); }
-:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--surface-primary);
+}
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -692,6 +741,7 @@ git commit -m "feat: establish C1.1 semantic visual tokens"
 ### Task 6: Build the accessible site shell and environment-backed corporate truth
 
 **Files:**
+
 - Create: `src/data/site.ts`, `src/layouts/BaseLayout.astro`
 - Create: `src/components/layout/{Container,Header,Footer}.astro`
 - Create: `src/components/ui/ButtonLink.astro`
@@ -699,6 +749,7 @@ git commit -m "feat: establish C1.1 semantic visual tokens"
 - Create: `tests/e2e/shell.spec.ts`
 
 **Interfaces:**
+
 - Produces: `SITE` config + shared shell for all routes.
 
 - [ ] **Step 1: Write failing shell tests**
@@ -708,9 +759,12 @@ import { expect, test } from "@playwright/test";
 
 test("shell exposes skip link and product-led nav", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("link", { name: /skip to main content/i })).toBeAttached();
+  await expect(
+    page.getByRole("link", { name: /skip to main content/i }),
+  ).toBeAttached();
   const nav = page.getByRole("navigation", { name: /primary/i });
-  for (const name of ["Products", "About", "Contact"]) await expect(nav.getByRole("link", { name })).toBeVisible();
+  for (const name of ["Products", "About", "Contact"])
+    await expect(nav.getByRole("link", { name })).toBeVisible();
   await expect(nav.getByText(/Work|Process|Manifesto/)).toHaveCount(0);
 });
 ```
@@ -721,7 +775,8 @@ test("shell exposes skip link and product-led nav", async ({ page }) => {
 const localFallback = "http://localhost:4321";
 export const SITE = {
   name: "BlueSkyz Labs",
-  proposition: "We build products that make complex things feel naturally clear.",
+  proposition:
+    "We build products that make complex things feel naturally clear.",
   url: import.meta.env.PUBLIC_SITE_URL?.trim() || localFallback,
   contactEmail: import.meta.env.PUBLIC_CONTACT_EMAIL?.trim() || null,
   securityEmail: import.meta.env.PUBLIC_SECURITY_EMAIL?.trim() || null,
@@ -782,11 +837,13 @@ git commit -m "feat: add accessible BlueSkyz site shell"
 ### Task 7: Create the evidence-aware Product Content Collection
 
 **Files:**
+
 - Create: `src/content.config.ts`, `src/content/products/*.yaml`, `src/lib/products.ts`
 - Create: `docs/evidence/2026-09-04-public-product-audit.md`
 - Create: `tests/architecture/product-truth.test.mjs`
 
 **Interfaces:**
+
 - Produces: `getPublicProducts()` and `getFlagshipProduct()` over validated content.
 
 - [ ] **Step 1: Write the failing source contract**
@@ -798,7 +855,20 @@ import test from "node:test";
 
 const config = readFileSync("src/content.config.ts", "utf8");
 test("product truth models lifecycle, availability, proof and CTA", () => {
-  for (const field of ["lifecycle", "availability", "publicLabel", "audience", "jobs", "platforms", "primaryAction", "proof", "featuredTier", "sourceRevision", "lastReviewedAt"]) assert.match(config, new RegExp(field));
+  for (const field of [
+    "lifecycle",
+    "availability",
+    "publicLabel",
+    "audience",
+    "jobs",
+    "platforms",
+    "primaryAction",
+    "proof",
+    "featuredTier",
+    "sourceRevision",
+    "lastReviewedAt",
+  ])
+    assert.match(config, new RegExp(field));
   assert.match(config, /A BlueSkyz Labs product/);
 });
 ```
@@ -810,46 +880,106 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
-const lifecycle = z.enum(["concept", "prototype", "development", "beta", "active", "maintenance", "sunset", "archived"]);
-const availability = z.enum(["private", "waitlist", "preview", "public", "invite-only", "unavailable"]);
-const publicLabel = z.enum(["Preview", "In development", "Beta", "Available", "Sunsetting", "Archived"]);
+const lifecycle = z.enum([
+  "concept",
+  "prototype",
+  "development",
+  "beta",
+  "active",
+  "maintenance",
+  "sunset",
+  "archived",
+]);
+const availability = z.enum([
+  "private",
+  "waitlist",
+  "preview",
+  "public",
+  "invite-only",
+  "unavailable",
+]);
+const publicLabel = z.enum([
+  "Preview",
+  "In development",
+  "Beta",
+  "Available",
+  "Sunsetting",
+  "Archived",
+]);
 const platform = z.enum(["web", "android", "ios", "macos", "windows", "api"]);
-const audience = z.enum(["individual", "professional", "team", "business", "organization"]);
-const actionType = z.enum(["open", "try", "explore", "preview", "waitlist", "get-started", "github", "contact"]);
-const action = z.object({ type: actionType, label: z.string().min(1).max(40), href: z.string().url() });
-
-const productSchema = z.object({
-  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  name: z.string().min(1),
-  shortDescription: z.string().min(1).max(180),
-  lifecycle,
-  availability,
-  publicLabel,
-  audience: z.array(audience).min(1),
-  jobs: z.array(z.string().min(1)).min(1),
-  platforms: z.array(platform).min(1),
-  primaryAction: action,
-  secondaryAction: action.optional(),
-  proof: z.object({
-    screenshot: z.string().optional(),
-    publicUrl: z.string().url().optional(),
-    repositoryUrl: z.string().url().optional(),
-    documentationUrl: z.string().url().optional(),
-    privacyUrl: z.string().url().optional(),
-    securityUrl: z.string().url().optional(),
-    supportUrl: z.string().url().optional(),
-  }).refine((v) => Object.values(v).some(Boolean), "public product requires at least one proof artifact"),
-  endorsement: z.literal("A BlueSkyz Labs product"),
-  featuredTier: z.enum(["hero", "featured", "ecosystem", "hidden"]),
-  displayOrder: z.number().int().nonnegative(),
-  public: z.boolean(),
-  sourceRevision: z.string().regex(/^[0-9a-f]{7,40}$/),
-  lastReviewedAt: z.coerce.date(),
-}).superRefine((v, ctx) => {
-  if (v.lifecycle === "development" && v.primaryAction.type === "try") ctx.addIssue({ code: "custom", path: ["primaryAction", "type"], message: "development product cannot claim Try" });
+const audience = z.enum([
+  "individual",
+  "professional",
+  "team",
+  "business",
+  "organization",
+]);
+const actionType = z.enum([
+  "open",
+  "try",
+  "explore",
+  "preview",
+  "waitlist",
+  "get-started",
+  "github",
+  "contact",
+]);
+const action = z.object({
+  type: actionType,
+  label: z.string().min(1).max(40),
+  href: z.string().url(),
 });
 
-const products = defineCollection({ loader: glob({ pattern: "**/*.{yaml,yml,json}", base: "./src/content/products" }), schema: productSchema });
+const productSchema = z
+  .object({
+    slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    name: z.string().min(1),
+    shortDescription: z.string().min(1).max(180),
+    lifecycle,
+    availability,
+    publicLabel,
+    audience: z.array(audience).min(1),
+    jobs: z.array(z.string().min(1)).min(1),
+    platforms: z.array(platform).min(1),
+    primaryAction: action,
+    secondaryAction: action.optional(),
+    proof: z
+      .object({
+        screenshot: z.string().optional(),
+        publicUrl: z.string().url().optional(),
+        repositoryUrl: z.string().url().optional(),
+        documentationUrl: z.string().url().optional(),
+        privacyUrl: z.string().url().optional(),
+        securityUrl: z.string().url().optional(),
+        supportUrl: z.string().url().optional(),
+      })
+      .refine(
+        (v) => Object.values(v).some(Boolean),
+        "public product requires at least one proof artifact",
+      ),
+    endorsement: z.literal("A BlueSkyz Labs product"),
+    featuredTier: z.enum(["hero", "featured", "ecosystem", "hidden"]),
+    displayOrder: z.number().int().nonnegative(),
+    public: z.boolean(),
+    sourceRevision: z.string().regex(/^[0-9a-f]{7,40}$/),
+    lastReviewedAt: z.coerce.date(),
+  })
+  .superRefine((v, ctx) => {
+    if (v.lifecycle === "development" && v.primaryAction.type === "try")
+      ctx.addIssue({
+        code: "custom",
+        path: ["primaryAction", "type"],
+        message: "development product cannot claim Try",
+      });
+  });
+
+const products = defineCollection({
+  loader: glob({
+    pattern: "**/*.{yaml,yml,json}",
+    base: "./src/content/products",
+  }),
+  schema: productSchema,
+});
 export const collections = { products };
 ```
 
@@ -872,7 +1002,10 @@ export async function getPublicProducts() {
   return products.sort((a, b) => a.data.displayOrder - b.data.displayOrder);
 }
 export async function getFlagshipProduct() {
-  return (await getPublicProducts()).find((p) => p.data.featuredTier === "hero") ?? null;
+  return (
+    (await getPublicProducts()).find((p) => p.data.featuredTier === "hero") ??
+    null
+  );
 }
 ```
 
@@ -891,12 +1024,14 @@ git commit -m "feat: add evidence-aware public product registry"
 ### Task 8: Build the C1.1 homepage in the canonical customer order
 
 **Files:**
+
 - Create: `src/components/sections/{Hero,FeaturedProducts,OneHouse,FlagshipProof,Trust,AboutBlueSkyz,NextStep}.astro`
 - Create: `src/components/product/{ProductCard,ProductStatus}.astro`
 - Replace: `src/pages/index.astro`
 - Create: `tests/e2e/home-c1.spec.ts`
 
 **Interfaces:**
+
 - Consumes: public products + flagship query.
 - Produces: canonical C1.1 homepage.
 
@@ -905,17 +1040,31 @@ git commit -m "feat: add evidence-aware public product registry"
 ```ts
 import { expect, test } from "@playwright/test";
 
-test("homepage explains BlueSkyz and rejects old positioning", async ({ page }) => {
+test("homepage explains BlueSkyz and rejects old positioning", async ({
+  page,
+}) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(/build products.*complex.*clear/i);
-  await expect(page.getByRole("link", { name: /Explore products/i })).toBeVisible();
-  await expect(page.getByText(/Quiet luxury|digital atelier|Savile Row|Selected works/i)).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    /build products.*complex.*clear/i,
+  );
+  await expect(
+    page.getByRole("link", { name: /Explore products/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/Quiet luxury|digital atelier|Savile Row|Selected works/i),
+  ).toHaveCount(0);
 });
 
 test("320px homepage has no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto("/");
-  expect(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)).toBe(false);
+  expect(
+    await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth >
+        document.documentElement.clientWidth,
+    ),
+  ).toBe(false);
 });
 ```
 
@@ -972,9 +1121,11 @@ git commit -m "feat: build C1.1 product-house homepage"
 ### Task 9: Build product discovery and static product profiles
 
 **Files:**
+
 - Create: `src/pages/products/index.astro`, `src/pages/products/[slug].astro`, `tests/e2e/products.spec.ts`
 
 **Interfaces:**
+
 - Produces: `/products/` + one route per public product.
 
 - [ ] **Step 1: Write failing route test**
@@ -984,10 +1135,16 @@ import { expect, test } from "@playwright/test";
 
 test("products index exposes truthful status", async ({ page }) => {
   await page.goto("/products/");
-  await expect(page.getByRole("heading", { level: 1, name: /Products/i })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { level: 1, name: /Products/i }),
+  ).toBeVisible();
   const cards = page.locator("[data-product-card]");
   expect(await cards.count()).toBeGreaterThan(0);
-  await expect(cards.first().getByText(/Available|Beta|Preview|In development|Sunsetting|Archived/)).toBeVisible();
+  await expect(
+    cards
+      .first()
+      .getByText(/Available|Beta|Preview|In development|Sunsetting|Archived/),
+  ).toBeVisible();
 });
 ```
 
@@ -1000,7 +1157,10 @@ Render public entries ordered by `displayOrder`; no search/filter for a five-pro
 ```ts
 export async function getStaticPaths() {
   const products = await getPublicProducts();
-  return products.map((product) => ({ params: { slug: product.data.slug }, props: { product } }));
+  return products.map((product) => ({
+    params: { slug: product.data.slug },
+    props: { product },
+  }));
 }
 ```
 
@@ -1020,23 +1180,32 @@ git commit -m "feat: add product discovery and profile routes"
 ### Task 10: Add factual About/Contact/Support/Privacy/Security routes and production truth gate
 
 **Files:**
+
 - Create: `src/pages/{about,contact,support,privacy,security}.astro`
 - Create: `src/lib/truth.ts`, `scripts/validate-public-truth.mjs`
 - Create: `tests/architecture/public-truth-gate.test.mjs`, `tests/e2e/trust-routes.spec.ts`
 
 **Interfaces:**
+
 - Consumes: `SITE` + product proof links.
 - Produces: trust surfaces and a production promotion gate.
 
 - [ ] **Step 1: Add pure truth validation**
 
 ```ts
-export interface PublicTruthInput { siteUrl?: string; contactEmail?: string; securityEmail?: string; }
+export interface PublicTruthInput {
+  siteUrl?: string;
+  contactEmail?: string;
+  securityEmail?: string;
+}
 export function validatePublicTruth(input: PublicTruthInput): string[] {
   const errors: string[] = [];
-  if (!input.siteUrl?.startsWith("https://")) errors.push("PUBLIC_SITE_URL must be an https URL");
-  if (!input.contactEmail?.includes("@")) errors.push("PUBLIC_CONTACT_EMAIL is required");
-  if (!input.securityEmail?.includes("@")) errors.push("PUBLIC_SECURITY_EMAIL is required");
+  if (!input.siteUrl?.startsWith("https://"))
+    errors.push("PUBLIC_SITE_URL must be an https URL");
+  if (!input.contactEmail?.includes("@"))
+    errors.push("PUBLIC_CONTACT_EMAIL is required");
+  if (!input.securityEmail?.includes("@"))
+    errors.push("PUBLIC_SECURITY_EMAIL is required");
   return errors;
 }
 ```
@@ -1080,21 +1249,30 @@ git commit -m "feat: add factual trust and contact surfaces"
 ### Task 11: Add canonical SEO, structured data, sitemap, and social metadata
 
 **Files:**
+
 - Create: `src/lib/seo.ts`, `src/pages/robots.txt.ts`, `src/pages/sitemap.xml.ts`
 - Modify: `src/layouts/BaseLayout.astro`
 - Create when approved: `public/social/og-default.*`
 - Create: `tests/architecture/seo-contract.test.mjs`, `tests/e2e/seo.spec.ts`
 
 **Interfaces:**
+
 - Consumes: `SITE.url` + public products.
 - Produces: canonical/entity/product SEO with zero staging leakage.
 
 - [ ] **Step 1: Create SEO helpers**
 
 ```ts
-export function absoluteUrl(base: string, path: string) { return new URL(path, base).toString(); }
+export function absoluteUrl(base: string, path: string) {
+  return new URL(path, base).toString();
+}
 export function organizationJsonLd(siteUrl: string) {
-  return { "@context": "https://schema.org", "@type": "Organization", name: "BlueSkyz Labs", url: siteUrl } as const;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "BlueSkyz Labs",
+    url: siteUrl,
+  } as const;
 }
 ```
 
@@ -1125,11 +1303,13 @@ git commit -m "feat: add truthful entity and product SEO"
 ### Task 12: Add progressive native motion, framework-neutral JS budget, and final security headers
 
 **Files:**
+
 - Create: `src/components/ui/Reveal.astro`, `scripts/check-client-budget.mjs`, `tests/e2e/motion.spec.ts`
 - Modify: `src/styles/global.css`, `public/_headers`, `tests/architecture/bundle-budget.test.mjs`, `tests/architecture/security-headers.test.mjs`, `package.json`
 - Delete/replace: `scripts/check-bundle-regression.mjs`
 
 **Interfaces:**
+
 - Produces: CSS/native motion and framework-neutral client-JS/security gates.
 
 - [ ] **Step 1: Write reduced-motion test**
@@ -1137,12 +1317,16 @@ git commit -m "feat: add truthful entity and product SEO"
 ```ts
 import { expect, test } from "@playwright/test";
 
-test("reduced motion keeps hero content immediately visible", async ({ browser }) => {
+test("reduced motion keeps hero content immediately visible", async ({
+  browser,
+}) => {
   const context = await browser.newContext({ reducedMotion: "reduce" });
   const page = await context.newPage();
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Explore products/i }).first()).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /Explore products/i }).first(),
+  ).toBeVisible();
   await context.close();
 });
 ```
@@ -1187,9 +1371,11 @@ git commit -m "test: enforce native motion, security and client-JS budgets"
 ### Task 13: Align Playwright, Lighthouse, local gates, and Workers Builds promotion flow
 
 **Files:**
+
 - Modify: `playwright.config.ts`, `lighthouserc.json`, `.githooks/pre-commit`, `tests/architecture/local-gates.test.mjs`, `docs/QA_STRATEGY.md`, `README.md`
 
 **Interfaces:**
+
 - Produces: local canonical source gate + Cloudflare preview/production workflow without GitHub Actions.
 
 - [ ] **Step 1: Update pre-commit contract**
@@ -1264,11 +1450,13 @@ git commit -m "chore: align QA with Cloudflare-native promotion"
 ### Task 14: Remove legacy runtime code, run E4 red team, and record launch readiness
 
 **Files:**
+
 - Delete obsolete: `src/app/**`, old React layout/section/ui/provider files, `src/lib/motion-features.ts`, stale legacy constants
 - Modify: `package.json`, `pnpm-lock.yaml`, `tests/architecture/ui-inventory.test.mjs`
 - Create: `docs/evidence/2026-09-04-e4-web-validation.md`, `docs/evidence/2026-09-04-launch-readiness.md`
 
 **Interfaces:**
+
 - Consumes: complete Astro replacement and deployed preview.
 - Produces: clean runtime + explicit PASS/BLOCKED promotion evidence.
 
