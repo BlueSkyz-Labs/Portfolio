@@ -12,6 +12,8 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 - Plan: `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`
 - ADR 0004: `ASTRO_7` → Cloudflare Workers Static Assets
 
+**Permission evidence:** `docs/evidence/2026-09-04-permission-blockers.md`
+
 **Current baseline (2026-09-04 agent, post-experience convergence):**
 
 | Area                                             | Status                                                           |

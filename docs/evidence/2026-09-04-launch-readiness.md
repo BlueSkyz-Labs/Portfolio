@@ -56,3 +56,11 @@ Landed on branch `cursor/c1-1-experience-convergence-2fbd`:
 - Workers Builds gap recorded (`docs/evidence/2026-09-04-workers-builds-gap.md`)
 
 Public promotion blockers above remain unchanged.
+
+## Security/Experience hardening pass (same branch)
+
+- Removed invented `hello@blueskyz.io` from package metadata
+- HSTS + tighter Permissions-Policy; deleted Next `serve-static` residual
+- Content motion no longer fades opacity (LCP-safe); capped motion; solid header; Ink footer
+- Contact lanes structured; workers.dev auto-noindex; axe + 404/empty e2e
+- Permission blockers documented in `docs/evidence/2026-09-04-permission-blockers.md`

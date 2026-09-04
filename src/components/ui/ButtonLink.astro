@@ -10,11 +10,10 @@ const { href, variant = "primary", class: className = "" } = Astro.props;
 <a
   href={href}
   class:list={[
-    "inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold no-underline transition-colors",
-    variant === "primary" &&
-      "bg-[var(--action-primary)] text-white hover:bg-[#1e40af]",
+    "inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold no-underline",
+    variant === "primary" && "bg-[#1d4ed8] text-[#ffffff] hover:bg-[#1e40af]",
     variant === "secondary" &&
-      "border border-[var(--border-subtle)] bg-white text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]",
+      "border border-[var(--border-subtle)] bg-[#ffffff] text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]",
     className,
   ]}
 >
