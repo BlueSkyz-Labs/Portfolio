@@ -28,16 +28,24 @@ pnpm typecheck
 pnpm lint
 pnpm format:check
 pnpm build
+pnpm check:client-budget
 pnpm test:architecture
 pnpm test:e2e
 pnpm lighthouse
+pnpm validate:public-truth
 ```
 
-## Deployment
+Local source gate (pre-commit): architecture → typecheck → lint → format → build → client budget.
 
-Cloudflare Workers Static Assets serves the Astro `dist/` artifact (`wrangler.toml`).
+## Promotion
 
-GitHub remains source control and PR review. Required long-run CI compute is intentionally not GitHub Actions — see ADR 0002 / ADR 0004 / C1.1 Task 3.
+```text
+feature branch → local source gate → PR → Cloudflare Workers preview
+  → Playwright/axe + Lighthouse + E4 → merge main
+  → production truth gate/build → post-deploy smoke
+```
+
+GitHub remains source control and PR review. Required long-run CI compute is intentionally not GitHub Actions — see ADR 0002 / ADR 0004 / C1.1 Task 13.
 
 ## License
 

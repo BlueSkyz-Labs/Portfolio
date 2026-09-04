@@ -1,266 +1,95 @@
-# QA Strategy — BlueSkyz Labs Portfolio
+# QA Strategy — BlueSkyz Labs Web (C1.1)
 
-> **Project:** BlueSkyz Labs Portfolio — Next.js 15.5.24, React 19.2.8, Tailwind CSS 4.3.3
-> **Product/design source of truth:** [`../SPEC.md`](../SPEC.md)
-> **Status:** Living engineering-assurance document. This file describes what the repository actually enforces today and explicitly labels residual gaps.
+> **Project:** BlueSkyz Labs Web — Astro 7 static, Tailwind CSS 4, TypeScript 6
+> **Product/design source of truth:** [`docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md`](./superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md)
+> **Status:** Living engineering-assurance document for the Astro + Workers Static Assets contract.
 
 ---
 
 ## 1. Mission
 
-Protect the portfolio's product truth and premium user experience with deterministic, reviewable promotion evidence. A change is not considered safe because it "looks fine" or because an earlier commit passed CI: the exact candidate being promoted must satisfy the applicable gates against the exact current base.
+Protect product truth and trust with deterministic, reviewable promotion evidence. A change is not safe because it "looks fine": the exact candidate SHA must satisfy the applicable gates.
 
 Core principles:
 
-- **PR-first promotion.** Routine delivery is developed on a branch and promoted through a pull request.
-- **Exact-head evidence.** A green run belongs to the commit SHA it tested; a moved head requires fresh evidence.
-- **Exact-base bundle comparison.** G5 compares the candidate with the pull request's exact base SHA, not an approximate historical baseline.
-- **Do not weaken gates to land a change.** Fix the root cause or explicitly escalate a real product/risk decision.
-- **Static-export truth.** Browser and Lighthouse tests exercise the same `out/` artifact that is deployable to Cloudflare Pages.
-- **Evidence before completion claims.** Mergeability, checks, review threads, and resulting `main` are refreshed before declaring a workstream complete.
+- **PR-first promotion.** Develop on a feature branch; promote through a pull request.
+- **Exact-head evidence.** A green run belongs to the commit SHA it tested.
+- **Do not weaken gates to land a change.** Fix the root cause or escalate a product/risk decision.
+- **Static-export truth.** Browser and Lighthouse tests exercise the same `dist/` artifact Workers Static Assets serve.
+- **Cloudflare-native remote compute.** GitHub remains source + PR review; do not reintroduce required GitHub Actions workload.
 
 ---
 
-## 2. Current Blocking Gates
+## 2. Local canonical source gate
 
-The primary GitHub Actions job is named exactly:
-
-`Quality Gates (architecture, lint, typecheck, build, e2e, a11y, perf)`
-
-That name is the intended required-status-check identifier once the `main` ruleset in Issue #8 is enabled.
-
-| Gate                                | Current implementation                                   | Blocking in `qa.yml`?           |
-| ----------------------------------- | -------------------------------------------------------- | ------------------------------- |
-| Dependency audit                    | `pnpm audit --prod --audit-level=high`                   | Yes                             |
-| Architecture regressions            | `pnpm test:architecture`                                 | Yes                             |
-| G1 — TypeScript                     | `pnpm typecheck`                                         | Yes                             |
-| G2 — ESLint                         | `pnpm lint` → `eslint . --max-warnings=0`                | Yes                             |
-| G3 — Prettier                       | `pnpm format:check`                                      | Yes                             |
-| G4 — Production/static-export build | `pnpm build` + `scripts/verify-static-export.mjs`        | Yes                             |
-| G5 — Bundle regression              | exact-base build + `scripts/check-bundle-regression.mjs` | Yes                             |
-| Product Truth initial-route JS      | hard budget `< 120,000 bytes` inside G5                  | Yes                             |
-| G6/G7 — E2E + accessibility         | Playwright + `@axe-core/playwright`                      | Yes                             |
-| G11 — Cross-browser                 | Chromium, Firefox, WebKit, mobile Chromium               | Yes                             |
-| G8 — Lighthouse                     | `pnpm lighthouse` / LHCI                                 | Yes                             |
-| Edge-UA smoke                       | separate post-merge `main` push job                      | Yes for that job, not a PR gate |
-| G9 — Field INP/RUM                  | not yet implemented                                      | **Residual gap**                |
-| G10 — screenshot visual regression  | not yet implemented as a blocking suite                  | Advisory / future work          |
-
-The local versioned pre-commit hook runs architecture, G1–G4. G5 deliberately remains CI-only because CI owns the authoritative base SHA.
-
----
-
-## 3. Architecture / Supply-Chain Regression Layer
-
-`tests/architecture/*.test.mjs` protects repository invariants before heavier browser work begins. Current coverage includes:
-
-- hard initial-route bundle budget and regression semantics;
-- Cloudflare Pages static-export contract;
-- supported Node LTS runtime alignment across CI/repository/deploy metadata;
-- Tailwind CSS v4/PostCSS pipeline;
-- production framework security floors;
-- zero-warning ESLint CLI + flat-config bridge;
-- immutable GitHub Actions supply-chain pins and read-only workflow permissions;
-- checkout credential persistence opt-out;
-- SECURITY.md private vulnerability reporting and CODEOWNERS ownership map;
-- committed Wrangler vars / `.env.example` secret hygiene;
-- semantic layout ownership;
-- versioned local pre-commit gates;
-- React 19 runtime/type-declaration alignment.
-
-These tests are intentionally cheap and fail early when a toolchain or architectural invariant drifts.
-
----
-
-## 4. Static and Build Gates
-
-### G1 — TypeScript
-
-`pnpm typecheck` runs `tsc --noEmit`. Runtime React and declarations are kept on the validated React 19.2 line (`react`/`react-dom` 19.2.8, `@types/react` 19.2.18, `@types/react-dom` 19.2.5).
-
-### G2 — ESLint
-
-The repository uses ESLint 9 through the explicit zero-warning CLI gate:
+`.githooks/pre-commit` runs:
 
 ```text
-pnpm lint     -> eslint . --max-warnings=0
-pnpm lint:fix -> eslint . --fix --max-warnings=0
+pnpm test:architecture
+pnpm typecheck
+pnpm lint
+pnpm format:check
+pnpm build
+pnpm check:client-budget
 ```
 
-`eslint.config.mjs` uses `FlatCompat` to preserve the Next.js 15.5 policy represented by `next/core-web-vitals` and `next/typescript`. The legacy `.eslintrc.json` path is intentionally removed.
-
-### G3 — Prettier
-
-`pnpm format:check` is blocking. On failure, CI runs the repository formatter and uploads the deterministic `prettier-output` artifact. Apply that formatter output rather than hand-guessing formatting differences.
-
-### G4 — Static export
-
-`pnpm build` runs Next.js and then `scripts/verify-static-export.mjs`. The build must produce the deployable `out/` artifact, including the expected static routes/assets and Cloudflare Pages headers contract.
+Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-commit hooks.
 
 ---
 
-## 5. G5 — Exact-Base Bundle Assurance
+## 3. Client JS budget (G5 replacement)
 
-G5 is both a regression gate and a Product Truth hard-budget gate.
-
-For a pull request, CI reads `github.event.pull_request.base.sha`, builds that exact revision in a disposable worktree, builds the candidate, and compares the root-route First Load JS values.
-
-Promotion requires both:
-
-1. candidate growth does not exceed the configured regression tolerance; and
-2. candidate initial-route JS remains **strictly below 120,000 bytes**.
-
-`bundle-evidence.json` is uploaded on every run where evidence can be produced. Never replace exact-base evidence with a remembered number from another PR.
+`pnpm check:client-budget` reads `dist/index.html`, Brotli-compresses referenced local `.js` files, and fails at `>= 120000` bytes. Next.js First Load JS log parsing is retired.
 
 ---
 
-## 6. Browser, Accessibility, and Responsive Coverage
+## 4. Browser / a11y / perf
 
-The current E2E suite is:
+- Playwright: Chromium, Firefox, WebKit, mobile Chromium (`pnpm test:e2e`)
+- Optional remote target: `PLAYWRIGHT_BASE_URL`
+- Local server: `pnpm start` (Astro preview on `127.0.0.1:3000`)
+- Lighthouse CI: three desktop runs against Astro preview; categories ≥0.90; CLS ≤0.05
+
+---
+
+## 5. Cloudflare promotion flow
 
 ```text
-tests/e2e/
-├── accessibility.spec.ts
-├── basic.spec.ts
-├── navigation.spec.ts
-└── sections.spec.ts
+feature branch
+  → local source gate
+  → PR
+  → Cloudflare Workers preview (Workers Builds)
+  → Playwright/axe + Lighthouse + E4 review
+  → merge main
+  → production truth gate + build (`validate:public-truth` + build + client budget)
+  → post-deploy smoke
 ```
 
-`playwright.config.ts` defines:
+### Workers Builds (dashboard)
 
-- `chromium` — Desktop Chrome profile;
-- `firefox` — Desktop Firefox profile;
-- `webkit` — Desktop Safari/WebKit profile;
-- `mobile-chromium` — Pixel 5 profile;
-- `edge-ua` — Chromium with a Microsoft Edge user agent, used by the post-merge main smoke job.
+Production:
 
-CI browser tests run against `pnpm start`, which serves the built static `out/` artifact. Failure artifacts retain traces/screenshots/video where Playwright produces them.
+```text
+repo: BlueSkyz-Labs/SGPS-Marketing
+branch: main
+command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget
+preview branches: enabled
+```
 
-Accessibility coverage uses `@axe-core/playwright` and semantic/keyboard assertions. Interactive mobile navigation must preserve keyboard operation, Escape behavior, focus restoration, appropriate accessible names, and reduced-motion behavior.
+Preview builds may omit `validate:public-truth` when production-only domain/email variables are intentionally absent, but must still build and pass static gates.
 
-### Test authoring rules
+**Do not** recreate this pipeline in `.github/workflows`.
 
-- Prefer role, label, and semantic selectors over DOM-position selectors.
-- Do not use arbitrary sleeps (`waitForTimeout`) for synchronization.
-- Test observable behavior, not implementation details.
-- When animation is involved, explicitly cover `prefers-reduced-motion` where the behavior materially changes.
-- A new user-visible behavior should receive a failing test/contract before implementation whenever practical.
+Legacy Cloudflare Pages Git integration for this repo is superseded by Workers Static Assets. A failing Pages check on Astro PRs is expected until that Pages project is disconnected or redirected.
 
 ---
 
-## 7. Lighthouse
+## 6. Public truth
 
-`lighthouserc.json` runs three desktop audits against the static site and currently enforces:
+`pnpm validate:public-truth` requires:
 
-- Performance ≥ 0.90
-- Accessibility ≥ 0.90
-- Best Practices ≥ 0.90
-- SEO ≥ 0.90
-- LCP ≤ 1,200 ms
-- CLS ≤ 0.05
+- `PUBLIC_SITE_URL` (https)
+- `PUBLIC_CONTACT_EMAIL`
+- `PUBLIC_SECURITY_EMAIL`
 
-TBT ≤ 150 ms is currently a warning, not an error.
-
-Reports are stored under `.lighthouseci/` and uploaded as the `lighthouse-report` artifact.
-
-Lighthouse is lab evidence. It does **not** close the G9 field-INP requirement by itself.
-
----
-
-## 8. CI Pipeline — `.github/workflows/qa.yml`
-
-The workflow runs on pushes and pull requests targeting `main` / `develop` and cancels stale in-flight runs for the same ref.
-
-The application/build runtime is pinned to Node 24.20.0 LTS in CI and `.node-version`; `package.json` enforces the same minimum. GitHub Actions themselves are independently pinned to reviewed immutable commit SHAs. The workflow-level `GITHUB_TOKEN` is read-only and checkout does not persist credentials into the worktree.
-
-Primary sequence:
-
-1. checkout without persisted credentials;
-2. install pnpm 9.15.9 and Node 24.20.0;
-3. frozen dependency install;
-4. production dependency audit;
-5. architecture regressions;
-6. G1 typecheck;
-7. G2 zero-warning ESLint;
-8. G3 Prettier;
-9. G4 candidate static build;
-10. resolve and build the exact G5 base revision;
-11. G5 regression + hard-budget check;
-12. Playwright browser installation/caching;
-13. cross-browser E2E + accessibility;
-14. Lighthouse CI;
-15. upload applicable evidence artifacts.
-
-After a successful push to `main`, the separate `Edge smoke (Chromium + Edge UA)` job verifies the live Cloudflare Pages production host (`https://blueskyz-labs-portfolio.pages.dev`) under an Edge user-agent. It does **not** rebuild the static site in Actions — deploy evidence comes from Cloudflare Pages. The marketing custom domain remains documentation intent until public DNS resolves.
-
----
-
-## 9. Promotion Discipline
-
-Immediately before merge, verify:
-
-- PR is open, non-draft, and mergeable;
-- base SHA is still the expected current `main`;
-- head SHA is exactly the SHA that passed the fresh PR QA run;
-- the primary QA job completed successfully;
-- no unresolved review threads remain;
-- no material review finding is being bypassed;
-- merge uses the expected-head SHA guard where tooling supports it.
-
-After merge, verify the returned merge commit is the new `main` head. For changes that affect runtime/deployment behavior, also inspect the corresponding `main` workflow/deployment evidence.
-
-Historical green runs are context, not promotion authority, after either head or base changes.
-
----
-
-## 10. Governance Reality — Issue #8
-
-**Current state:** `main` is still technically unprotected and no active repository ruleset is enforcing PR-only promotion. The engineering process follows PR-first discipline, but repository settings do not yet make direct writes impossible.
-
-This is tracked in [Issue #8 — `governance: enforce main promotion ruleset`](https://github.com/BlueSkyz-Labs/SGPS-Marketing/issues/8).
-
-Target ruleset:
-
-- require a pull request before merge;
-- require status check `Quality Gates (architecture, lint, typecheck, build, e2e, a11y, perf)`;
-- require strict/up-to-date status checks;
-- require conversation resolution;
-- block force pushes and branch deletion;
-- keep emergency bypass narrow and explicit;
-- avoid an impossible approval-count requirement for the one-human operating model.
-
-**Do not state that branch protection blocks merges until the setting has actually been applied and read back from GitHub.** Keep Issue #8 open until direct-main rejection and a normal green-PR merge have both been verified.
-
----
-
-## 11. Evidence Artifacts
-
-The primary workflow can publish:
-
-- `bundle-evidence` — exact-base G5 result;
-- `prettier-output` — deterministic correction, only when G3 fails;
-- `playwright-report` — HTML report;
-- `playwright-test-results` — test result artifacts/JUnit output;
-- `lighthouse-report` — `.lighthouseci/` results.
-
-Artifact absence is expected for conditional outputs that were never generated; it must not be confused with a successful gate when the underlying gate was skipped.
-
----
-
-## 12. Explicit Residual Gaps
-
-### G9 — real-user INP / RUM
-
-The SPEC field-performance requirement is not yet mechanically verified. A future telemetry workstream should define privacy-conscious RUM collection, p75 evaluation, retention, alerting, and an operational owner before G9 can honestly become a blocking release gate.
-
-### G10 — visual regression
-
-The repository does not currently have committed screenshot baselines and a blocking visual-diff workflow. Do not describe visual regression as implemented until a deterministic baseline/review lifecycle exists.
-
-### Repository governance
-
-Issue #8 remains open until the GitHub ruleset is enabled and verified. Documentation is not remediation for this control gap.
-
----
-
-_Last reconciled with repository reality on 2026-09-03._
+Production promotion is blocked until these are owner-supplied. Do not invent domain/email fallbacks.

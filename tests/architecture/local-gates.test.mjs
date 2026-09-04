@@ -14,10 +14,12 @@ test("repository installs a versioned pre-commit gate instead of silently missin
     "pnpm lint",
     "pnpm format:check",
     "pnpm build",
+    "pnpm check:client-budget",
   ]) {
     assert.match(
       hook,
       new RegExp(command.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
     );
   }
+  assert.doesNotMatch(hook, /NEXT_TELEMETRY_DISABLED/);
 });

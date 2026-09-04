@@ -13,16 +13,13 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : "50%",
-  reporter: process.env.CI
-    ? [
-        ["github"],
-        ["html", { outputFolder: "playwright-report", open: "never" }],
-        ["junit", { outputFile: "test-results/junit.xml" }],
-      ]
-    : [
-        ["list"],
-        ["html", { outputFolder: "playwright-report", open: "never" }],
-      ],
+  reporter: [
+    ["list"],
+    ["html", { outputFolder: "playwright-report", open: "never" }],
+    ...(process.env.CI
+      ? ([["junit", { outputFile: "test-results/junit.xml" }]] as const)
+      : []),
+  ],
   use: {
     baseURL,
     trace: "retain-on-failure",
