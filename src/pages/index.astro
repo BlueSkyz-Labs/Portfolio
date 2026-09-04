@@ -17,8 +17,8 @@ const products = await getPublicProducts();
   title="Home"
   description={`${SITE.name} builds products that make complex things feel naturally clear.`}
 >
+  <Hero />
   <Container>
-    <Hero />
     <FeaturedProducts products={products} />
     <OneHouse />
     <Trust />

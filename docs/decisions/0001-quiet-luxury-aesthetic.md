@@ -1,10 +1,10 @@
 # 0001 — Adopt Quiet Luxury Aesthetic
 
-- **Status:** Accepted
+- **Status:** Superseded
 - **Date:** 2026-08-29
 - **Deciders:** Thinh Nguyen (owner), BlueSkyz Labs
 - **Supersedes:** —
-- **Superseded by:** —
+- **Superseded by:** `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` + ADR 0004 (`ASTRO_7`) — C1.1 Porcelain-first, Trust-forward Hybrid Product House (Ink / Porcelain / Cobalt)
 
 ## Context
 
@@ -17,6 +17,8 @@ BlueSkyz Labs needs a public portfolio that signals premium positioning to enter
 These signal "indie maker", not "premium studio". We need a design language that earns trust with a 30-second visit.
 
 ## Decision
+
+> **Historical.** Quiet Luxury is no longer the active public experience contract.
 
 Adopt the **Quiet Luxury** aesthetic for v1 of the portfolio. Concretely:
 
@@ -38,6 +40,8 @@ Adopt the **Quiet Luxury** aesthetic for v1 of the portfolio. Concretely:
 
 - Dark-only v1 excludes a small segment of users
 - Brand voice requires discipline — easy to drift toward "template"
+
+**Supersession note (2026-09-04):** C1.1 replaces Quiet Luxury / atelier semantics with Porcelain-first masterbrand surfaces. Do not implement champagne gold, Cormorant-led display, dark-only atelier chrome, or Savile Row copy from this ADR.
 
 **Mitigations:**
 

@@ -4,24 +4,33 @@ import Reveal from "@/components/ui/Reveal.astro";
 import { SITE } from "@/data/site";
 ---
 
-<Reveal
-  as="section"
-  class="border-b border-[var(--border-subtle)] py-16 sm:py-24"
+<section
+  class="hero-plane relative isolate overflow-hidden border-b border-[var(--border-subtle)]"
   aria-labelledby="hero-title"
 >
-  <p class="text-sm font-medium text-[var(--text-muted)]">{SITE.name}</p>
-  <h1
-    id="hero-title"
-    class="mt-4 max-w-[18ch] text-4xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-5xl lg:text-6xl"
+  <div class="hero-atmosphere" aria-hidden="true"></div>
+  <Reveal
+    as="div"
+    class="relative mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8"
   >
-    {SITE.proposition}
-  </h1>
-  <p class="mt-5 max-w-xl text-lg text-[var(--text-secondary)]">
-    Thoughtful digital products shaped around real people, real decisions, and
-    real-world use.
-  </p>
-  <div class="mt-8 flex flex-wrap gap-3">
-    <ButtonLink href="/products/">Explore products</ButtonLink>
-    <ButtonLink href="/about/" variant="secondary">About BlueSkyz</ButtonLink>
-  </div>
-</Reveal>
+    <p
+      class="brand-signal text-2xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-3xl"
+    >
+      {SITE.name}
+    </p>
+    <h1
+      id="hero-title"
+      class="mt-6 max-w-[18ch] text-4xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-5xl lg:text-6xl"
+    >
+      {SITE.proposition}
+    </h1>
+    <p class="mt-5 max-w-xl text-lg text-[var(--text-secondary)]">
+      Thoughtful digital products shaped around real people, real decisions, and
+      real-world use.
+    </p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <ButtonLink href="/products/">Explore products</ButtonLink>
+      <ButtonLink href="/about/" variant="secondary">About BlueSkyz</ButtonLink>
+    </div>
+  </Reveal>
+</section>
