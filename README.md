@@ -23,19 +23,23 @@ Framework decision: [`docs/decisions/0004-web-framework-selection.md`](./docs/de
 
 ```bash
 pnpm install --frozen-lockfile
+pnpm test:e2e:install
 pnpm dev
 pnpm typecheck
 pnpm lint
 pnpm format:check
 pnpm build
 pnpm check:client-budget
+pnpm check:static-links
 pnpm test:architecture
 pnpm test:e2e
 pnpm lighthouse
 pnpm validate:public-truth
 ```
 
-Local source gate (pre-commit): architecture → typecheck → lint → format → build → client budget.
+Local source gate (pre-commit): architecture → typecheck → lint → format → build → client budget → static links.
+
+`pnpm test:e2e:install` installs Playwright browser binaries (not covered by `pnpm install`). One-shot Workers deploy: set `PUBLIC_SITE_URL` then `pnpm deploy:workers` — prefer Workers Builds Git Connect for ongoing promotion.
 
 ## Promotion
 

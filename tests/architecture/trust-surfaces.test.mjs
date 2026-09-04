@@ -29,7 +29,10 @@ test("flagship proof section is evidence-gated and optional", () => {
     "utf8",
   );
   assert.match(proof, /proof\.screenshot/);
+  assert.match(proof, /screenshot\.src/);
   assert.match(proof, /data-flagship-proof/);
+  assert.match(proof, /capabilities\.slice/);
+  assert.doesNotMatch(proof, /jobs\.slice/);
   const home = readFileSync("src/pages/index.astro", "utf8");
   assert.match(home, /getFlagshipProduct/);
   assert.match(home, /FlagshipProof/);

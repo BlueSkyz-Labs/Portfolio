@@ -31,9 +31,10 @@ pnpm lint
 pnpm format:check
 pnpm build
 pnpm check:client-budget
+pnpm check:static-links
 ```
 
-Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-commit hooks.
+Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-commit hooks. Install browsers once with `pnpm test:e2e:install` before `pnpm test:e2e`.
 
 ---
 
@@ -46,6 +47,9 @@ Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-
 ## 4. Browser / a11y / perf
 
 - Playwright: Chromium, Firefox, WebKit, mobile Chromium (`pnpm test:e2e`)
+- Browser bootstrap: `pnpm test:e2e:install`
+- axe tags: WCAG 2.0 / 2.1 / 2.2 A+AA (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22a`, `wcag22aa`)
+- Static internal links/assets: `pnpm check:static-links` (after `pnpm build`)
 - Optional remote target: `PLAYWRIGHT_BASE_URL`
 - Local server: `pnpm start` (Astro preview on `127.0.0.1:3000`)
 - Lighthouse CI: three desktop runs against Astro preview; categories ≥0.90; CLS ≤0.05

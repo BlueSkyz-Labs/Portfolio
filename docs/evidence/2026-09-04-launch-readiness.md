@@ -55,7 +55,10 @@ Landed via #46 (merged):
 - ADR 0001 marked superseded; remaining-convergence refreshed
 - Workers Builds gap recorded (`docs/evidence/2026-09-04-workers-builds-gap.md`)
 
-Public promotion blockers above remain unchanged.
+Public promotion blockers above remain unchanged except live Workers drift,
+which was closed by Wrangler redeploy on 2026-09-04
+(`docs/evidence/2026-09-04-workers-redeploy.md`). Workers Builds Git Connect
+remains open.
 
 ## Security/Experience hardening pass (same branch)
 

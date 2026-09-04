@@ -11,6 +11,7 @@ test("product truth models lifecycle, availability, proof and CTA", () => {
     "publicLabel",
     "audience",
     "jobs",
+    "capabilities",
     "platforms",
     "primaryAction",
     "proof",
@@ -21,4 +22,5 @@ test("product truth models lifecycle, availability, proof and CTA", () => {
     assert.match(config, new RegExp(field));
   }
   assert.match(config, /A BlueSkyz Labs product/);
+  assert.match(config, /productScreenshot/);
 });

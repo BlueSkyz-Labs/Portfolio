@@ -20,6 +20,8 @@ interface Props {
 
 const { product } = Astro.props;
 const { data } = product;
+const screenshot = data.proof.screenshot;
+const capabilities = data.capabilities ?? [];
 
 const proofLinks = [
   { href: data.proof.publicUrl, label: "Product site" },
@@ -35,7 +37,7 @@ const proofLinks = [
   title={data.name}
   description={data.shortDescription}
   path={`/products/${data.slug}/`}
-  ogImage={data.proof.screenshot}
+  ogImage={data.proof.screenshot?.src}
 >
   <article class="py-16">
     <Container>
@@ -122,15 +124,35 @@ const proofLinks = [
       </section>
 
       {
-        data.proof.screenshot ? (
+        capabilities.length > 0 ? (
+          <section class="mt-14" aria-labelledby="profile-capabilities">
+            <h2
+              id="profile-capabilities"
+              class="text-xl font-semibold tracking-tight"
+            >
+              Main capabilities
+            </h2>
+            <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
+              {capabilities.map((capability: string) => (
+                <li>{capability}</li>
+              ))}
+            </ul>
+          </section>
+        ) : null
+      }
+
+      {
+        screenshot ? (
           <section class="mt-14" aria-labelledby="profile-proof">
             <h2 id="profile-proof" class="text-xl font-semibold tracking-tight">
               Evidence
             </h2>
             <img
-              class="mt-4 w-full max-w-3xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
-              src={data.proof.screenshot}
-              alt={`${data.name} public proof artifact`}
+              class="mt-4 h-auto w-full max-w-3xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
+              src={screenshot.src}
+              alt={screenshot.alt}
+              width={screenshot.width}
+              height={screenshot.height}
               loading="lazy"
               decoding="async"
             />
