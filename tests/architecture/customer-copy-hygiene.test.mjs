@@ -26,8 +26,33 @@ test("customer-facing pages ban internal path and env jargon", () => {
 
 test("muted text token meets WCAG AA on Porcelain", () => {
   const css = readFileSync("src/styles/global.css", "utf8");
-  assert.match(css, /--text-muted:\s*#475569/i);
-  assert.doesNotMatch(css, /--text-muted:\s*#64748b/i);
+  const match = css.match(/--text-muted:\s*(#[0-9a-fA-F]{6})/);
+  assert.ok(match, "muted token hex required");
+  const hex = match[1].toLowerCase();
+  assert.notEqual(hex, "#64748b");
+
+  const toRgb = (value) => [
+    Number.parseInt(value.slice(1, 3), 16),
+    Number.parseInt(value.slice(3, 5), 16),
+    Number.parseInt(value.slice(5, 7), 16),
+  ];
+  const channel = (c) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = ([r, g, b]) =>
+    0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+  const ratio = (fg, bg) => {
+    const L1 = luminance(toRgb(fg));
+    const L2 = luminance(toRgb(bg));
+    const lighter = Math.max(L1, L2);
+    const darker = Math.min(L1, L2);
+    return (lighter + 0.05) / (darker + 0.05);
+  };
+  assert.ok(
+    ratio(hex, "#f7f8fa") >= 4.5,
+    `muted ${hex} on Porcelain must be ≥4.5:1`,
+  );
 });
 
 test("JSON-LD serialization escapes script breakouts", () => {

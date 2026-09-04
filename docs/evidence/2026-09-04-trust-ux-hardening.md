@@ -19,7 +19,13 @@ checkpoint. Agent-safe P1/P2 closed in this pass:
 | Featured empty teased “audit under review”       | Honest empty copy                          |
 | Duplicate `public/og-image.png`                  | Canonical `/social/og-default.png` only    |
 
-Regression: `tests/architecture/customer-copy-hygiene.test.mjs` + e2e bans.
+Regression: `tests/architecture/customer-copy-hygiene.test.mjs` +
+`tests/architecture/product-schema-behavior.test.mjs` (behavioral `safeParse`) +
+e2e bans.
+
+Follow-up after independent HOLD: extract `src/lib/product-schema.ts`, scope
+label coherence to `public: true` so non-public drafts may use
+`availability: private`, and add behavioral schema rejection tests.
 
 ## Remaining external blockers (unchanged)
 

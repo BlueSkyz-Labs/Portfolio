@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
+const schema = readFileSync("src/lib/product-schema.ts", "utf8");
 const config = readFileSync("src/content.config.ts", "utf8");
 const flagship = readFileSync(
   "src/components/sections/FlagshipProof.astro",
@@ -10,34 +11,35 @@ const flagship = readFileSync(
 const profile = readFileSync("src/pages/products/[slug].astro", "utf8");
 
 test("product proof screenshot is a local sized artifact contract", () => {
-  assert.match(config, /screenshot:\s*productScreenshot/);
-  assert.match(config, /src:\s*z[\s.]*string\(/);
-  assert.match(config, /alt:\s*z\.string/);
-  assert.match(config, /width:\s*z\.number/);
-  assert.match(config, /height:\s*z\.number/);
-  assert.match(config, /\/products\//);
-  assert.doesNotMatch(config, /screenshot:\s*z\.string\(\)\.optional\(\)/);
+  assert.match(schema, /screenshot:\s*productScreenshot/);
+  assert.match(schema, /src:\s*z[\s.]*string\(/);
+  assert.match(schema, /alt:\s*z\.string/);
+  assert.match(schema, /width:\s*z\.number/);
+  assert.match(schema, /height:\s*z\.number/);
+  assert.match(schema, /\/products\//);
+  assert.doesNotMatch(schema, /screenshot:\s*z\.string\(\)\.optional\(\)/);
 });
 
 test("product action and proof URLs require https schemes", () => {
-  assert.match(config, /httpsUrl/);
-  assert.match(config, /isHttpsUrl/);
-  assert.match(config, /isNonProductionSiteUrl|isPublicClaimHttpsUrl/);
-  assert.match(config, /href:\s*httpsUrl/);
-  assert.match(config, /publicUrl:\s*httpsUrl/);
-  assert.match(config, /repositoryUrl:\s*httpsUrl/);
+  assert.match(schema, /httpsUrl/);
+  assert.match(schema, /isHttpsUrl|isPublicClaimHttpsUrl/);
+  assert.match(schema, /href:\s*httpsUrl/);
+  assert.match(schema, /publicUrl:\s*httpsUrl/);
+  assert.match(schema, /repositoryUrl:\s*httpsUrl/);
+  assert.match(config, /from ["']@\/lib\/product-schema["']/);
 });
 
 test("public product truth rejects incoherent maturity claims", () => {
-  assert.match(config, /PUBLIC_LABEL_COHERENCE/);
-  assert.match(config, /public product cannot have private availability/);
-  assert.match(config, /publicLabel .* is incoherent with lifecycle/);
+  assert.match(schema, /PUBLIC_LABEL_COHERENCE/);
+  assert.match(schema, /public product cannot have private availability/);
+  assert.match(schema, /publicLabel .* is incoherent with lifecycle/);
+  assert.match(schema, /if\s*\(\s*!value\.public\s*\)\s*return/);
 });
 
 test("public products require verified capabilities distinct from jobs", () => {
-  assert.match(config, /capabilities/);
-  assert.match(config, /jobs/);
-  assert.match(config, /capabilities\.length/);
+  assert.match(schema, /capabilities/);
+  assert.match(schema, /jobs/);
+  assert.match(schema, /capabilities\.length/);
 });
 
 test("FlagshipProof renders capabilities and intrinsic screenshot sizing", () => {
