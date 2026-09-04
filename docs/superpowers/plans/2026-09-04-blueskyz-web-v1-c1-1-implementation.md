@@ -1,5 +1,7 @@
 # BlueSkyz Labs Web V1 C1.1 Implementation Plan
 
+> **Execution status (2026-09-04):** Tasks **1–3** and **5–14** landed on `main` through #43–#46. Task **4** (R4d from `sgps-core`) remains **BLOCKED**. Public promotion remains owner/evidence-gated. See `docs/superpowers/plans/2026-09-03-remaining-convergence.md` and `docs/evidence/2026-09-04-permission-blockers.md`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace the legacy BlueSkyz portfolio/atelier website with the C1.1 trust-forward product-house experience, using an evidence-gated frontier-stable stack and Cloudflare-native delivery.
