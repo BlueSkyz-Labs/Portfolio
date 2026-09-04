@@ -10,9 +10,12 @@ C1.1. Canonical product direction is now
 (ADR 0004: `ASTRO_7`). Do not invest further in Quiet Luxury atelier polish
 except owner-gated holds below.
 
-**Current `main` baseline (verified this session):** atelier narrative sections
-still live on `main` pending C1.1 Task 2+ migration; Task 1 framework decision
-locked to Astro 7. Open: draft #33 (hold), Issue #8 (ruleset), C1.1 Tasks 2–14.
+**Current baseline (2026-09-04 agent):** ADR 0004 locks `ASTRO_7`. PR #43
+carries Tasks 2–3 (Astro + Workers Static Assets) and Tasks 5–6 (tokens +
+shell). Task 4 blocked: `BlueSkyz-Labs/sgps-core` is not readable (HTTP 404)
+so R4d provenance cannot be projected yet — Header uses text lockup only.
+Open: draft #33 (hold), Issue #8 (ruleset), C1.1 Tasks 4 + 7–14, agent merge
+403 (human merge required).
 
 ---
 
