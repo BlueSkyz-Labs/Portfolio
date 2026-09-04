@@ -31,6 +31,10 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`
 const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
 const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
+const isLocalFallback = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/?$/i.test(
+  SITE.url,
+);
+const robotsNoindex = noindex || isLocalFallback;
 ---
 
 <!doctype html>
@@ -41,7 +45,7 @@ const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
     <link rel="canonical" href={canonical} />
-    {noindex ? <meta name="robots" content="noindex, nofollow" /> : null}
+    {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />

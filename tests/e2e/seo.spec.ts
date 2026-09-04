@@ -14,6 +14,11 @@ test("home exposes canonical, OG, and Organization JSON-LD", async ({
     "content",
     /\/social\/og-default\.png$/,
   );
+  // Local/default SITE.url must not be indexable.
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+    "content",
+    /noindex/,
+  );
 
   const jsonLd = await page
     .locator('script[type="application/ld+json"]')
@@ -29,7 +34,8 @@ test("robots and sitemap are public and exclude staging hard-codes", async ({
   const robots = await request.get("/robots.txt");
   expect(robots.ok()).toBeTruthy();
   const robotsBody = await robots.text();
-  expect(robotsBody).toMatch(/Sitemap:/);
+  // Without PUBLIC_SITE_URL, local fallback disallows indexing.
+  expect(robotsBody).toMatch(/Disallow:\s*\//);
   expect(robotsBody).not.toMatch(/portfolio\.tonydemo\.com/);
 
   const sitemap = await request.get("/sitemap.xml");

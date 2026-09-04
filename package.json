@@ -23,7 +23,7 @@
     "test:architecture": "node --test tests/architecture/*.test.mjs",
     "test:e2e": "playwright test --project=chromium --project=firefox --project=webkit --project=mobile-chromium",
     "check:client-budget": "node scripts/check-client-budget.mjs",
-    "lighthouse": "lhci autorun",
+    "lighthouse": "PUBLIC_SITE_URL=https://example.com pnpm build && lhci autorun",
     "prepare": "git config core.hooksPath .githooks || true",
     "validate:public-truth": "node scripts/validate-public-truth.mjs"
   },

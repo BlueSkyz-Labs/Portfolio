@@ -65,3 +65,5 @@ Lab LCP budget in `lighthouserc.json` set to **2500 ms** to match the field p75 
 - Legacy Pages Git check may still fail on PRs until disconnected — documented, not a Workers contract failure.
 
 Recorded git SHA (docs commit follows): `008424fc1829ebf0ff272710323c5c7ada8f1c96`
+
+Follow-up: local SITE.url fallback auto-noindexes and Disallow robots; Workers preview redeployed with PUBLIC_SITE_URL=https://blueskyz-web.thinhnguyen-km10.workers.dev; workers.dev responses carry X-Robots-Tag: noindex.

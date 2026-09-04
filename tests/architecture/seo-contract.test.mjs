@@ -26,6 +26,7 @@ test("BaseLayout wires canonical, OG, and structured data without staging hard-c
   assert.match(layout, /application\/ld\+json/);
   assert.match(layout, /organizationJsonLd/);
   assert.match(layout, /websiteJsonLd/);
+  assert.match(layout, /isLocalFallback/);
   assert.doesNotMatch(layout, /portfolio\.tonydemo\.com/);
   assert.doesNotMatch(layout, /workers\.dev/);
 });
@@ -35,7 +36,7 @@ test("robots and sitemap endpoints exist and reference public routes only", () =
   assert.equal(existsSync("src/pages/sitemap.xml.ts"), true);
   const robots = readFileSync("src/pages/robots.txt.ts", "utf8");
   const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
-  assert.match(robots, /Sitemap:/);
+  assert.match(robots, /isLocalFallback|Disallow: \//);
   assert.match(sitemap, /getPublicProducts/);
   assert.match(sitemap, /PUBLIC_STATIC_PATHS/);
   assert.doesNotMatch(sitemap, /portfolio\.tonydemo\.com/);
