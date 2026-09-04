@@ -3,19 +3,20 @@
 Date: 2026-09-04  
 Worker: `blueskyz-web` (`8a8fece25ca94b0cb05bcabac63c9020`)  
 Account: `0dd046dab63171c38a6548642bc9f2d4`  
-Live preview observed: `https://blueskyz-web.thinhnguyen-km10.workers.dev/` (HTTP 200)
+Live preview observed: `https://blueskyz-web.thinhnguyen-km10.workers.dev/` (HTTP 200; post-redeploy surface)
 
 ## Finding
 
 Cloudflare Workers Builds API listing for this Worker returned **0 builds**
-(`total_count=0`) on re-verify **2026-09-04T06:32Z** (post-#49 `main`). The
-Worker itself exists and still serves a **pre-#46** Astro static snapshot
-(`modified_on` ≈ `2026-09-04T02:08:32Z`), but the preferred remote promotion
-path from ADR 0002 / QA_STRATEGY is not yet emitting build records.
+(`total_count=0`) on re-verify **2026-09-04T06:50Z**. The Worker itself exists
+and now serves the current Astro static site after an agent Wrangler redeploy
+(see `docs/evidence/2026-09-04-workers-redeploy.md`), but the preferred remote
+promotion path from ADR 0002 / QA_STRATEGY is not yet emitting build records.
 
 Agent Cloudflare MCP can **read** Workers/Builds metadata but has **no write
-tool** to attach a Git repository to Workers Builds. Shell has no usable
-`CLOUDFLARE_API_TOKEN` for account-scoped API writes / `wrangler deploy`.
+tool** to attach a Git repository to Workers Builds. Shell can one-shot
+`wrangler deploy` with `CLOUDFLARE_API_TOKEN` via `pnpm deploy:workers`; Builds
+Git Connect remains an owner dashboard action for steady-state CI.
 
 ## Owner action (least privilege)
 
@@ -28,7 +29,7 @@ tool** to attach a Git repository to Workers Builds. Shell has no usable
 4. Build command (production):
 
 ```text
-pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget
+pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget && pnpm check:static-links
 ```
 
 5. Deploy command: default `npx wrangler deploy` (or account equivalent).
@@ -62,3 +63,4 @@ Do **not** recreate this pipeline as required GitHub Actions workload.
 - ADR 0002 Cloudflare-first CI
 - `docs/QA_STRATEGY.md` §5
 - `docs/evidence/2026-09-04-pages-disable.md` (legacy Pages Git disabled)
+- `docs/evidence/2026-09-04-workers-redeploy.md` (agent recovery redeploy)

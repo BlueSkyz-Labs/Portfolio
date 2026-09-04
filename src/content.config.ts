@@ -58,6 +58,19 @@ const action = z.object({
   href: z.url(),
 });
 
+/** Local product evidence only — CSP img-src is 'self' data:; remote URLs cannot render. */
+const productScreenshot = z.object({
+  src: z
+    .string()
+    .regex(
+      /^\/products\/[a-z0-9][a-z0-9/_-]*\.(?:avif|jpe?g|png|webp)$/i,
+      "screenshot.src must be a local /products/... image path",
+    ),
+  alt: z.string().min(1).max(160),
+  width: z.number().int().positive().max(8192),
+  height: z.number().int().positive().max(8192),
+});
+
 const productSchema = z
   .object({
     slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -68,12 +81,14 @@ const productSchema = z
     publicLabel,
     audience: z.array(audience).min(1),
     jobs: z.array(z.string().min(1)).min(1),
+    /** Verified product capabilities — distinct from customer jobs-to-be-done. */
+    capabilities: z.array(z.string().min(1).max(120)).min(2).max(3).optional(),
     platforms: z.array(platform).min(1),
     primaryAction: action,
     secondaryAction: action.optional(),
     proof: z
       .object({
-        screenshot: z.string().optional(),
+        screenshot: productScreenshot.optional(),
         publicUrl: z.url().optional(),
         repositoryUrl: z.url().optional(),
         documentationUrl: z.url().optional(),
@@ -101,6 +116,29 @@ const productSchema = z
         code: "custom",
         path: ["primaryAction", "type"],
         message: "development product cannot claim Try",
+      });
+    }
+
+    if (value.public) {
+      if (!value.capabilities || value.capabilities.length < 2) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["capabilities"],
+          message:
+            "public product requires 2–3 verified capabilities (distinct from jobs)",
+        });
+      }
+    }
+
+    if (
+      value.proof.screenshot &&
+      (!value.capabilities || value.capabilities.length < 2)
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["capabilities"],
+        message:
+          "screenshot proof requires 2–3 verified capabilities for FlagshipProof",
       });
     }
   });

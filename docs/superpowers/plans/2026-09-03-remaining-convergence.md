@@ -3,7 +3,7 @@
 > **For agentic workers:** Execute only items that are still open and safe.
 > Do not merge draft #33 or claim Issue #8 closed without verified GitHub ruleset reads.
 
-**Goal:** Close residual gaps after C1.1 Astro foundation (`main` through #49)
+**Goal:** Close residual gaps after C1.1 Astro foundation (`main` through #50)
 without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 **Canonical SoT:**
@@ -12,22 +12,24 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 - Plan: `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`
 - ADR 0004: `ASTRO_7` → Cloudflare Workers Static Assets
 
-**Permission evidence:** `docs/evidence/2026-09-04-permission-blockers.md`
+**Permission evidence:** `docs/evidence/2026-09-04-permission-blockers.md`  
+**Live redeploy evidence:** `docs/evidence/2026-09-04-workers-redeploy.md`
 
-**Current baseline (2026-09-04 agent re-verify @ `a51dd56`):**
+**Current baseline (2026-09-04 agent @ post-#50 + live redeploy):**
 
-| Area                                             | Status                                                           |
-| ------------------------------------------------ | ---------------------------------------------------------------- |
-| C1.1 Tasks 1–3, 5–14 technical foundation        | Landed on `main` (#43–#49)                                       |
-| Product profile route `/products/[slug]/`        | Landed on `main` (#46)                                           |
-| Trust-path CTA / FlagshipProof / SoT hygiene     | Landed on `main` (#48)                                           |
-| Honest empty public product registry             | PASS                                                             |
-| In-repo material work                            | **Converged** — only external/owner holds remain                 |
-| R4d Task 4 (`sgps-core` import)                  | **BLOCKED** — repo HTTP 404 from this environment                |
-| Cloudflare Workers Builds for `blueskyz-web`     | **GAP** — Worker exists; Builds list returns 0 runs; live drift  |
-| Draft PR #33 (`/so-tro`, Next atelier)           | **DIRTY/CONFLICTING** vs Astro `main` — keep draft; do not merge |
-| Issue #8 main ruleset                            | **Owner-only** — API cannot write rulesets                       |
-| Canonical domain / emails / legal / founder copy | **Owner/evidence**                                               |
+| Area                                             | Status                                                            |
+| ------------------------------------------------ | ----------------------------------------------------------------- |
+| C1.1 Tasks 1–3, 5–14 technical foundation        | Landed on `main` (#43–#50)                                        |
+| Product profile route `/products/[slug]/`        | Landed on `main` (#46)                                            |
+| Trust-path CTA / FlagshipProof / SoT hygiene     | Landed on `main` (#48)                                            |
+| Live Workers surface vs `main`                   | **Recovered** via Wrangler redeploy (see redeploy evidence)       |
+| Honest empty public product registry             | PASS                                                              |
+| In-repo material work                            | Product proof + static links + WCAG 2.2 + e2e bootstrap in flight |
+| R4d Task 4 (`sgps-core` import)                  | **BLOCKED** — repo HTTP 404 from this environment                 |
+| Cloudflare Workers Builds for `blueskyz-web`     | **GAP** — Worker exists; Builds list returns 0 runs               |
+| Draft PR #33 (`/so-tro`, Next atelier)           | **DIRTY/CONFLICTING** vs Astro `main` — keep draft; do not merge  |
+| Issue #8 main ruleset                            | **Owner-only** — API cannot write rulesets                        |
+| Canonical domain / emails / legal / founder copy | **Owner/evidence**                                                |
 
 ---
 

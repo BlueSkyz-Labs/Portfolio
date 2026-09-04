@@ -21,8 +21,11 @@
     "format": "prettier --write \"**/*.{astro,ts,tsx,js,mjs,json,md,css,yaml,yml}\"",
     "format:check": "prettier --check \"**/*.{astro,ts,tsx,js,mjs,json,md,css,yaml,yml}\"",
     "test:architecture": "node --test tests/architecture/*.test.mjs",
+    "test:e2e:install": "playwright install chromium firefox webkit",
     "test:e2e": "playwright test --project=chromium --project=firefox --project=webkit --project=mobile-chromium",
     "check:client-budget": "node scripts/check-client-budget.mjs",
+    "check:static-links": "node scripts/check-static-links.mjs",
+    "deploy:workers": "node scripts/deploy-workers.mjs",
     "lighthouse": "PUBLIC_SITE_URL=https://example.com pnpm build && lhci autorun",
     "prepare": "git config core.hooksPath .githooks || true",
     "validate:public-truth": "node scripts/validate-public-truth.mjs"

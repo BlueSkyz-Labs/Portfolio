@@ -8,4 +8,5 @@ pnpm lint
 pnpm format:check
 pnpm build
 pnpm check:client-budget
+pnpm check:static-links
 printf '%s\n' 'Local source gate passed. Full Playwright/Lighthouse remain promotion/preview evidence.'

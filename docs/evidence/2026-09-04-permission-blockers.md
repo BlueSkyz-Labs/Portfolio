@@ -1,9 +1,10 @@
 # Agent permission blockers — 2026-09-04
 
 Evidence for external holds that still block remote promotion / governance.
-PRs **#46–#49** are merged on `main` (HEAD `a51dd56`). Live Workers redeploy and
-Builds Git Connect remain owner actions. Agent re-verify at **2026-09-04T06:32Z**
-confirmed the same external hold set — no new material in-repo work.
+PRs **#46–#50** are merged on `main`. Agent session at **2026-09-04T06:50Z**
+closed the live Workers drift via Wrangler redeploy when `CLOUDFLARE_API_TOKEN`
+became available. Workers Builds Git Connect and GitHub rulesets remain
+owner-gated.
 
 ## 1) GitHub — merge / ruleset / PR moderation
 
@@ -32,12 +33,14 @@ confirmed the same external hold set — no new material in-repo work.
 
 ## 2) Cloudflare — Workers Builds Git attach
 
-See `docs/evidence/2026-09-04-workers-builds-gap.md`.
+See `docs/evidence/2026-09-04-workers-builds-gap.md` and
+`docs/evidence/2026-09-04-workers-redeploy.md`.
 
 Deep link:  
 https://dash.cloudflare.com/0dd046dab63171c38a6548642bc9f2d4/workers/services/view/blueskyz-web/settings
 
-Worker `blueskyz-web` still `modified_on` ≈ `2026-09-04T02:08:32Z` (pre-#46 surface). Builds list `total_count=0`.
+Live surface was recovered by agent Wrangler redeploy (2026-09-04). Builds list
+still `total_count=0` — Connect Git remains the steady-state promotion path.
 
 ## 3) R4d / sgps-core
 
@@ -54,39 +57,30 @@ Set on Workers production (not invent locally):
 
 Then `pnpm validate:public-truth` can pass on production Builds.
 
+For workers.dev preview/recovery deploys, set `PUBLIC_SITE_URL` to the factual
+`https://blueskyz-web.thinhnguyen-km10.workers.dev` host (or use
+`pnpm deploy:workers`) so canonical/OG URLs are not baked as localhost.
+
 ## 5) Convergence checkpoint (agent re-verify)
 
-Date/HEAD: `a51dd56` on `main` (post-#49). Re-verify: **2026-09-04T06:32Z**.
+Date/HEAD: post-redeploy + product-proof/QA hardening branch (2026-09-04T06:50Z).
 
-| Check                                          | Result                                                                                       |
-| ---------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| Open material in-repo work                     | **None** (independent audit: still converged-for-in-repo)                                    |
-| `pnpm test:architecture`                       | PASS (37)                                                                                    |
-| Local `dist/security/` CTA                     | Contains `Open private vulnerability reporting` → advisories URL                             |
-| Live `blueskyz-web…workers.dev/security/`      | Still pre-#46 copy (“See SECURITY.md…”); **no** advisory CTA                                 |
-| Live `Permissions-Policy`                      | `camera=(), microphone=(), geolocation=()` — missing payment/usb/interest-cohort from `main` |
-| Live HSTS                                      | **Absent** on response                                                                       |
-| Workers Builds list                            | `total_count=0`                                                                              |
-| Shell Cloudflare secrets                       | `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` **missing**                                 |
-| GitHub rulesets                                | `[]`                                                                                         |
-| Close/comment #33 / Issue #8 comment / ruleset | `403 Resource not accessible by integration`                                                 |
-| Env setup actions requested                    | `CLOUDFLARE_API_TOKEN` (+ optional account id); Connect Builds; close #33 + ruleset          |
+| Check                                          | Result                                                                                         |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Live `/security/` advisory CTA                 | **PASS** after Wrangler redeploy                                                               |
+| Live HSTS + extended Permissions-Policy        | **PASS**                                                                                       |
+| Live canonical on workers.dev                  | **PASS** (`https://blueskyz-web…workers.dev/...`) after rebuild with `PUBLIC_SITE_URL`         |
+| Workers Builds list                            | `total_count=0` (still owner Connect)                                                          |
+| Shell Cloudflare secrets                       | `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` present (redeploy works)                      |
+| GitHub rulesets                                | `[]`                                                                                           |
+| Close/comment #33 / Issue #8 comment / ruleset | `403 Resource not accessible by integration`                                                   |
+| In-repo material follow-ups                    | Product proof contract + static link gate + WCAG 2.2 axe + Playwright bootstrap (this session) |
 
-### Unblock paths (pick one)
+### Unblock paths (remaining)
 
-**A — Preferred (no agent token):** Dashboard Connect Git → Workers Builds (auto build token).  
+**A — Preferred steady state:** Dashboard Connect Git → Workers Builds.  
 Deep link: https://dash.cloudflare.com/0dd046dab63171c38a6548642bc9f2d4/workers/services/view/blueskyz-web/settings  
 Docs: https://developers.cloudflare.com/workers/ci-cd/builds/
 
-**B — Agent one-shot redeploy:** add env secret `CLOUDFLARE_API_TOKEN` (user token) with least privilege for `wrangler deploy` of Static Assets Worker `blueskyz-web`:
-
-- Account → Workers Scripts → **Edit** (required)
-- Account → Account Settings → **Read** (often needed by Wrangler)
-- Zone → Workers Routes → **Edit** (only if custom routes/zones used)
-
-Create token: https://dash.cloudflare.com/profile/api-tokens  
-Official auth notes: https://developers.cloudflare.com/workers/wrangler/migration/v1-to-v2/wrangler-legacy/authentication/#generate-tokens
-
-Do **not** grant Billing, User Details beyond Memberships/Read unless Wrangler requires it; prefer Workers Builds Connect (A) over long-lived agent deploy tokens.
-
-After A or B: verify `/security/` shows advisory CTA and response includes `Strict-Transport-Security`.
+**B — Agent recovery redeploy (available now):** `PUBLIC_SITE_URL=https://blueskyz-web.thinhnguyen-km10.workers.dev pnpm deploy:workers`  
+Token scopes already proven sufficient for Static Assets deploy of `blueskyz-web`. Prefer A for ongoing CI.

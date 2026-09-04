@@ -10,6 +10,7 @@ interface Props {
 const { product } = Astro.props;
 const { data } = product;
 const screenshot = data.proof.screenshot;
+const capabilities = data.capabilities ?? [];
 const profileHref = `/products/${data.slug}/`;
 ---
 
@@ -33,8 +34,8 @@ const profileHref = `/products/${data.slug}/`;
             {data.shortDescription}
           </p>
           <ul class="mt-6 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
-            {data.jobs.slice(0, 3).map((job: string) => (
-              <li>{job}</li>
+            {capabilities.slice(0, 3).map((capability: string) => (
+              <li>{capability}</li>
             ))}
           </ul>
           <p class="mt-4 text-xs font-medium uppercase tracking-wide text-[var(--text-muted)]">
@@ -51,9 +52,11 @@ const profileHref = `/products/${data.slug}/`;
         </div>
         <figure class="m-0">
           <img
-            src={screenshot}
-            alt={`${data.name} public product evidence`}
-            class="w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
+            src={screenshot.src}
+            alt={screenshot.alt}
+            width={screenshot.width}
+            height={screenshot.height}
+            class="h-auto w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
             loading="lazy"
             decoding="async"
           />
