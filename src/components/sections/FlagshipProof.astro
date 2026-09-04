@@ -1,0 +1,67 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ProductStatus from "@/components/product/ProductStatus.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+
+interface Props {
+  product: CollectionEntry<"products">;
+}
+
+const { product } = Astro.props;
+const { data } = product;
+const screenshot = data.proof.screenshot;
+const profileHref = `/products/${data.slug}/`;
+---
+
+{
+  screenshot ? (
+    <section
+      class="border-b border-[var(--border-subtle)] py-16"
+      aria-labelledby="flagship-proof-title"
+      data-flagship-proof
+    >
+      <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
+        <div>
+          <ProductStatus label={data.publicLabel} />
+          <h2
+            id="flagship-proof-title"
+            class="mt-4 text-3xl font-semibold tracking-tight"
+          >
+            {data.name}
+          </h2>
+          <p class="mt-4 text-lg text-[var(--text-secondary)]">
+            {data.shortDescription}
+          </p>
+          <ul class="mt-6 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
+            {data.jobs.slice(0, 3).map((job: string) => (
+              <li>{job}</li>
+            ))}
+          </ul>
+          <p class="mt-4 text-xs font-medium uppercase tracking-wide text-[var(--text-muted)]">
+            {data.endorsement}
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <ButtonLink href={data.primaryAction.href}>
+              {data.primaryAction.label}
+            </ButtonLink>
+            <ButtonLink href={profileHref} variant="secondary">
+              View profile
+            </ButtonLink>
+          </div>
+        </div>
+        <figure class="m-0">
+          <img
+            src={screenshot}
+            alt={`${data.name} public product evidence`}
+            class="w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption class="mt-3 text-sm text-[var(--text-muted)]">
+            Verified public artifact — not a concept mock.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+  ) : null
+}

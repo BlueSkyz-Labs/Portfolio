@@ -31,3 +31,29 @@ for (const route of TRUST_ROUTES) {
     }
   });
 }
+
+test("/security/ exposes private vulnerability reporting CTA", async ({
+  page,
+}) => {
+  await page.goto("/security/");
+  const link = page.getByRole("link", {
+    name: /Open private vulnerability reporting/i,
+  });
+  await expect(link).toBeVisible();
+  await expect(link).toHaveAttribute(
+    "href",
+    "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",
+  );
+});
+
+test("/about/ shows approved founder title", async ({ page }) => {
+  await page.goto("/about/");
+  await expect(page.getByText(/Tony Nguyen — Founder & CEO/i)).toBeVisible();
+});
+
+test("homepage omits flagship proof without verified screenshot", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(page.locator("[data-flagship-proof]")).toHaveCount(0);
+});

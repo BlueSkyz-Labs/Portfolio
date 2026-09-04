@@ -9,6 +9,10 @@ export const SITE = {
   securityEmail: import.meta.env.PUBLIC_SECURITY_EMAIL?.trim() || null,
 } as const;
 
+/** Public GitHub private vulnerability reporting (SECURITY.md). */
+export const SECURITY_ADVISORY_URL =
+  "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
+
 export const NAV = [
   { label: "Products", href: "/products/" },
   { label: "About", href: "/about/" },

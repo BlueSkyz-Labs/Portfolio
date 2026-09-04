@@ -1,16 +1,17 @@
 # Agent permission blockers — 2026-09-04
 
-Evidence for external holds that stopped safe merge / remote promotion wiring
-during autonomous convergence. Repository code work continued on PR #46.
+Evidence for external holds that still block remote promotion / governance.
+PR #46 and #47 are merged on `main` (2026-09-04). Live Workers redeploy and
+Builds Git Connect remain owner actions.
 
 ## 1) GitHub — merge / ruleset / PR moderation
 
-| Item                     | Observed                                                                                                                                                                                                                   |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Resource                 | `BlueSkyz-Labs/SGPS-Marketing`                                                                                                                                                                                             |
-| Agent can                | push feature branches; open/update PR body via Cursor ManagePullRequest                                                                                                                                                    |
-| Agent cannot             | squash-merge PR (`403 Resource not accessible by personal access token`); convert draft→ready (`resource_exhausted` / rate limit); comment on #33 (`403`); write repository rulesets (API returns `[]`, write not exposed) |
-| Repo permissions via API | `admin/maintain/push/pull/triage` all reported `false` for the integration identity (branch push still works through Cursor git remote)                                                                                    |
+| Item                     | Observed                                                                                                                                                                                                                  |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Resource                 | `BlueSkyz-Labs/SGPS-Marketing`                                                                                                                                                                                            |
+| Agent can                | push feature branches; open/update PR body via Cursor ManagePullRequest                                                                                                                                                   |
+| Agent cannot             | ManagePullRequest draft→ready (`resource_exhausted`); comment/close #33 (`FORBIDDEN`); write repository rulesets (API `[]`). GraphQL `markPullRequestReadyForReview` + REST squash-merge **works** for agent-authored PRs |
+| Repo permissions via API | `admin/maintain/push/pull/triage` all reported `false` for the integration identity (branch push still works through Cursor git remote)                                                                                   |
 
 ### Minimum owner actions
 

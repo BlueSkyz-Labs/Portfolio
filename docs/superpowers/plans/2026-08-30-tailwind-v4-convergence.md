@@ -1,5 +1,7 @@
 # Tailwind v4 Convergence Implementation Plan
 
+> **Historical / superseded.** Atelier-era Next.js plan. Canonical SoT is C1.1 Astro (`docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`). Do not execute this plan against current `main`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Bring the repository styling toolchain into exact alignment with `SPEC.md` by upgrading Tailwind CSS 3.4.x to Tailwind CSS 4.3.3 without changing the approved visual language or weakening existing engineering gates.

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
-import { SITE } from "@/data/site";
+import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
 ---
 
 <BaseLayout
@@ -12,16 +12,34 @@ import { SITE } from "@/data/site";
     <Container>
       <h1 class="text-3xl font-semibold tracking-tight">Security</h1>
       <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-        {
-          SITE.securityEmail ? (
-            <>
-              Report security issues to{" "}
-              <a href={`mailto:${SITE.securityEmail}`}>{SITE.securityEmail}</a>.
-            </>
-          ) : (
-            "Security reporting destinations publish when PUBLIC_SECURITY_EMAIL is configured. See SECURITY.md for GitHub private vulnerability reporting."
-          )
-        }
+        Report security issues through a private channel. Do not open a public
+        GitHub issue for vulnerability reports.
+      </p>
+      {
+        SITE.securityEmail ? (
+          <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+            Email{" "}
+            <a
+              href={`mailto:${SITE.securityEmail}`}
+              class="font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              {SITE.securityEmail}
+            </a>
+            .
+          </p>
+        ) : null
+      }
+      <p class="mt-6">
+        <a
+          href={SECURITY_ADVISORY_URL}
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          Open private vulnerability reporting
+        </a>
+      </p>
+      <p class="mt-4 max-w-2xl text-sm text-[var(--text-muted)]">
+        No bug-bounty, SLA, or certification badges are published without
+        verified evidence.
       </p>
     </Container>
   </section>

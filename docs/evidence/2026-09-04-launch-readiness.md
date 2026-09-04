@@ -1,9 +1,9 @@
 # Launch Readiness — BlueSkyz Web V1 C1.1
 
 Date: 2026-09-04  
-Branch: `cursor/c1-1-astro-foundation-ea89`
+Branch: `main` (post-#47)
 
-Technical implementation of C1.1 Tasks 1–3 and 5–13 is complete on this branch. Task 4 (R4d asset import from `sgps-core`) remains blocked. Public production promotion remains blocked on owner/external truth — **do not treat technical green as launch approval**.
+Technical implementation of C1.1 Tasks 1–3 and 5–14 are complete on `main`. Task 4 (R4d asset import from `sgps-core`) remains blocked. Public production promotion remains blocked on owner/external truth — **do not treat technical green as launch approval**.
 
 ## Checklist
 
@@ -42,11 +42,11 @@ pnpm check:client-budget
 
 Workers Builds should run that sequence on `main` with preview branches enabled. Do not re-create as GitHub Actions workload.
 
-Evidence commit SHA: `79b97db4f5bf9a38bb362a8c80eec30c9733876b`
+Evidence commit SHA (foundation): historical; current `main` HEAD supersedes for promotion checks.
 
 ## Post-foundation convergence (2026-09-04 experience pass)
 
-Landed on branch `cursor/c1-1-experience-convergence-2fbd`:
+Landed via #46 (merged):
 
 - `/products/[slug]/` static profiles + card deep-links + sitemap slug URLs
 - C1.1 OG/favicon generator (no Quiet Luxury gold) + regenerated social assets
