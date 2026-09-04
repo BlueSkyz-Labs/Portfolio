@@ -41,3 +41,5 @@ pnpm check:client-budget
 ```
 
 Workers Builds should run that sequence on `main` with preview branches enabled. Do not re-create as GitHub Actions workload.
+
+Evidence commit SHA: `79b97db4f5bf9a38bb362a8c80eec30c9733876b`
