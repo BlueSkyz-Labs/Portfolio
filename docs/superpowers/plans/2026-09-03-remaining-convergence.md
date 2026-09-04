@@ -3,7 +3,7 @@
 > **For agentic workers:** Execute only items that are still open and safe.
 > Do not merge draft #33 or claim Issue #8 closed without verified GitHub ruleset reads.
 
-**Goal:** Close residual gaps after C1.1 Astro foundation (`main` through #47)
+**Goal:** Close residual gaps after C1.1 Astro foundation (`main` through #49)
 without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 **Canonical SoT:**
@@ -14,15 +14,17 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 **Permission evidence:** `docs/evidence/2026-09-04-permission-blockers.md`
 
-**Current baseline (2026-09-04 agent, post-experience convergence):**
+**Current baseline (2026-09-04 agent re-verify @ `a51dd56`):**
 
 | Area                                             | Status                                                           |
 | ------------------------------------------------ | ---------------------------------------------------------------- |
-| C1.1 Tasks 1–3, 5–14 technical foundation        | Landed on `main` (#43–#45)                                       |
-| Product profile route `/products/[slug]/`        | Landed on this branch                                            |
+| C1.1 Tasks 1–3, 5–14 technical foundation        | Landed on `main` (#43–#49)                                       |
+| Product profile route `/products/[slug]/`        | Landed on `main` (#46)                                           |
+| Trust-path CTA / FlagshipProof / SoT hygiene     | Landed on `main` (#48)                                           |
 | Honest empty public product registry             | PASS                                                             |
+| In-repo material work                            | **Converged** — only external/owner holds remain                 |
 | R4d Task 4 (`sgps-core` import)                  | **BLOCKED** — repo HTTP 404 from this environment                |
-| Cloudflare Workers Builds for `blueskyz-web`     | **GAP** — Worker exists; Builds list returns 0 runs              |
+| Cloudflare Workers Builds for `blueskyz-web`     | **GAP** — Worker exists; Builds list returns 0 runs; live drift  |
 | Draft PR #33 (`/so-tro`, Next atelier)           | **DIRTY/CONFLICTING** vs Astro `main` — keep draft; do not merge |
 | Issue #8 main ruleset                            | **Owner-only** — API cannot write rulesets                       |
 | Canonical domain / emails / legal / founder copy | **Owner/evidence**                                               |
