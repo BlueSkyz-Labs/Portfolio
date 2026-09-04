@@ -17,6 +17,11 @@ test("SEO helpers keep absolute URLs and Organization JSON-LD truthful", async (
   assert.equal(org["@type"], "Organization");
   assert.equal(org.name, "BlueSkyz Labs");
   assert.equal(org.url, "https://example.com/");
+
+  assert.equal(
+    seo.safeJsonLd({ name: "</script><script>alert(1)" }),
+    '{"name":"\\u003c/script>\\u003cscript>alert(1)"}',
+  );
 });
 
 test("BaseLayout wires canonical, OG, and structured data via shared non-prod helper", () => {
@@ -26,6 +31,7 @@ test("BaseLayout wires canonical, OG, and structured data via shared non-prod he
   assert.match(layout, /application\/ld\+json/);
   assert.match(layout, /organizationJsonLd/);
   assert.match(layout, /websiteJsonLd/);
+  assert.match(layout, /safeJsonLd/);
   assert.match(layout, /isNonProductionSiteUrl/);
   assert.doesNotMatch(layout, /portfolio\.tonydemo\.com/);
   assert.doesNotMatch(layout, /isLocalFallback/);

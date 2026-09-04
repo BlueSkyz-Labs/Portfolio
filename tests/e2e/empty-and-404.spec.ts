@@ -20,7 +20,9 @@ test("404 page recovers without atelier copy", async ({ page }) => {
 test("homepage featured empty state stays honest", async ({ page }) => {
   await page.goto("/");
   await expect(
-    page.getByText(/Public product listings publish when lifecycle/i),
+    page.getByText(/No public products are published yet/i),
   ).toBeVisible();
   await expect(page.locator("[data-product-card]")).toHaveCount(0);
+  const body = await page.locator("body").innerText();
+  expect(body).not.toMatch(/docs\/evidence|candidates under review/i);
 });

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
+const schema = readFileSync("src/lib/product-schema.ts", "utf8");
 const config = readFileSync("src/content.config.ts", "utf8");
 
 test("product truth models lifecycle, availability, proof and CTA", () => {
@@ -19,8 +20,9 @@ test("product truth models lifecycle, availability, proof and CTA", () => {
     "sourceRevision",
     "lastReviewedAt",
   ]) {
-    assert.match(config, new RegExp(field));
+    assert.match(schema, new RegExp(field));
   }
-  assert.match(config, /A BlueSkyz Labs product/);
-  assert.match(config, /productScreenshot/);
+  assert.match(schema, /A BlueSkyz Labs product/);
+  assert.match(schema, /productScreenshot/);
+  assert.match(config, /productSchema/);
 });

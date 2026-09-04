@@ -18,5 +18,5 @@ test("brand asset generator projects C1.1 primitives only", () => {
 
 test("committed OG assets exist for masterbrand social previews", () => {
   assert.equal(existsSync("public/social/og-default.png"), true);
-  assert.equal(existsSync("public/og-image.png"), true);
+  assert.equal(existsSync("public/og-image.png"), false);
 });

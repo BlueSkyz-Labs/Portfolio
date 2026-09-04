@@ -2,6 +2,11 @@ export function absoluteUrl(base: string, path: string): string {
   return new URL(path, base.endsWith("/") ? base : `${base}/`).toString();
 }
 
+/** Escape `<` so JSON-LD cannot break out of an inline script element. */
+export function safeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
 export function organizationJsonLd(siteUrl: string) {
   return {
     "@context": "https://schema.org",
