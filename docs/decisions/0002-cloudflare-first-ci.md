@@ -1,38 +1,36 @@
 # 0002 — Cloudflare-first CI economics
 
-- **Status:** Accepted
+- **Status:** Accepted (amended 2026-09-04)
 - **Date:** 2026-09-03
-- **Deciders:** Autonomous SGPS convergence (inferred from operating brief + SPEC §6.5)
+- **Deciders:** Autonomous SGPS convergence (inferred from operating brief + C1.1 SoT)
+- **Amends:** Hosting path updated by ADR 0004 + C1.1 Task 3 (`ASTRO_7` → Workers Static Assets)
 
 ## Context
 
-GitHub Actions currently runs a full QA matrix on every PR and an additional
-rebuild + Edge-UA smoke after every `main` push. Deploy already happens on
-Cloudflare Pages. Long-lived CI cost and Actions minutes are not aligned with
-the project's Cloudflare-first deploy model.
-
-Playwright + Lighthouse cannot run inside a Cloudflare Worker (CPU/memory and
-browser runtime). Workers remain ideal for edge product logic, not browser QA.
+Long-lived GitHub Actions minutes are not aligned with a Cloudflare-first deploy
+model. Browser QA (Playwright + Lighthouse) cannot run inside a Cloudflare Worker
+CPU budget; Workers remain ideal for edge product logic and static asset hosting,
+not browser automation.
 
 ## Decision
 
-1. **Cloudflare Pages** remains the authoritative build/deploy surface for the
-   static `out/` artifact (preview + production).
-2. **GitHub Actions** retains only the evidence gates that cannot yet move:
-   architecture, lint/typecheck, exact-base G5, Playwright, Lighthouse — until
-   an external/self-hosted or Cloudflare Containers runner can host browsers.
-3. **Post-merge Edge smoke** must not rebuild the site. It verifies the live
-   Cloudflare Pages production host
-   (`https://blueskyz-labs-portfolio.pages.dev`) under an Edge user-agent,
-   reducing duplicate Actions compute. Do not point CI at
-   `portfolio.tonydemo.com` until that custom domain resolves in public DNS.
-4. No new GitHub Actions automation is added when Cloudflare Pages, Workers,
-   or agent-local verification can provide equivalent evidence more cheaply.
+1. **Cloudflare Workers Static Assets** is the authoritative build/deploy surface
+   for the Astro static `dist/` artifact (preview + production). Legacy Cloudflare
+   Pages Git integration for this repository is superseded and should be
+   disconnected or redirected.
+2. **Cloudflare Workers Builds** is the preferred remote build/promotion path
+   (`pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget` on `main`; preview branches may omit the truth gate when production env is intentionally absent).
+3. **GitHub** remains source control + PR review. Do not reintroduce required
+   GitHub Actions workload when Cloudflare or agent-local verification suffices.
+4. **Local source gate** (`.githooks/pre-commit`) is canonical before PR:
+   architecture, typecheck, lint, format, build, client-JS budget.
+5. Browser/Lighthouse evidence runs agent-locally or against Cloudflare previews;
+   do not invent production domain/email values to force a green production gate.
 
 ## Consequences
 
-- Edge smoke becomes deploy-coupled: it fails closed if production is
-  unreachable, which is desirable for post-merge confidence.
-- Future browser QA migration targets self-hosted/Cloudflare Containers, not
-  Workers CPU for Playwright.
-- Repository docs and architecture tests must describe this hybrid honestly.
+- Failing legacy Pages checks on Astro PRs are expected until Pages is disconnected.
+- Production promotion stays blocked on owner-supplied `PUBLIC_SITE_URL` /
+  contact / security emails and evidence-backed public products.
+- ADR 0004 (`ASTRO_7`) and `docs/QA_STRATEGY.md` are the operational companions
+  to this decision.
