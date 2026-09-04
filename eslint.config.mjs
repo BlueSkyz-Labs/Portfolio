@@ -1,17 +1,20 @@
-import { defineConfig } from "eslint/config";
 import eslintPluginAstro from "eslint-plugin-astro";
+import tseslint from "typescript-eslint";
 
-export default defineConfig([
+export default [
   {
     ignores: [
       "dist/**",
       ".astro/**",
+      ".next/**",
+      "out/**",
       "node_modules/**",
       "playwright-report/**",
       "test-results/**",
       ".lighthouseci/**",
-      "out/**",
+      "next-env.d.ts",
     ],
   },
-  ...eslintPluginAstro.configs.recommended,
-]);
+  ...tseslint.configs.recommended,
+  ...eslintPluginAstro.configs["flat/recommended"],
+];

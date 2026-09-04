@@ -1,0 +1,28 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import { SITE } from "@/data/site";
+---
+
+<BaseLayout
+  title="Security"
+  description="Security contact and reporting for BlueSkyz Labs."
+>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">Security</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        {
+          SITE.securityEmail ? (
+            <>
+              Report security issues to{" "}
+              <a href={`mailto:${SITE.securityEmail}`}>{SITE.securityEmail}</a>.
+            </>
+          ) : (
+            "Security reporting destinations publish when PUBLIC_SECURITY_EMAIL is configured. See SECURITY.md for GitHub private vulnerability reporting."
+          )
+        }
+      </p>
+    </Container>
+  </section>
+</BaseLayout>

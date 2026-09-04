@@ -1,12 +1,12 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Astro foundation smoke", () => {
-  test("home page loads the BlueSkyz Labs heading", async ({ page }) => {
+test.describe("Smoke — Astro foundation", () => {
+  test("home page loads the BlueSkyz Labs proposition", async ({ page }) => {
     const response = await page.goto("/", { waitUntil: "domcontentloaded" });
     expect(response, "navigation response").not.toBeNull();
     expect(response!.status(), "HTTP status").toBeLessThan(400);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "BlueSkyz Labs",
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "complex things feel naturally clear",
     );
     await expect(page.locator("main#main-content")).toBeVisible();
   });

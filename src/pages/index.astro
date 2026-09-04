@@ -1,17 +1,32 @@
 ---
-import "@/styles/global.css";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { SITE } from "@/data/site";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>BlueSkyz Labs</title>
-  </head>
-  <body>
-    <main id="main-content">
-      <h1>BlueSkyz Labs</h1>
-    </main>
-  </body>
-</html>
+<BaseLayout
+  title="Home"
+  description="BlueSkyz Labs builds products that make complex things feel naturally clear."
+>
+  <section class="py-16 sm:py-24">
+    <Container>
+      <p class="text-sm font-medium text-[var(--text-muted)]">{SITE.name}</p>
+      <h1
+        class="mt-4 max-w-[18ch] text-4xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-5xl"
+      >
+        {SITE.proposition}
+      </h1>
+      <p class="mt-5 max-w-xl text-lg text-[var(--text-secondary)]">
+        Digital products with honest maturity, clear next steps, and evidence
+        you can evaluate.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <ButtonLink href="/products/">Explore products</ButtonLink>
+        <ButtonLink href="/about/" variant="secondary"
+          >About BlueSkyz</ButtonLink
+        >
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
