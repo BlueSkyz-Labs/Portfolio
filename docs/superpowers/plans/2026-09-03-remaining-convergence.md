@@ -3,7 +3,7 @@
 > **For agentic workers:** Execute only items that are still open and safe.
 > Do not merge draft #33 or claim Issue #8 closed without verified GitHub ruleset reads.
 
-**Goal:** Close residual gaps after C1.1 Astro foundation (`main` through #45)
+**Goal:** Close residual gaps after C1.1 Astro foundation (`main` through #47)
 without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 **Canonical SoT:**
@@ -35,6 +35,7 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 - [ ] Create active branch ruleset on `main` per Issue #8 checklist
 - [ ] Prefer Cloudflare Workers Builds / local source-gate evidence names over resurrecting required GitHub Actions workload
+- [ ] After Workers Builds Connect, set the **actual** Cloudflare check name in the ruleset — do not recreate a GA job solely to match the legacy Issue #8 string
 - [ ] Verify direct push to `main` is rejected; green PR remains mergeable
 - [ ] Close Issue #8 only after read-back verification
 
@@ -89,8 +90,8 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 ### Task 8: Residual QA (G9 / G10)
 
-- [ ] G9: privacy-conscious field INP/RUM design before blocking gate
-- [ ] G10: screenshot visual regression baselines + review lifecycle
+- [x] G9: privacy-conscious field INP/RUM **design** recorded (`docs/evidence/2026-09-04-g9-field-rum-design.md`) — enablement still owner-gated
+- [x] G10: visual baseline **lifecycle** recorded (`docs/evidence/2026-09-04-g10-visual-baseline-lifecycle.md`) — baselines not yet a merge gate
 
 ---
 
@@ -101,4 +102,4 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 - Button/Dialog inventory (#38) — historical
 - TypeScript 6 / React 19.2 / security baseline — historical
 - Astro 7 foundation through E4 (#43) + SoT sync (#44) + Pages disable note (#45)
-- Product profile routes, C1.1 OG generator, porcelain atmosphere, trust-route e2e (this branch)
+- Product profile routes, C1.1 OG generator, porcelain atmosphere, trust-route e2e, security CTA, FlagshipProof scaffold (#46+)

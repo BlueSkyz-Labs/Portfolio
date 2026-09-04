@@ -1,5 +1,7 @@
 # Initial JS Budget Convergence Plan
 
+> **Historical / superseded.** Atelier-era Next.js plan. Canonical SoT is C1.1 Astro (`docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`). Do not execute this plan against current `main`.
+
 **Base revision:** `5dadb214a2d62a5b9f131a5cdbc87325a5545f64`
 
 ## Objective

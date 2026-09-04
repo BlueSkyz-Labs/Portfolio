@@ -8,7 +8,7 @@ Exact SHA filled at commit time in launch-readiness companion.
 
 | Gate                                                                         | Result                                                    |
 | ---------------------------------------------------------------------------- | --------------------------------------------------------- |
-| `pnpm test:architecture`                                                     | PASS (25)                                                 |
+| `pnpm test:architecture`                                                     | PASS (32 on current `main`; was 25 on foundation SHA)     |
 | `pnpm typecheck`                                                             | PASS (hints only: Zod `.url()` deprecation; non-blocking) |
 | `pnpm lint`                                                                  | PASS                                                      |
 | `pnpm format:check`                                                          | PASS                                                      |
