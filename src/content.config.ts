@@ -55,7 +55,7 @@ const actionType = z.enum([
 const action = z.object({
   type: actionType,
   label: z.string().min(1).max(40),
-  href: z.string().url(),
+  href: z.url(),
 });
 
 const productSchema = z
@@ -74,12 +74,12 @@ const productSchema = z
     proof: z
       .object({
         screenshot: z.string().optional(),
-        publicUrl: z.string().url().optional(),
-        repositoryUrl: z.string().url().optional(),
-        documentationUrl: z.string().url().optional(),
-        privacyUrl: z.string().url().optional(),
-        securityUrl: z.string().url().optional(),
-        supportUrl: z.string().url().optional(),
+        publicUrl: z.url().optional(),
+        repositoryUrl: z.url().optional(),
+        documentationUrl: z.url().optional(),
+        privacyUrl: z.url().optional(),
+        securityUrl: z.url().optional(),
+        supportUrl: z.url().optional(),
       })
       .refine(
         (value) => Object.values(value).some(Boolean),

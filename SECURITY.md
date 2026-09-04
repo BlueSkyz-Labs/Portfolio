@@ -2,8 +2,12 @@
 
 ## Supported versions
 
-Security fixes apply to the latest `main` deployment of this portfolio.
-Historical preview deployments are not independently supported.
+Security fixes apply to the latest `main` deployment of BlueSkyz Labs Web (C1.1 product house).
+Historical preview deployments (including workers.dev previews) are not independently supported.
+
+## Transport security
+
+Workers Static Assets ship `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` via `public/_headers` so HTTPS responses advertise HSTS.
 
 ## Content Security Policy
 

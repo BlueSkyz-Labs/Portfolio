@@ -6,13 +6,10 @@ export default [
     ignores: [
       "dist/**",
       ".astro/**",
-      ".next/**",
-      "out/**",
       "node_modules/**",
       "playwright-report/**",
       "test-results/**",
       ".lighthouseci/**",
-      "next-env.d.ts",
     ],
   },
   ...tseslint.configs.recommended,

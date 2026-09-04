@@ -31,9 +31,9 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`
 const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
 const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
-const isLocalFallback = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/?$/i.test(
-  SITE.url,
-);
+const isLocalFallback =
+  /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/?$/i.test(SITE.url) ||
+  /\.workers\.dev\/?$/i.test(SITE.url);
 const robotsNoindex = noindex || isLocalFallback;
 ---
 
@@ -42,6 +42,7 @@ const robotsNoindex = noindex || isLocalFallback;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
     <link rel="canonical" href={canonical} />

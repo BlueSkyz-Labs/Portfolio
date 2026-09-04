@@ -43,3 +43,24 @@ pnpm check:client-budget
 Workers Builds should run that sequence on `main` with preview branches enabled. Do not re-create as GitHub Actions workload.
 
 Evidence commit SHA: `79b97db4f5bf9a38bb362a8c80eec30c9733876b`
+
+## Post-foundation convergence (2026-09-04 experience pass)
+
+Landed on branch `cursor/c1-1-experience-convergence-2fbd`:
+
+- `/products/[slug]/` static profiles + card deep-links + sitemap slug URLs
+- C1.1 OG/favicon generator (no Quiet Luxury gold) + regenerated social assets
+- Porcelain atmosphere / brand-signal hero (text lockup; R4d still blocked)
+- Trust-route Playwright matrix + architecture guards
+- ADR 0001 marked superseded; remaining-convergence refreshed
+- Workers Builds gap recorded (`docs/evidence/2026-09-04-workers-builds-gap.md`)
+
+Public promotion blockers above remain unchanged.
+
+## Security/Experience hardening pass (same branch)
+
+- Removed invented `hello@blueskyz.io` from package metadata
+- HSTS + tighter Permissions-Policy; deleted Next `serve-static` residual
+- Content motion no longer fades opacity (LCP-safe); capped motion; solid header; Ink footer
+- Contact lanes structured; workers.dev auto-noindex; axe + 404/empty e2e
+- Permission blockers documented in `docs/evidence/2026-09-04-permission-blockers.md`

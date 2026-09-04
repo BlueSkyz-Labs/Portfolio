@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const CREDENTIAL_VALUE =
@@ -59,11 +59,24 @@ test(".env.example stays a public template and does not contain credentials", ()
   assert.doesNotMatch(sample, SECRET_ASSIGNMENT);
 
   for (const key of assignedKeys(sample)) {
-    if (key.startsWith("NEXT_PUBLIC_")) continue;
     assert.doesNotMatch(
       key,
       SECRET_KEY,
       `${key} looks like a secret and must not be assigned in .env.example`,
     );
   }
+});
+
+test("package metadata does not invent a public corporate email", () => {
+  const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+  assert.doesNotMatch(String(pkg.author ?? ""), /@/);
+  assert.doesNotMatch(JSON.stringify(pkg), /hello@blueskyz\.io/i);
+});
+
+test("legacy Next static server residual is removed", () => {
+  assert.equal(
+    existsSync("scripts/serve-static.mjs"),
+    false,
+    "serve-static.mjs targeted Next out/ and must stay deleted",
+  );
 });

@@ -17,12 +17,12 @@ const principles = [
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
     We don’t build around one category. We build around a way of thinking.
   </p>
-  <ul class="mt-8 grid gap-3 sm:grid-cols-2">
+  <ul
+    class="mt-10 divide-y divide-[var(--border-subtle)] border-y border-[var(--border-subtle)]"
+  >
     {
       principles.map((item) => (
-        <li class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-white px-5 py-4 text-[var(--text-primary)]">
-          {item}
-        </li>
+        <li class="py-4 text-lg text-[var(--text-primary)]">{item}</li>
       ))
     }
   </ul>

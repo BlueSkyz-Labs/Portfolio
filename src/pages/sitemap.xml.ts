@@ -14,7 +14,7 @@ export const GET: APIRoute = async () => {
   const locs = [
     ...PUBLIC_STATIC_PATHS.map((path) => absoluteUrl(SITE.url, path)),
     ...products.map((product) =>
-      absoluteUrl(SITE.url, `/products/${product.id}/`),
+      absoluteUrl(SITE.url, `/products/${product.data.slug}/`),
     ),
   ];
 
