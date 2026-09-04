@@ -19,11 +19,11 @@ not browser automation.
    Pages Git integration for this repository is superseded and should be
    disconnected or redirected.
 2. **Cloudflare Workers Builds** is the preferred remote build/promotion path
-   (`pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget` on `main`; preview branches may omit the truth gate when production env is intentionally absent).
+   (`pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget && pnpm check:static-links` on `main`; preview branches may omit the truth gate when production env is intentionally absent).
 3. **GitHub** remains source control + PR review. Do not reintroduce required
    GitHub Actions workload when Cloudflare or agent-local verification suffices.
 4. **Local source gate** (`.githooks/pre-commit`) is canonical before PR:
-   architecture, typecheck, lint, format, build, client-JS budget.
+   architecture, typecheck, lint, format, build, client-JS budget, static links.
 5. Browser/Lighthouse evidence runs agent-locally or against Cloudflare previews;
    do not invent production domain/email values to force a green production gate.
 

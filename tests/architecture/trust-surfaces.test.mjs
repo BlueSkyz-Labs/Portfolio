@@ -5,6 +5,18 @@ import test from "node:test";
 const ADVISORY =
   "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
 
+test("support empty state offers contact and security recourse", () => {
+  const support = readFileSync("src/pages/support.astro", "utf8");
+  assert.match(support, /href="\/contact\/"/);
+  assert.match(support, /href="\/security\/"/);
+  assert.match(support, /min-h-11/);
+});
+
+test("trust section links meet touch-target floor", () => {
+  const trust = readFileSync("src/components/sections/Trust.astro", "utf8");
+  assert.match(trust, /min-h-11/);
+});
+
 test("security surface exposes actionable private reporting CTA", () => {
   const site = readFileSync("src/data/site.ts", "utf8");
   assert.match(site, /SECURITY_ADVISORY_URL/);

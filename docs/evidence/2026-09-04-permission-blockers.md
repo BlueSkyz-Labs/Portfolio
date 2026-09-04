@@ -21,7 +21,7 @@ owner-gated.
    https://github.com/BlueSkyz-Labs/SGPS-Marketing/settings/rules  
    Official docs: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository
 2. Prefer required checks from **Cloudflare Workers Builds** / local source-gate evidence over resurrecting required GitHub Actions workload. If a status check name must exist, align Issue #8 with the actual Workers Builds check name after Connect — do not invent a GA job solely to satisfy the legacy string.
-3. Close draft #33 after acknowledgement it is superseded by Astro C1.1:  
+3. PR #33 is already **CLOSED** (superseded by Astro C1.1) — no further close action required:  
    https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/33
 
 ### Least-privilege token (if expanding agent later)
@@ -73,7 +73,7 @@ Date/HEAD: post-redeploy + product-proof/QA hardening branch (2026-09-04T06:50Z)
 | Workers Builds list                            | `total_count=0` (still owner Connect)                                                          |
 | Shell Cloudflare secrets                       | `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` present (redeploy works)                      |
 | GitHub rulesets                                | `[]`                                                                                           |
-| Close/comment #33 / Issue #8 comment / ruleset | `403 Resource not accessible by integration`                                                   |
+| Close/comment #33 / Issue #8 comment / ruleset | #33 already CLOSED; Issue #8 comment / ruleset write still `403`                               |
 | In-repo material follow-ups                    | Product proof contract + static link gate + WCAG 2.2 axe + Playwright bootstrap (this session) |
 
 ### Unblock paths (remaining)

@@ -1,15 +1,9 @@
 import type { APIRoute } from "astro";
 import { SITE } from "@/data/site";
 import { absoluteUrl } from "@/lib/seo";
+import { isNonProductionSiteUrl } from "@/lib/truth";
 
 export const prerender = true;
-
-function isNonProductionSiteUrl(url: string): boolean {
-  return (
-    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/?$/i.test(url) ||
-    /\.workers\.dev\/?$/i.test(url)
-  );
-}
 
 export const GET: APIRoute = () => {
   const disallowIndexing = isNonProductionSiteUrl(SITE.url);

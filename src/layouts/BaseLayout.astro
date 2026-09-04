@@ -9,6 +9,7 @@ import {
   organizationJsonLd,
   websiteJsonLd,
 } from "@/lib/seo";
+import { isNonProductionSiteUrl } from "@/lib/truth";
 import "@/styles/global.css";
 
 interface Props {
@@ -31,10 +32,7 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`
 const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
 const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
-const isLocalFallback =
-  /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/?$/i.test(SITE.url) ||
-  /\.workers\.dev\/?$/i.test(SITE.url);
-const robotsNoindex = noindex || isLocalFallback;
+const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 ---
 
 <!doctype html>

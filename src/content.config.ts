@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { isHttpsUrl } from "@/lib/https-url";
 
 const lifecycle = z.enum([
   "concept",
@@ -52,10 +53,13 @@ const actionType = z.enum([
   "contact",
 ]);
 
+/** Public product links must be https — reject javascript:/data:/mailto: schemes. */
+const httpsUrl = z.url().refine(isHttpsUrl, "https URL required");
+
 const action = z.object({
   type: actionType,
   label: z.string().min(1).max(40),
-  href: z.url(),
+  href: httpsUrl,
 });
 
 /** Local product evidence only — CSP img-src is 'self' data:; remote URLs cannot render. */
@@ -89,12 +93,12 @@ const productSchema = z
     proof: z
       .object({
         screenshot: productScreenshot.optional(),
-        publicUrl: z.url().optional(),
-        repositoryUrl: z.url().optional(),
-        documentationUrl: z.url().optional(),
-        privacyUrl: z.url().optional(),
-        securityUrl: z.url().optional(),
-        supportUrl: z.url().optional(),
+        publicUrl: httpsUrl.optional(),
+        repositoryUrl: httpsUrl.optional(),
+        documentationUrl: httpsUrl.optional(),
+        privacyUrl: httpsUrl.optional(),
+        securityUrl: httpsUrl.optional(),
+        supportUrl: httpsUrl.optional(),
       })
       .refine(
         (value) => Object.values(value).some(Boolean),

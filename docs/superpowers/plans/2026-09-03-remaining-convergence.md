@@ -1,9 +1,9 @@
 # Remaining Convergence Plan — Owner-gated & residual gaps
 
 > **For agentic workers:** Execute only items that are still open and safe.
-> Do not merge draft #33 or claim Issue #8 closed without verified GitHub ruleset reads.
+> Do not claim Issue #8 closed without verified GitHub ruleset reads.
 
-**Goal:** Close residual gaps after C1.1 Astro foundation (`main` through #50)
+**Goal:** Close residual gaps after C1.1 Astro foundation (`main` through #52)
 without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 **Canonical SoT:**
@@ -15,21 +15,21 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 **Permission evidence:** `docs/evidence/2026-09-04-permission-blockers.md`  
 **Live redeploy evidence:** `docs/evidence/2026-09-04-workers-redeploy.md`
 
-**Current baseline (2026-09-04 agent @ post-#50 + live redeploy):**
+**Current baseline (2026-09-04 agent @ post-#52 + SoT hygiene pass):**
 
-| Area                                             | Status                                                           |
-| ------------------------------------------------ | ---------------------------------------------------------------- |
-| C1.1 Tasks 1–3, 5–14 technical foundation        | Landed on `main` (#43–#50)                                       |
-| Product profile route `/products/[slug]/`        | Landed on `main` (#46)                                           |
-| Trust-path CTA / FlagshipProof / SoT hygiene     | Landed on `main` (#48)                                           |
-| Live Workers surface vs `main`                   | **Recovered** via Wrangler redeploy (see redeploy evidence)      |
-| Honest empty public product registry             | PASS                                                             |
-| In-repo material work                            | **Converged** after #51 — only external/owner holds remain       |
-| R4d Task 4 (`sgps-core` import)                  | **BLOCKED** — repo HTTP 404 from this environment                |
-| Cloudflare Workers Builds for `blueskyz-web`     | **GAP** — Worker exists; Builds list returns 0 runs              |
-| Draft PR #33 (`/so-tro`, Next atelier)           | **DIRTY/CONFLICTING** vs Astro `main` — keep draft; do not merge |
-| Issue #8 main ruleset                            | **Owner-only** — API cannot write rulesets                       |
-| Canonical domain / emails / legal / founder copy | **Owner/evidence**                                               |
+| Area                                             | Status                                                              |
+| ------------------------------------------------ | ------------------------------------------------------------------- |
+| C1.1 Tasks 1–3, 5–14 technical foundation        | Landed on `main` (#43–#52)                                          |
+| Product profile route `/products/[slug]/`        | Landed on `main` (#46)                                              |
+| Trust-path CTA / FlagshipProof / SoT hygiene     | Landed on `main` (#48–#52 + this hygiene pass)                      |
+| Live Workers surface vs `main`                   | **Recovered** via Wrangler redeploy (see redeploy evidence)         |
+| Honest empty public product registry             | PASS                                                                |
+| In-repo material work                            | **High-value gaps closed** in this pass; only external holds remain |
+| R4d Task 4 (`sgps-core` import)                  | **BLOCKED** — repo HTTP 404 from this environment                   |
+| Cloudflare Workers Builds for `blueskyz-web`     | **GAP** — Worker exists; Builds list returns 0 runs                 |
+| Draft PR #33 (`/so-tro`, Next atelier)           | **CLOSED** (superseded; do not reopen/merge into Astro `main`)      |
+| Issue #8 main ruleset                            | **Owner-only** — API cannot write rulesets                          |
+| Canonical domain / emails / legal / founder copy | **Owner/evidence**                                                  |
 
 ---
 
@@ -48,7 +48,7 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 ### Task 2: Cloudflare Workers Builds wiring
 
 - [ ] Connect `BlueSkyz-Labs/SGPS-Marketing` → Worker `blueskyz-web` Builds
-- [ ] Production command: `pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget`
+- [ ] Production command: `pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget && pnpm check:static-links`
 - [ ] Enable preview branches; omit truth gate only when production env is intentionally absent
 - [ ] Confirm Builds list is non-empty after the next `main`/PR push
 
@@ -79,9 +79,8 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 ### Task 6: GTM `/so-tro` (#33)
 
-- [ ] Keep draft; do **not** merge into Astro C1.1 `main`
+- [x] Draft PR #33 closed (2026-09-04) — superseded by Astro C1.1; **do not reopen or merge**
 - [ ] If Sổ Trọ marketing remains desired, re-implement as an evidence-gated product entry + profile under C1.1 — do not revive Next atelier chrome
-- [ ] Close #33 only with owner acknowledgement that atelier `/so-tro` is superseded
 
 ---
 
@@ -102,6 +101,7 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 ## Autonomous-safe work already landed (do not redo)
 
 - Product proof contract + static links + WCAG 2.2 axe + Playwright bootstrap + live Workers redeploy evidence (#51)
+- Public-truth rejects example/preview hosts; product URLs https-only; support recourse CTAs; Builds recipe includes `check:static-links` (this hygiene pass)
 
 - Lucide v1 + SocialIcons (#36) — historical atelier era
 - Experience polish + Pages.dev smoke (#37 / #39) — historical

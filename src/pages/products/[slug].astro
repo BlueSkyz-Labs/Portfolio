@@ -42,7 +42,9 @@ const proofLinks = [
   <article class="py-16">
     <Container>
       <p class="text-sm font-medium text-[var(--text-muted)]">
-        <a href="/products/" class="text-[var(--action-primary)] no-underline"
+        <a
+          href="/products/"
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
           >Products</a
         >
         <span aria-hidden="true"> / </span>
@@ -171,7 +173,7 @@ const proofLinks = [
                 <li>
                   <a
                     href={link.href}
-                    class="text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                    class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
                   >
                     {link.label}
                   </a>
