@@ -8,13 +8,14 @@ Live preview observed: `https://blueskyz-web.thinhnguyen-km10.workers.dev/` (HTT
 ## Finding
 
 Cloudflare Workers Builds API listing for this Worker returned **0 builds**
-(`total_count=0`). The Worker itself exists and serves the Astro static site,
-but the preferred remote promotion path from ADR 0002 / QA_STRATEGY is not yet
-emitting build records.
+(`total_count=0`) on re-verify **2026-09-04T06:32Z** (post-#49 `main`). The
+Worker itself exists and still serves a **pre-#46** Astro static snapshot
+(`modified_on` ≈ `2026-09-04T02:08:32Z`), but the preferred remote promotion
+path from ADR 0002 / QA_STRATEGY is not yet emitting build records.
 
 Agent Cloudflare MCP can **read** Workers/Builds metadata but has **no write
 tool** to attach a Git repository to Workers Builds. Shell has no usable
-`CLOUDFLARE_API_TOKEN` for account-scoped API writes.
+`CLOUDFLARE_API_TOKEN` for account-scoped API writes / `wrangler deploy`.
 
 ## Owner action (least privilege)
 
