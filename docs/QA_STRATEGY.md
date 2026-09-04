@@ -80,7 +80,7 @@ Preview builds may omit `validate:public-truth` when production-only domain/emai
 
 **Do not** recreate this pipeline in `.github/workflows`.
 
-Legacy Cloudflare Pages Git integration for this repo is superseded by Workers Static Assets. A failing Pages check on Astro PRs is expected until that Pages project is disconnected or redirected.
+Legacy Cloudflare Pages project `blueskyz-labs-portfolio` is superseded by Workers Static Assets. On 2026-09-04 Git deployments were disabled via Cloudflare API (`deployments_enabled=false`, preview=`none`), and `destination_dir` was corrected from `.next` → `dist` so an accidental re-enable cannot revive the Next output contract. Canonical host remains Workers (`blueskyz-web`).
 
 ---
 

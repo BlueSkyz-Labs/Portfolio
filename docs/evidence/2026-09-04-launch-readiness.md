@@ -28,8 +28,8 @@ Technical implementation of C1.1 Tasks 1–3 and 5–13 is complete on this bran
 - Issue **#8** main ruleset — owner-gated.
 - DNS for `portfolio.tonydemo.com` — owner-gated; not used as canonical.
 - Task 4: `BlueSkyz-Labs/sgps-core` not readable from this environment (HTTP 404).
-- Human merge of PR **#42** / **#43** (agent token lacks merge permission).
-- Disconnect or reconfigure legacy **Cloudflare Pages** Git integration (fails on Astro PRs; Workers is canonical).
+- PRs **#42** / **#43** / **#44** landed on `main` (C1.1 foundation + SoT doc sync).
+- Legacy **Cloudflare Pages** project `blueskyz-labs-portfolio`: Git deployments disabled 2026-09-04 (Workers is canonical). See `docs/evidence/2026-09-04-pages-disable.md`.
 
 ## Promotion command (production, when unblocked)
 
