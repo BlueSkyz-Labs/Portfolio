@@ -1,0 +1,31 @@
+import { expect, test } from "@playwright/test";
+
+test("shell exposes skip link and product-led nav", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/");
+  await expect(
+    page.getByRole("link", { name: "Skip to main content" }),
+  ).toBeAttached();
+  await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Products" }).first(),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "About" }).first()).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Contact" }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Explore products" }).first(),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "complex things feel naturally clear",
+  );
+});
+
+test("footer exposes trust routes", async ({ page }) => {
+  await page.goto("/");
+  const footer = page.getByRole("contentinfo");
+  await expect(footer.getByRole("link", { name: "Support" })).toBeVisible();
+  await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();
+  await expect(footer.getByRole("link", { name: "Security" })).toBeVisible();
+});

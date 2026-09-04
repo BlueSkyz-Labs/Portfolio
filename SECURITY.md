@@ -5,6 +5,17 @@
 Security fixes apply to the latest `main` deployment of this portfolio.
 Historical preview deployments are not independently supported.
 
+## Content Security Policy
+
+Static assets ship a strict CSP via `public/_headers` (Workers Static Assets):
+
+- `default-src 'self'`
+- `script-src 'self'` (no third-party scripts)
+- `style-src 'self' 'unsafe-inline'` — required for Astro/Tailwind inline critical CSS in the static HTML output
+- no `'unsafe-eval'` and no wildcard origins
+
+Widen a directive only when an approved source is introduced, and document the exact reason here.
+
 ## Reporting a vulnerability
 
 Do not file a public GitHub issue or discussion for a security report.

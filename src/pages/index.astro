@@ -1,0 +1,28 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import Hero from "@/components/sections/Hero.astro";
+import FeaturedProducts from "@/components/sections/FeaturedProducts.astro";
+import OneHouse from "@/components/sections/OneHouse.astro";
+import Trust from "@/components/sections/Trust.astro";
+import AboutBlueSkyz from "@/components/sections/AboutBlueSkyz.astro";
+import NextStep from "@/components/sections/NextStep.astro";
+import { getPublicProducts } from "@/lib/products";
+import { SITE } from "@/data/site";
+
+const products = await getPublicProducts();
+---
+
+<BaseLayout
+  title="Home"
+  description={`${SITE.name} builds products that make complex things feel naturally clear.`}
+>
+  <Container>
+    <Hero />
+    <FeaturedProducts products={products} />
+    <OneHouse />
+    <Trust />
+    <AboutBlueSkyz />
+    <NextStep />
+  </Container>
+</BaseLayout>

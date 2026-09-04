@@ -1,62 +1,49 @@
 {
-  "name": "portfolio",
+  "name": "blueskyz-web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "BlueSkyz Labs Portfolio — Quiet Luxury, Loud Conviction",
+  "description": "BlueSkyz Labs Web — C1.1 Porcelain-first, Trust-forward Hybrid Product House",
   "author": "BlueSkyz Labs <hello@blueskyz.io>",
   "license": "UNLICENSED",
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@11.6.0+sha512.9a36518224080c6fe5165afdcfe79bfa118c29be703f3f462b1e32efe1e98e47e8750b148e08286250aad4113cc7993ca413c4e2cd447752708c2ee5751bc95f",
   "engines": {
     "node": ">=24.20.0",
-    "pnpm": ">=9.0.0"
+    "pnpm": ">=11.0.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build && node scripts/verify-static-export.mjs",
-    "start": "node scripts/serve-static.mjs",
+    "dev": "astro dev",
+    "build": "astro check && astro build && node scripts/verify-static-export.mjs",
+    "start": "astro preview --host 127.0.0.1 --port 3000",
+    "typecheck": "astro check",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix --max-warnings=0",
-    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{astro,ts,tsx,js,mjs,json,md,css,yaml,yml}\"",
+    "format:check": "prettier --check \"**/*.{astro,ts,tsx,js,mjs,json,md,css,yaml,yml}\"",
     "test:architecture": "node --test tests/architecture/*.test.mjs",
     "test:e2e": "playwright test --project=chromium --project=firefox --project=webkit --project=mobile-chromium",
-    "lighthouse": "lhci autorun",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,json,md,css}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,json,md,css}\"",
-    "prepare": "git config core.hooksPath .githooks || true"
+    "check:client-budget": "node scripts/check-client-budget.mjs",
+    "lighthouse": "PUBLIC_SITE_URL=https://example.com pnpm build && lhci autorun",
+    "prepare": "git config core.hooksPath .githooks || true",
+    "validate:public-truth": "node scripts/validate-public-truth.mjs"
   },
   "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.2",
-    "@radix-ui/react-slot": "^1.1.0",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.1",
-    "framer-motion": "^11.11.17",
-    "lucide-react": "^1.37.0",
-    "next": "15.5.24",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "tailwind-merge": "^2.5.4"
+    "astro": "^7.3.1"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.6",
     "@axe-core/playwright": "4.13.0",
-    "@eslint/eslintrc": "^3.3.6",
     "@lhci/cli": "0.15.1",
     "@playwright/test": "1.62.1",
-    "@tailwindcss/postcss": "4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22.9.0",
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.5",
     "eslint": "^9.15.0",
-    "eslint-config-next": "15.5.24",
+    "eslint-plugin-astro": "^1.5.0",
     "postcss": "^8.4.49",
     "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.8.1",
+    "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "^4.3.3",
-    "typescript": "^6.0.3"
-  },
-  "pnpm": {
-    "overrides": {
-      "postcss": "8.5.26"
-    }
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.69.0"
   }
 }

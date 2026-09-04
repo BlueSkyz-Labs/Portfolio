@@ -1,0 +1,32 @@
+---
+const links = [
+  { href: "/privacy/", label: "Privacy" },
+  { href: "/security/", label: "Security" },
+  { href: "/support/", label: "Support" },
+];
+---
+
+<section
+  class="border-b border-[var(--border-subtle)] py-16"
+  aria-labelledby="trust-title"
+>
+  <h2 id="trust-title" class="text-3xl font-semibold tracking-tight">Trust</h2>
+  <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+    Product maturity stays explicit. Privacy, security, and support paths are
+    first-class routes — not slogans.
+  </p>
+  <ul class="mt-8 flex flex-wrap gap-4">
+    {
+      links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
