@@ -1,21 +1,11 @@
 import assert from "node:assert/strict";
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 
-for (const requiredFile of ["out/index.html", "out/404.html", "out/_headers"]) {
-  assert.ok(
-    existsSync(requiredFile),
-    `Missing static export artifact: ${requiredFile}`,
-  );
+for (const file of ["dist/index.html", "dist/404.html"]) {
+  assert.ok(existsSync(file), `${file} must exist`);
+  assert.ok(statSync(file).size > 0, `${file} must not be empty`);
 }
 
-const staticRoot = "out/_next/static";
-assert.ok(
-  existsSync(staticRoot),
-  `Missing Next static asset directory: ${staticRoot}`,
-);
-assert.ok(
-  readdirSync(staticRoot).length > 0,
-  "Next static asset directory is empty",
-);
+assert.ok(existsSync("dist/_headers"), "dist/_headers must exist");
 
-console.log("Verified Cloudflare Pages static export in out/");
+console.log("Static export verified");

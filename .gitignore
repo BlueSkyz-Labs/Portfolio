@@ -85,3 +85,6 @@ public/*.placeholder
 
 # one-time framework benchmark fixtures
 .tmp/framework-benchmark/
+
+# Astro
+.astro/

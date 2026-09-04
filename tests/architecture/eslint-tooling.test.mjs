@@ -1,32 +1,17 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
-test("lint tooling uses a zero-warning ESLint CLI gate with a versioned flat-config bridge", () => {
-  const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
-
-  assert.equal(packageJson.scripts.lint, "eslint . --max-warnings=0");
-  assert.equal(
-    packageJson.scripts["lint:fix"],
-    "eslint . --fix --max-warnings=0",
-  );
-  assert.ok(
-    packageJson.devDependencies["@eslint/eslintrc"],
-    "FlatCompat must be declared directly instead of relying on a transitive dependency",
-  );
-
-  assert.equal(existsSync("eslint.config.mjs"), true);
-  assert.equal(existsSync(".eslintrc.json"), false);
+test("lint tooling uses zero-warning ESLint with Astro flat config", () => {
+  const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+  assert.match(pkg.scripts.lint, /--max-warnings=0/);
+  assert.equal(pkg.devDependencies["eslint-config-next"], undefined);
+  assert.equal(pkg.devDependencies["@eslint/eslintrc"], undefined);
+  assert.ok(pkg.devDependencies["eslint-plugin-astro"]);
 
   const config = readFileSync("eslint.config.mjs", "utf8");
-  assert.match(config, /FlatCompat/);
-  assert.match(config, /next\/core-web-vitals/);
-  assert.match(config, /next\/typescript/);
-  assert.match(config, /\.next\/\*\*/);
-  assert.match(config, /out\/\*\*/);
-  assert.match(config, /const eslintConfig = \[/);
-  assert.match(config, /export default eslintConfig;/);
-
-  const lockfile = readFileSync("pnpm-lock.yaml", "utf8");
-  assert.match(lockfile, /'@eslint\/eslintrc':\n\s+specifier: \^3\.3\.6/);
+  assert.match(config, /eslint-plugin-astro/);
+  assert.doesNotMatch(config, /FlatCompat/);
+  assert.doesNotMatch(config, /next\/core-web-vitals/);
+  assert.doesNotMatch(config, /next\/typescript/);
 });

@@ -1,19 +1,17 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { defineConfig } from "eslint/config";
+import eslintPluginAstro from "eslint-plugin-astro";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
+export default defineConfig([
   {
-    ignores: [".next/**", "out/**", "node_modules/**", "next-env.d.ts"],
+    ignores: [
+      "dist/**",
+      ".astro/**",
+      "node_modules/**",
+      "playwright-report/**",
+      "test-results/**",
+      ".lighthouseci/**",
+      "out/**",
+    ],
   },
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-];
-
-export default eslintConfig;
+  ...eslintPluginAstro.configs.recommended,
+]);

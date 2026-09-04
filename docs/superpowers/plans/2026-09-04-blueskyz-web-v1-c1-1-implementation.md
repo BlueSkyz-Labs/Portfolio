@@ -405,8 +405,16 @@ body {
 ---
 import "@/styles/global.css";
 ---
+
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>BlueSkyz Labs</title></head><body><main id="main-content"><h1>BlueSkyz Labs</h1></main></body></html>
+<html lang="en">
+  <head
+    ><meta charset="utf-8" /><meta
+      name="viewport"
+      content="width=device-width"
+    /><title>BlueSkyz Labs</title></head
+  ><body><main id="main-content"><h1>BlueSkyz Labs</h1></main></body>
+</html>
 ```
 
 - [ ] **Step 9: Run green gates, then remove Next-only config**
@@ -804,12 +812,23 @@ Footer: Products/About/Contact/Support/Privacy/Security; social links only when 
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
 import "@/styles/global.css";
-interface Props { title: string; description: string; }
+interface Props {
+  title: string;
+  description: string;
+}
 const { title, description } = Astro.props;
 ---
+
 <!doctype html>
 <html lang="en">
-  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><meta name="description" content={description} /><title>{title}</title></head>
+  <head
+    ><meta charset="utf-8" /><meta
+      name="viewport"
+      content="width=device-width"
+    /><meta name="description" content={description} /><title>
+      {title}
+    </title></head
+  >
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <Header />
