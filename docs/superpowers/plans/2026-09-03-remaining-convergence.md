@@ -23,7 +23,7 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 | Product profile route `/products/[slug]/`          | Landed on `main` (#46)                                         |
 | Trust-path CTA / FlagshipProof / SoT hygiene       | Landed on `main` (#48–#54)                                     |
 | Customer copy / privacy summary / schema coherence | This hardening pass (agent-safe P1/P2)                         |
-| Live Workers surface vs `main`                     | Redeploy after merge when Builds still empty                   |
+| Live Workers surface vs `main`                     | **Recovered** via Wrangler redeploy after #55 (`ee7bd9ad…`)    |
 | Honest empty public product registry               | PASS                                                           |
 | In-repo material work                              | High-value agent-safe gaps from red-team closed in this pass   |
 | R4d Task 4 (`sgps-core` import)                    | **BLOCKED** — repo HTTP 404 from this environment              |
