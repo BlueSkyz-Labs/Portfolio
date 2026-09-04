@@ -17,19 +17,19 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 **Current baseline (2026-09-04 agent @ post-#50 + live redeploy):**
 
-| Area                                             | Status                                                            |
-| ------------------------------------------------ | ----------------------------------------------------------------- |
-| C1.1 Tasks 1–3, 5–14 technical foundation        | Landed on `main` (#43–#50)                                        |
-| Product profile route `/products/[slug]/`        | Landed on `main` (#46)                                            |
-| Trust-path CTA / FlagshipProof / SoT hygiene     | Landed on `main` (#48)                                            |
-| Live Workers surface vs `main`                   | **Recovered** via Wrangler redeploy (see redeploy evidence)       |
-| Honest empty public product registry             | PASS                                                              |
-| In-repo material work                            | Product proof + static links + WCAG 2.2 + e2e bootstrap in flight |
-| R4d Task 4 (`sgps-core` import)                  | **BLOCKED** — repo HTTP 404 from this environment                 |
-| Cloudflare Workers Builds for `blueskyz-web`     | **GAP** — Worker exists; Builds list returns 0 runs               |
-| Draft PR #33 (`/so-tro`, Next atelier)           | **DIRTY/CONFLICTING** vs Astro `main` — keep draft; do not merge  |
-| Issue #8 main ruleset                            | **Owner-only** — API cannot write rulesets                        |
-| Canonical domain / emails / legal / founder copy | **Owner/evidence**                                                |
+| Area                                             | Status                                                           |
+| ------------------------------------------------ | ---------------------------------------------------------------- |
+| C1.1 Tasks 1–3, 5–14 technical foundation        | Landed on `main` (#43–#50)                                       |
+| Product profile route `/products/[slug]/`        | Landed on `main` (#46)                                           |
+| Trust-path CTA / FlagshipProof / SoT hygiene     | Landed on `main` (#48)                                           |
+| Live Workers surface vs `main`                   | **Recovered** via Wrangler redeploy (see redeploy evidence)      |
+| Honest empty public product registry             | PASS                                                             |
+| In-repo material work                            | **Converged** after #51 — only external/owner holds remain       |
+| R4d Task 4 (`sgps-core` import)                  | **BLOCKED** — repo HTTP 404 from this environment                |
+| Cloudflare Workers Builds for `blueskyz-web`     | **GAP** — Worker exists; Builds list returns 0 runs              |
+| Draft PR #33 (`/so-tro`, Next atelier)           | **DIRTY/CONFLICTING** vs Astro `main` — keep draft; do not merge |
+| Issue #8 main ruleset                            | **Owner-only** — API cannot write rulesets                       |
+| Canonical domain / emails / legal / founder copy | **Owner/evidence**                                               |
 
 ---
 
@@ -100,6 +100,8 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 ---
 
 ## Autonomous-safe work already landed (do not redo)
+
+- Product proof contract + static links + WCAG 2.2 axe + Playwright bootstrap + live Workers redeploy evidence (#51)
 
 - Lucide v1 + SocialIcons (#36) — historical atelier era
 - Experience polish + Pages.dev smoke (#37 / #39) — historical
