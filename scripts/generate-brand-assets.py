@@ -95,7 +95,6 @@ def write_og() -> None:
 
     SOCIAL.mkdir(parents=True, exist_ok=True)
     rgb = img.convert("RGB")
-    rgb.save(PUBLIC / "og-image.png", optimize=True)
     rgb.save(SOCIAL / "og-default.png", optimize=True)
 
 

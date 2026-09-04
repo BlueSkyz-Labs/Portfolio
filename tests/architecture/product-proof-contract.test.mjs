@@ -22,9 +22,16 @@ test("product proof screenshot is a local sized artifact contract", () => {
 test("product action and proof URLs require https schemes", () => {
   assert.match(config, /httpsUrl/);
   assert.match(config, /isHttpsUrl/);
+  assert.match(config, /isNonProductionSiteUrl|isPublicClaimHttpsUrl/);
   assert.match(config, /href:\s*httpsUrl/);
   assert.match(config, /publicUrl:\s*httpsUrl/);
   assert.match(config, /repositoryUrl:\s*httpsUrl/);
+});
+
+test("public product truth rejects incoherent maturity claims", () => {
+  assert.match(config, /PUBLIC_LABEL_COHERENCE/);
+  assert.match(config, /public product cannot have private availability/);
+  assert.match(config, /publicLabel .* is incoherent with lifecycle/);
 });
 
 test("public products require verified capabilities distinct from jobs", () => {
@@ -42,7 +49,10 @@ test("FlagshipProof renders capabilities and intrinsic screenshot sizing", () =>
   assert.match(flagship, /screenshot\.height/);
 });
 
-test("product profile exposes capabilities and sized evidence image", () => {
+test("product profile exposes public status without internal enums", () => {
+  assert.match(profile, /data\.publicLabel/);
+  assert.doesNotMatch(profile, /data\.lifecycle/);
+  assert.doesNotMatch(profile, /data\.availability/);
   assert.match(profile, /Main capabilities|capabilities/);
   assert.match(profile, /screenshot\.src/);
   assert.match(profile, /width=\{screenshot\.width\}/);

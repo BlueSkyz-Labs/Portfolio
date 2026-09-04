@@ -15,21 +15,22 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 **Permission evidence:** `docs/evidence/2026-09-04-permission-blockers.md`  
 **Live redeploy evidence:** `docs/evidence/2026-09-04-workers-redeploy.md`
 
-**Current baseline (2026-09-04 agent @ post-#52 + SoT hygiene pass):**
+**Current baseline (2026-09-04 agent @ trust/UX hardening pass):**
 
-| Area                                             | Status                                                              |
-| ------------------------------------------------ | ------------------------------------------------------------------- |
-| C1.1 Tasks 1–3, 5–14 technical foundation        | Landed on `main` (#43–#52)                                          |
-| Product profile route `/products/[slug]/`        | Landed on `main` (#46)                                              |
-| Trust-path CTA / FlagshipProof / SoT hygiene     | Landed on `main` (#48–#52 + this hygiene pass)                      |
-| Live Workers surface vs `main`                   | **Recovered** via Wrangler redeploy (see redeploy evidence)         |
-| Honest empty public product registry             | PASS                                                                |
-| In-repo material work                            | **High-value gaps closed** in this pass; only external holds remain |
-| R4d Task 4 (`sgps-core` import)                  | **BLOCKED** — repo HTTP 404 from this environment                   |
-| Cloudflare Workers Builds for `blueskyz-web`     | **GAP** — Worker exists; Builds list returns 0 runs                 |
-| Draft PR #33 (`/so-tro`, Next atelier)           | **CLOSED** (superseded; do not reopen/merge into Astro `main`)      |
-| Issue #8 main ruleset                            | **Owner-only** — API cannot write rulesets                          |
-| Canonical domain / emails / legal / founder copy | **Owner/evidence**                                                  |
+| Area                                               | Status                                                         |
+| -------------------------------------------------- | -------------------------------------------------------------- |
+| C1.1 Tasks 1–3, 5–14 technical foundation          | Landed on `main` (#43–#54)                                     |
+| Product profile route `/products/[slug]/`          | Landed on `main` (#46)                                         |
+| Trust-path CTA / FlagshipProof / SoT hygiene       | Landed on `main` (#48–#54)                                     |
+| Customer copy / privacy summary / schema coherence | This hardening pass (agent-safe P1/P2)                         |
+| Live Workers surface vs `main`                     | Redeploy after merge when Builds still empty                   |
+| Honest empty public product registry               | PASS                                                           |
+| In-repo material work                              | High-value agent-safe gaps from red-team closed in this pass   |
+| R4d Task 4 (`sgps-core` import)                    | **BLOCKED** — repo HTTP 404 from this environment              |
+| Cloudflare Workers Builds for `blueskyz-web`       | **GAP** — Worker exists; Builds list returns 0 runs            |
+| Draft PR #33 (`/so-tro`, Next atelier)             | **CLOSED** (superseded; do not reopen/merge into Astro `main`) |
+| Issue #8 main ruleset                              | **Owner-only** — API cannot write rulesets                     |
+| Canonical domain / emails / legal / founder copy   | **Owner/evidence**                                             |
 
 ---
 
@@ -100,8 +101,9 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 ## Autonomous-safe work already landed (do not redo)
 
+- Customer-facing copy hygiene (no `docs/evidence` / env jargon); privacy practical summary; Support email fallback; product profile publicLabel-only; schema coherence + production claim URLs; muted AA contrast; HSTS preload deferred; JSON-LD escape; status chrome (this pass)
 - Product proof contract + static links + WCAG 2.2 axe + Playwright bootstrap + live Workers redeploy evidence (#51)
-- Public-truth rejects example/preview hosts; product URLs https-only; support recourse CTAs; Builds recipe includes `check:static-links` (this hygiene pass)
+- Public-truth rejects example/preview hosts; product URLs https-only; support recourse CTAs; Builds recipe includes `check:static-links` (#53)
 
 - Lucide v1 + SocialIcons (#36) — historical atelier era
 - Experience polish + Pages.dev smoke (#37 / #39) — historical

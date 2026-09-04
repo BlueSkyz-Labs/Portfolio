@@ -2,6 +2,7 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { isHttpsUrl } from "@/lib/https-url";
+import { isNonProductionSiteUrl } from "@/lib/truth";
 
 const lifecycle = z.enum([
   "concept",
@@ -53,8 +54,48 @@ const actionType = z.enum([
   "contact",
 ]);
 
-/** Public product links must be https — reject javascript:/data:/mailto: schemes. */
-const httpsUrl = z.url().refine(isHttpsUrl, "https URL required");
+type Lifecycle = z.infer<typeof lifecycle>;
+type Availability = z.infer<typeof availability>;
+type PublicLabel = z.infer<typeof publicLabel>;
+
+/** Public product claim URLs: https only, never local/preview/docs hosts. */
+function isPublicClaimHttpsUrl(value: string): boolean {
+  return isHttpsUrl(value) && !isNonProductionSiteUrl(value);
+}
+
+const httpsUrl = z
+  .url()
+  .refine(isPublicClaimHttpsUrl, "https production claim URL required");
+
+const PUBLIC_LABEL_COHERENCE: Record<
+  PublicLabel,
+  { lifecycles: readonly Lifecycle[]; availabilities: readonly Availability[] }
+> = {
+  Preview: {
+    lifecycles: ["prototype", "development", "beta"],
+    availabilities: ["preview", "waitlist", "invite-only", "public"],
+  },
+  "In development": {
+    lifecycles: ["concept", "prototype", "development"],
+    availabilities: ["waitlist", "preview", "invite-only"],
+  },
+  Beta: {
+    lifecycles: ["beta", "development"],
+    availabilities: ["public", "invite-only", "preview", "waitlist"],
+  },
+  Available: {
+    lifecycles: ["active", "maintenance"],
+    availabilities: ["public", "invite-only"],
+  },
+  Sunsetting: {
+    lifecycles: ["sunset", "maintenance"],
+    availabilities: ["public", "invite-only", "unavailable"],
+  },
+  Archived: {
+    lifecycles: ["archived", "sunset"],
+    availabilities: ["unavailable"],
+  },
+};
 
 const action = z.object({
   type: actionType,
@@ -123,7 +164,42 @@ const productSchema = z
       });
     }
 
+    const coherence = PUBLIC_LABEL_COHERENCE[value.publicLabel];
+    if (!coherence.lifecycles.includes(value.lifecycle)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["publicLabel"],
+        message: `publicLabel ${value.publicLabel} is incoherent with lifecycle ${value.lifecycle}`,
+      });
+    }
+    if (!coherence.availabilities.includes(value.availability)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["publicLabel"],
+        message: `publicLabel ${value.publicLabel} is incoherent with availability ${value.availability}`,
+      });
+    }
+
     if (value.public) {
+      if (value.availability === "private") {
+        ctx.addIssue({
+          code: "custom",
+          path: ["availability"],
+          message: "public product cannot have private availability",
+        });
+      }
+      if (
+        value.availability === "unavailable" &&
+        value.publicLabel !== "Sunsetting" &&
+        value.publicLabel !== "Archived"
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["availability"],
+          message:
+            "unavailable availability is only coherent with Sunsetting or Archived public labels",
+        });
+      }
       if (!value.capabilities || value.capabilities.length < 2) {
         ctx.addIssue({
           code: "custom",

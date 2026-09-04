@@ -15,6 +15,9 @@ const BANNED = [
   /\bISO\b/,
   /\bSOC\b/,
   /Have something worth making\?/i,
+  /docs\/evidence/i,
+  /PUBLIC_CONTACT_EMAIL/,
+  /PUBLIC_SECURITY_EMAIL/,
 ];
 
 for (const route of TRUST_ROUTES) {
@@ -49,6 +52,12 @@ test("/security/ exposes private vulnerability reporting CTA", async ({
 test("/about/ shows approved founder title", async ({ page }) => {
   await page.goto("/about/");
   await expect(page.getByText(/Tony Nguyen — Founder & CEO/i)).toBeVisible();
+});
+
+test("/privacy/ summarizes practical trust answers", async ({ page }) => {
+  await page.goto("/privacy/");
+  await expect(page.getByText(/What is collected/i)).toBeVisible();
+  await expect(page.getByText(/Deletion and product privacy/i)).toBeVisible();
 });
 
 test("homepage omits flagship proof without verified screenshot", async ({

@@ -46,7 +46,7 @@ import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
                   for business inquiries.
                 </>
               ) : (
-                "Business contact publishes when PUBLIC_CONTACT_EMAIL is configured for this environment."
+                "Business email publishes when this environment is configured."
               )
             }
           </p>
@@ -67,12 +67,13 @@ import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
                   , or use GitHub private vulnerability reporting.
                 </>
               ) : (
-                "Use GitHub private vulnerability reporting. PUBLIC_SECURITY_EMAIL publishes when configured."
+                "Use GitHub private vulnerability reporting. A security email publishes when this environment is configured."
               )
             }
           </p>
           <a
             href={SECURITY_ADVISORY_URL}
+            rel="noopener noreferrer"
             class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
           >
             Open private vulnerability reporting

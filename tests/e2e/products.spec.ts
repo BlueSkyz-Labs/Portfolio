@@ -11,4 +11,7 @@ test("products index is honest when the public registry is empty", async ({
   await expect(
     page.getByText(/No public products are published yet/i),
   ).toBeVisible();
+  const body = await page.locator("body").innerText();
+  expect(body).not.toMatch(/docs\/evidence/i);
+  expect(body).not.toMatch(/PUBLIC_[A-Z_]+/);
 });

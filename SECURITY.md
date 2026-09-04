@@ -7,7 +7,7 @@ Historical preview deployments (including workers.dev previews) are not independ
 
 ## Transport security
 
-Workers Static Assets ship `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` via `public/_headers` so HTTPS responses advertise HSTS.
+Workers Static Assets ship `Strict-Transport-Security: max-age=31536000; includeSubDomains` via `public/_headers` so HTTPS responses advertise HSTS. The `preload` directive is deferred until a canonical corporate domain is ready for HSTS preload submission.
 
 ## Content Security Policy
 

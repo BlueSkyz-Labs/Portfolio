@@ -11,8 +11,9 @@ test("static responses carry a safe baseline header set", () => {
   assert.match(headers, /payment=\(\)/);
   assert.match(
     headers,
-    /Strict-Transport-Security:\s*max-age=31536000;\s*includeSubDomains;\s*preload/,
+    /Strict-Transport-Security:\s*max-age=31536000;\s*includeSubDomains/,
   );
+  assert.doesNotMatch(headers, /preload/);
   assert.match(
     headers,
     /Content-Security-Policy:\s*default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none';/,

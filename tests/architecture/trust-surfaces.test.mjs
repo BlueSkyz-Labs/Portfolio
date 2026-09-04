@@ -9,6 +9,7 @@ test("support empty state offers contact and security recourse", () => {
   const support = readFileSync("src/pages/support.astro", "utf8");
   assert.match(support, /href="\/contact\/"/);
   assert.match(support, /href="\/security\/"/);
+  assert.match(support, /SITE\.contactEmail/);
   assert.match(support, /min-h-11/);
 });
 
