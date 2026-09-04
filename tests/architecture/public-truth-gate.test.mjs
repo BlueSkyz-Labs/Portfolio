@@ -45,7 +45,10 @@ test("public truth gate rejects placeholder emails", () => {
 
 test("isNonProductionSiteUrl covers local, workers.dev, and example hosts", () => {
   assert.equal(isNonProductionSiteUrl("http://localhost:4321"), true);
+  assert.equal(isNonProductionSiteUrl("https://127.0.0.1"), true);
+  assert.equal(isNonProductionSiteUrl("https://[::1]/"), true);
   assert.equal(isNonProductionSiteUrl("https://example.com"), true);
+  assert.equal(isNonProductionSiteUrl("https://foo.example"), true);
   assert.equal(
     isNonProductionSiteUrl(
       "https://blueskyz-web.thinhnguyen-km10.workers.dev/",
@@ -53,6 +56,20 @@ test("isNonProductionSiteUrl covers local, workers.dev, and example hosts", () =
     true,
   );
   assert.equal(isNonProductionSiteUrl("https://blueskyz.labs"), false);
+});
+
+test("public truth gate rejects IPv6 loopback and .example TLD", () => {
+  for (const siteUrl of ["https://[::1]", "https://docs.example"]) {
+    const errors = validatePublicTruth({
+      siteUrl,
+      contactEmail: "owner@blueskyz.labs",
+      securityEmail: "security@blueskyz.labs",
+    });
+    assert.ok(
+      errors.some((e) => e.includes("PUBLIC_SITE_URL")),
+      `expected rejection for ${siteUrl}`,
+    );
+  }
 });
 
 test("validate-public-truth script exists and does not invent production fallbacks", () => {

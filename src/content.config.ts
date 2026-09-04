@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { isHttpsUrl } from "@/lib/https-url";
 
 const lifecycle = z.enum([
   "concept",
@@ -53,9 +54,7 @@ const actionType = z.enum([
 ]);
 
 /** Public product links must be https — reject javascript:/data:/mailto: schemes. */
-const httpsUrl = z
-  .url()
-  .refine((value) => /^https:\/\//i.test(value), "https URL required");
+const httpsUrl = z.url().refine(isHttpsUrl, "https URL required");
 
 const action = z.object({
   type: actionType,

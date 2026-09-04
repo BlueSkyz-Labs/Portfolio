@@ -9,6 +9,7 @@ const RESERVED_HOST_SUFFIXES = [
   "example.com",
   "example.org",
   "example.net",
+  "example",
   "invalid",
   "localhost",
   "test",
@@ -22,10 +23,24 @@ function hostnameOf(siteUrl: string): string | null {
   }
 }
 
+/** Normalize Node/browser hostname forms (`[::1]` → `::1`). */
+function bareHostname(hostname: string): string {
+  if (hostname.startsWith("[") && hostname.endsWith("]")) {
+    return hostname.slice(1, -1);
+  }
+  return hostname;
+}
+
+function isLoopbackHost(hostname: string): boolean {
+  const bare = bareHostname(hostname);
+  return bare === "127.0.0.1" || bare === "::1" || bare === "localhost";
+}
+
 function isReservedDocumentationHost(hostname: string): boolean {
-  if (hostname === "127.0.0.1" || hostname === "::1") return true;
+  if (isLoopbackHost(hostname)) return true;
+  const bare = bareHostname(hostname);
   return RESERVED_HOST_SUFFIXES.some(
-    (suffix) => hostname === suffix || hostname.endsWith(`.${suffix}`),
+    (suffix) => bare === suffix || bare.endsWith(`.${suffix}`),
   );
 }
 

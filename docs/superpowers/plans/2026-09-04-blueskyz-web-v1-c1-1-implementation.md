@@ -945,10 +945,12 @@ const actionType = z.enum([
   "github",
   "contact",
 ]);
+// Product links: https only via src/lib/https-url.ts (reject javascript:/data:/mailto:/http:)
+const httpsUrl = z.url().refine(isHttpsUrl, "https URL required");
 const action = z.object({
   type: actionType,
   label: z.string().min(1).max(40),
-  href: z.string().url(),
+  href: httpsUrl, // z.url().refine(isHttpsUrl) — https only; see src/lib/https-url.ts
 });
 
 const productSchema = z
@@ -967,12 +969,12 @@ const productSchema = z
     proof: z
       .object({
         screenshot: z.string().optional(),
-        publicUrl: z.string().url().optional(),
-        repositoryUrl: z.string().url().optional(),
-        documentationUrl: z.string().url().optional(),
-        privacyUrl: z.string().url().optional(),
-        securityUrl: z.string().url().optional(),
-        supportUrl: z.string().url().optional(),
+        publicUrl: httpsUrl.optional(),
+        repositoryUrl: httpsUrl.optional(),
+        documentationUrl: httpsUrl.optional(),
+        privacyUrl: httpsUrl.optional(),
+        securityUrl: httpsUrl.optional(),
+        supportUrl: httpsUrl.optional(),
       })
       .refine(
         (v) => Object.values(v).some(Boolean),
@@ -1213,21 +1215,15 @@ git commit -m "feat: add product discovery and profile routes"
 
 - [ ] **Step 1: Add pure truth validation**
 
+Canonical implementation lives in `src/lib/truth.ts` (do not weaken):
+
+- `PUBLIC_SITE_URL` must be https **and** not a non-production host
+  (`localhost`, loopback IPv4/IPv6, `*.workers.dev`, RFC 2606 / `example.*`)
+- emails must match a minimal `local@domain.tld` shape (never invent addresses)
+
 ```ts
-export interface PublicTruthInput {
-  siteUrl?: string;
-  contactEmail?: string;
-  securityEmail?: string;
-}
 export function validatePublicTruth(input: PublicTruthInput): string[] {
-  const errors: string[] = [];
-  if (!input.siteUrl?.startsWith("https://"))
-    errors.push("PUBLIC_SITE_URL must be an https URL");
-  if (!input.contactEmail?.includes("@"))
-    errors.push("PUBLIC_CONTACT_EMAIL is required");
-  if (!input.securityEmail?.includes("@"))
-    errors.push("PUBLIC_SECURITY_EMAIL is required");
-  return errors;
+  // See src/lib/truth.ts — rejects reserved/preview hosts + weak emails.
 }
 ```
 

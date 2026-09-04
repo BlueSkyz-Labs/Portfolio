@@ -21,7 +21,7 @@ test("product proof screenshot is a local sized artifact contract", () => {
 
 test("product action and proof URLs require https schemes", () => {
   assert.match(config, /httpsUrl/);
-  assert.match(config, /https:\\\/\\\//);
+  assert.match(config, /isHttpsUrl/);
   assert.match(config, /href:\s*httpsUrl/);
   assert.match(config, /publicUrl:\s*httpsUrl/);
   assert.match(config, /repositoryUrl:\s*httpsUrl/);
