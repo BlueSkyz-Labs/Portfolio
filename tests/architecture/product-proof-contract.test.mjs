@@ -19,6 +19,14 @@ test("product proof screenshot is a local sized artifact contract", () => {
   assert.doesNotMatch(config, /screenshot:\s*z\.string\(\)\.optional\(\)/);
 });
 
+test("product action and proof URLs require https schemes", () => {
+  assert.match(config, /httpsUrl/);
+  assert.match(config, /https:\\\/\\\//);
+  assert.match(config, /href:\s*httpsUrl/);
+  assert.match(config, /publicUrl:\s*httpsUrl/);
+  assert.match(config, /repositoryUrl:\s*httpsUrl/);
+});
+
 test("public products require verified capabilities distinct from jobs", () => {
   assert.match(config, /capabilities/);
   assert.match(config, /jobs/);

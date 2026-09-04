@@ -76,11 +76,11 @@ Production:
 ```text
 repo: BlueSkyz-Labs/SGPS-Marketing
 branch: main
-command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget
+command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget && pnpm check:static-links
 preview branches: enabled
 ```
 
-Preview builds may omit `validate:public-truth` when production-only domain/email variables are intentionally absent, but must still build and pass static gates.
+Preview builds may omit `validate:public-truth` when production-only domain/email variables are intentionally absent, but must still build and pass static gates (`check:client-budget`, `check:static-links`).
 
 **Do not** recreate this pipeline in `.github/workflows`.
 
@@ -92,8 +92,8 @@ Legacy Cloudflare Pages project `blueskyz-labs-portfolio` is superseded by Worke
 
 `pnpm validate:public-truth` requires:
 
-- `PUBLIC_SITE_URL` (https)
-- `PUBLIC_CONTACT_EMAIL`
-- `PUBLIC_SECURITY_EMAIL`
+- `PUBLIC_SITE_URL` (canonical corporate https domain — not localhost, `*.workers.dev`, or RFC 2606 / `example.*` documentation hosts)
+- `PUBLIC_CONTACT_EMAIL` (plausible `local@domain.tld`)
+- `PUBLIC_SECURITY_EMAIL` (plausible `local@domain.tld`)
 
 Production promotion is blocked until these are owner-supplied. Do not invent domain/email fallbacks.

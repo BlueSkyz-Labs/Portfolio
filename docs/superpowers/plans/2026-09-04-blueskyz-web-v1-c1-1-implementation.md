@@ -1439,7 +1439,7 @@ Production:
 ```text
 repo: BlueSkyz-Labs/SGPS-Marketing
 branch: main
-command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget
+command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget && pnpm check:static-links
 preview branches: enabled
 ```
 

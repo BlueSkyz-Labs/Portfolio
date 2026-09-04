@@ -19,16 +19,16 @@ test("SEO helpers keep absolute URLs and Organization JSON-LD truthful", async (
   assert.equal(org.url, "https://example.com/");
 });
 
-test("BaseLayout wires canonical, OG, and structured data without staging hard-codes", () => {
+test("BaseLayout wires canonical, OG, and structured data via shared non-prod helper", () => {
   const layout = readFileSync("src/layouts/BaseLayout.astro", "utf8");
   assert.match(layout, /rel="canonical"/);
   assert.match(layout, /og:image/);
   assert.match(layout, /application\/ld\+json/);
   assert.match(layout, /organizationJsonLd/);
   assert.match(layout, /websiteJsonLd/);
-  assert.match(layout, /isLocalFallback/);
+  assert.match(layout, /isNonProductionSiteUrl/);
   assert.doesNotMatch(layout, /portfolio\.tonydemo\.com/);
-  assert.doesNotMatch(layout, /workers\.dev/);
+  assert.doesNotMatch(layout, /isLocalFallback/);
 });
 
 test("robots and sitemap endpoints exist and reference public routes only", () => {
@@ -36,7 +36,8 @@ test("robots and sitemap endpoints exist and reference public routes only", () =
   assert.equal(existsSync("src/pages/sitemap.xml.ts"), true);
   const robots = readFileSync("src/pages/robots.txt.ts", "utf8");
   const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
-  assert.match(robots, /isLocalFallback|Disallow: \//);
+  assert.match(robots, /isNonProductionSiteUrl/);
+  assert.match(robots, /Disallow: \//);
   assert.match(sitemap, /getPublicProducts/);
   assert.match(sitemap, /PUBLIC_STATIC_PATHS/);
   assert.doesNotMatch(sitemap, /portfolio\.tonydemo\.com/);

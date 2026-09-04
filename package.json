@@ -26,7 +26,7 @@
     "check:client-budget": "node scripts/check-client-budget.mjs",
     "check:static-links": "node scripts/check-static-links.mjs",
     "deploy:workers": "node scripts/deploy-workers.mjs",
-    "lighthouse": "PUBLIC_SITE_URL=https://example.com pnpm build && lhci autorun",
+    "lighthouse": "PUBLIC_SITE_URL=http://127.0.0.1:3000 pnpm build && lhci autorun",
     "prepare": "git config core.hooksPath .githooks || true",
     "validate:public-truth": "node scripts/validate-public-truth.mjs"
   },

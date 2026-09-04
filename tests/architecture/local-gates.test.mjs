@@ -15,6 +15,7 @@ test("repository installs a versioned pre-commit gate instead of silently missin
     "pnpm format:check",
     "pnpm build",
     "pnpm check:client-budget",
+    "pnpm check:static-links",
   ]) {
     assert.match(
       hook,

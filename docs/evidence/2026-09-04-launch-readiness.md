@@ -24,7 +24,7 @@ Technical implementation of C1.1 Tasks 1–3 and 5–14 are complete on `main`. 
 
 ## External holds (unchanged)
 
-- Draft PR **#33** (`/so-tro`) — owner-gated; do not merge.
+- PR **#33** (`/so-tro`) — **CLOSED** (superseded by Astro C1.1; do not reopen/merge).
 - Issue **#8** main ruleset — owner-gated.
 - DNS for `portfolio.tonydemo.com` — owner-gated; not used as canonical.
 - Task 4: `BlueSkyz-Labs/sgps-core` not readable from this environment (HTTP 404).
@@ -38,6 +38,7 @@ pnpm install --frozen-lockfile
 pnpm validate:public-truth
 pnpm build
 pnpm check:client-budget
+pnpm check:static-links
 ```
 
 Workers Builds should run that sequence on `main` with preview branches enabled. Do not re-create as GitHub Actions workload.
