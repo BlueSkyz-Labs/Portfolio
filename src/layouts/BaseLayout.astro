@@ -2,15 +2,35 @@
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
 import { SITE } from "@/data/site";
+import {
+  absoluteUrl,
+  canonicalForPath,
+  defaultOgImagePath,
+  organizationJsonLd,
+  websiteJsonLd,
+} from "@/lib/seo";
 import "@/styles/global.css";
 
 interface Props {
   title: string;
   description: string;
+  path?: string;
+  ogImage?: string;
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const {
+  title,
+  description,
+  path = Astro.url.pathname,
+  ogImage = defaultOgImagePath(),
+  noindex = false,
+} = Astro.props;
+
 const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`;
+const canonical = canonicalForPath(path, SITE.url);
+const ogImageUrl = absoluteUrl(SITE.url, ogImage);
+const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
 ---
 
 <!doctype html>
@@ -20,6 +40,27 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
+    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex, nofollow" /> : null}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    {
+      structuredData.map((data) => (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(data)}
+        />
+      ))
+    }
   </head>
   <body class="flex min-h-screen flex-col">
     <a class="skip-link" href="#main-content">Skip to main content</a>
