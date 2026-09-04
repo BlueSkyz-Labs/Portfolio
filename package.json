@@ -23,7 +23,8 @@
     "test:architecture": "node --test tests/architecture/*.test.mjs",
     "test:e2e": "playwright test --project=chromium --project=firefox --project=webkit --project=mobile-chromium",
     "lighthouse": "lhci autorun",
-    "prepare": "git config core.hooksPath .githooks || true"
+    "prepare": "git config core.hooksPath .githooks || true",
+    "validate:public-truth": "node scripts/validate-public-truth.mjs"
   },
   "dependencies": {
     "astro": "^7.3.1"

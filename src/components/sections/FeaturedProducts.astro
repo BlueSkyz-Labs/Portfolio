@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ProductCard from "@/components/product/ProductCard.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+
+interface Props {
+  products: CollectionEntry<"products">[];
+}
+
+const { products } = Astro.props;
+const hero = products.find((p) => p.data.featuredTier === "hero");
+const featured = products
+  .filter((p) => p.data.featuredTier === "featured")
+  .slice(0, 2);
+const ecosystem = products.filter((p) => p.data.featuredTier === "ecosystem");
+---
+
+<section
+  class="border-b border-[var(--border-subtle)] py-16"
+  aria-labelledby="featured-title"
+>
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h2 id="featured-title" class="text-3xl font-semibold tracking-tight">
+        Featured products
+      </h2>
+      <p class="mt-3 max-w-2xl text-[var(--text-secondary)]">
+        Only products with verified public evidence appear here.
+      </p>
+    </div>
+    <ButtonLink href="/products/" variant="secondary"
+      >Explore all products</ButtonLink
+    >
+  </div>
+
+  {
+    products.length === 0 ? (
+      <p class="mt-8 rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-white p-6 text-[var(--text-secondary)]">
+        Public product listings publish when lifecycle, availability, and proof
+        gates pass. See the current audit for candidates under review.
+      </p>
+    ) : (
+      <div class="mt-8 grid gap-4">
+        {hero ? <ProductCard product={hero} emphasis="hero" /> : null}
+        {(featured.length > 0 || ecosystem.length > 0) && (
+          <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {featured.map((product) => (
+              <ProductCard product={product} />
+            ))}
+            {ecosystem.map((product) => (
+              <ProductCard product={product} />
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+</section>

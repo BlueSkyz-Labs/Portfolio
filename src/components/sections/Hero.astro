@@ -1,0 +1,25 @@
+---
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { SITE } from "@/data/site";
+---
+
+<section
+  class="border-b border-[var(--border-subtle)] py-16 sm:py-24"
+  aria-labelledby="hero-title"
+>
+  <p class="text-sm font-medium text-[var(--text-muted)]">{SITE.name}</p>
+  <h1
+    id="hero-title"
+    class="mt-4 max-w-[18ch] text-4xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-5xl lg:text-6xl"
+  >
+    {SITE.proposition}
+  </h1>
+  <p class="mt-5 max-w-xl text-lg text-[var(--text-secondary)]">
+    Thoughtful digital products shaped around real people, real decisions, and
+    real-world use.
+  </p>
+  <div class="mt-8 flex flex-wrap gap-3">
+    <ButtonLink href="/products/">Explore products</ButtonLink>
+    <ButtonLink href="/about/" variant="secondary">About BlueSkyz</ButtonLink>
+  </div>
+</section>
