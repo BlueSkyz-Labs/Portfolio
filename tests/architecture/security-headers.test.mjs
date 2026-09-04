@@ -8,5 +8,17 @@ test("static responses carry a safe baseline header set", () => {
   assert.match(headers, /X-Frame-Options:\s*DENY/);
   assert.match(headers, /Referrer-Policy:\s*strict-origin-when-cross-origin/);
   assert.match(headers, /Permissions-Policy:/);
+  assert.match(
+    headers,
+    /Content-Security-Policy:\s*default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none';/,
+  );
+  assert.match(headers, /script-src 'self'/);
+  assert.match(headers, /style-src 'self' 'unsafe-inline'/);
   assert.doesNotMatch(headers, /'unsafe-eval'/);
+  const cspLine =
+    headers
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .find((line) => line.startsWith("Content-Security-Policy:")) ?? "";
+  assert.doesNotMatch(cspLine, /(?:^|[\s;])\*(?:[\s;]|$)/);
 });

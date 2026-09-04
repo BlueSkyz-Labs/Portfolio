@@ -1,9 +1,11 @@
 ---
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import Reveal from "@/components/ui/Reveal.astro";
 import { SITE } from "@/data/site";
 ---
 
-<section
+<Reveal
+  as="section"
   class="border-b border-[var(--border-subtle)] py-16 sm:py-24"
   aria-labelledby="hero-title"
 >
@@ -22,4 +24,4 @@ import { SITE } from "@/data/site";
     <ButtonLink href="/products/">Explore products</ButtonLink>
     <ButtonLink href="/about/" variant="secondary">About BlueSkyz</ButtonLink>
   </div>
-</section>
+</Reveal>
