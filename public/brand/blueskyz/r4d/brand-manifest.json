@@ -1,0 +1,16 @@
+{
+  "assetId": "BLUESKYZ-MASTERBRAND-R4D",
+  "assetVersion": "1.1.0",
+  "canonicalName": "BlueSkyz Labs",
+  "status": "IDENTITY_PROTOTYPE_READY",
+  "designState": "DESIGN_FREEZE_CANDIDATE",
+  "sourceRepository": "BlueSkyz-Labs/sgps-core",
+  "sourcePath": "standards/experience/brand/assets/blueskyz/r4d-v1.1/",
+  "sourceRevision": "28dbbc7e28442173c367212096e9095b9e09c0d6",
+  "runtimeFontDependencyForWordmark": "NONE_VECTOR_OUTLINES",
+  "fileSha256": {
+    "symbol_mono_ink": "f566a1a1104de1a3a27011a569d2f49f7a93339663927cf183a2734ce0a019d4",
+    "micro_mark_ink": "ce83f517aaec32239805d5a8937f38bf7c2e7c1919509bd7b02272e09ab18469",
+    "brand_tokens": "7b8008bf93f5bb0d1ab48f33d7d12cde8fbf7ce1b0ed3ab5944c21f6132b021c"
+  }
+}

@@ -1,0 +1,55 @@
+---
+import { SITE } from "@/data/site";
+
+interface Props {
+  size?: "header" | "hero" | "footer";
+  href?: string;
+}
+
+const { size = "header", href } = Astro.props;
+
+function lockupPx(value: "header" | "hero" | "footer"): number {
+  switch (value) {
+    case "header":
+    case "footer":
+      return 32;
+    case "hero":
+      return 56;
+    default: {
+      const _exhaustive: never = value;
+      return _exhaustive;
+    }
+  }
+}
+
+const px = lockupPx(size);
+const Tag = href ? "a" : "p";
+const className = [
+  "brand-lockup inline-flex min-h-11 items-center gap-2.5 tracking-tight no-underline",
+  size === "header" &&
+    "brand-signal text-base font-semibold text-[var(--text-primary)] sm:text-lg",
+  size === "hero" &&
+    "brand-signal text-2xl font-semibold text-[var(--text-primary)] sm:text-3xl",
+  size === "footer" && "font-semibold text-[var(--brand-porcelain)]",
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<Tag href={href} class={className}>
+  <span
+    class:list={[
+      "inline-flex shrink-0 items-center justify-center",
+      size === "footer" && "rounded-md bg-[var(--brand-porcelain)] p-1",
+    ]}
+  >
+    <img
+      src="/brand/blueskyz/r4d/symbol_mono_ink.svg"
+      alt=""
+      width={px}
+      height={px}
+      class="block"
+    />
+  </span>
+  <span>{SITE.name}</span>
+</Tag>

@@ -14,6 +14,8 @@ test("brand asset generator projects C1.1 primitives only", () => {
     /Quiet Luxury|champagne|Cormorant|#C9A962|GOLD\s*=/i,
   );
   assert.match(source, /Does not invent R4d geometry/);
+  assert.match(source, /symbol_mono_ink\.svg/);
+  assert.match(source, /require_r4d_symbol/);
 });
 
 test("committed OG assets exist for masterbrand social previews", () => {

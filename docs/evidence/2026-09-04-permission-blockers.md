@@ -52,13 +52,16 @@ Evidence: `docs/evidence/2026-09-05-owner-domain-sgps-core.md`.
 
 ## 3) R4d / sgps-core
 
-`BlueSkyz-Labs/sgps-core` exists (Cloudflare GitHub App lists `repo_id=1336680359`)
-but returns HTTP 404 to Cursor/`gh` and to `PORTFOLIO_GITHUB_TOKEN`. Cursor App
-install is `repository_selection=selected` with **only** `SGPS-Marketing`.
+**C1.1 Task 4 projection landed 2026-09-05** from `sgps-core` main
+`28dbbc7e28442173c367212096e9095b9e09c0d6` using `PORTFOLIO_GITHUB_TOKEN`.
+Evidence: `docs/evidence/2026-09-05-r4d-sgps-core-import.md`.
 
-**Owner fix:** GitHub → Org `BlueSkyz-Labs` → GitHub Apps → **Cursor** → add
-repo `sgps-core` (or All repositories). Cloudflare connect ≠ Cursor App grant.
-Evidence: `docs/evidence/2026-09-05-owner-domain-sgps-core.md`.
+Cursor `gh` / GitHub App install is still `repository_selection=selected` with
+**only** `SGPS-Marketing` (`sgps-core` → HTTP 404). Cloudflare GitHub App still
+lists `sgps-core` (`repo_id=1336680359`).
+
+**Owner fix (optional, for future Cursor `gh` reads):** GitHub → Org
+`BlueSkyz-Labs` → GitHub Apps → **Cursor** → add repo `sgps-core`.
 
 ## 4) Production truth env
 
