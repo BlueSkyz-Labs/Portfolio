@@ -7,25 +7,27 @@ const m = JSON.parse(
   readFileSync("public/brand/blueskyz/r4d/brand-manifest.json", "utf8"),
 );
 
-test("R4d projection preserves candidate provenance", () => {
+test("R4d kit projection preserves candidate provenance", () => {
   assert.equal(m.assetId, "BLUESKYZ-MASTERBRAND-R4D");
   assert.equal(m.assetVersion, "1.1.0");
   assert.equal(m.canonicalName, "BlueSkyz Labs");
   assert.equal(m.status, "IDENTITY_PROTOTYPE_READY");
   assert.equal(m.designState, "DESIGN_FREEZE_CANDIDATE");
-  assert.match(m.sourceRevision, /^[0-9a-f]{40}$/);
+  assert.equal(m.canonicalMasterbrandPromoted, false);
+  assert.equal(
+    m.kitPackage,
+    "BlueSkyz_Identity_R4d_Production_Master_Candidate_v1.1",
+  );
   assert.equal(m.runtimeFontDependencyForWordmark, "NONE_VECTOR_OUTLINES");
+  assert.equal(existsSync(m.kitPath), true);
 });
 
-test("R4d files are the exact sgps-core bytes recorded in the manifest", () => {
-  assert.equal(m.sourceRepository, "BlueSkyz-Labs/sgps-core");
-  assert.equal(
-    m.sourcePath,
-    "standards/experience/brand/assets/blueskyz/r4d-v1.1/",
-  );
+test("R4d production masters match brand-manifest digests", () => {
   const files = {
     "symbol_mono_ink.svg": m.fileSha256.symbol_mono_ink,
     "micro_mark_ink.svg": m.fileSha256.micro_mark_ink,
+    "lockup_horizontal_dark.svg": m.fileSha256.lockup_horizontal_dark,
+    "lockup_horizontal_light.svg": m.fileSha256.lockup_horizontal_light,
     "brand_tokens.json": m.fileSha256.brand_tokens,
   };
   for (const [name, expected] of Object.entries(files)) {
@@ -39,11 +41,11 @@ test("R4d files are the exact sgps-core bytes recorded in the manifest", () => {
   }
 });
 
-test("header and footer use exact R4d symbol plus live text", () => {
+test("header and footer use R4d outlined horizontal lockups", () => {
   const lockup = readFileSync("src/components/brand/BrandLockup.astro", "utf8");
-  assert.match(lockup, /\/brand\/blueskyz\/r4d\/symbol_mono_ink\.svg/);
-  assert.match(lockup, /SITE\.name/);
-  assert.doesNotMatch(lockup, /wordmark.*\.svg/i);
+  assert.match(lockup, /\/brand\/blueskyz\/r4d\/lockup_horizontal_dark\.svg/);
+  assert.match(lockup, /\/brand\/blueskyz\/r4d\/lockup_horizontal_light\.svg/);
+  assert.doesNotMatch(lockup, /SITE\.name/);
   for (const path of [
     "src/components/layout/Header.astro",
     "src/components/layout/Footer.astro",
