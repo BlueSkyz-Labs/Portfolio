@@ -25,7 +25,7 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 | Customer copy / empty-state CTA / schema CTA truth | Landed (#55–#57)                                                                                 |
 | Staging-host claim denylist + non-prod sitemap/404 | Landed (#57)                                                                                     |
 | Empty-email Act path + stable workers.dev noindex  | This pass (`docs/evidence/2026-09-05-act-path-workers-noindex.md`)                               |
-| Live Workers surface vs `main`                     | Reconcile after merge — Wrangler recovery still available                                        |
+| Live Workers surface vs `main`                     | **IN SYNC** post-#64 (`a926019`, Builds `c03d83fa…`)                                             |
 | Honest empty public product registry               | PASS                                                                                             |
 | In-repo material work                              | Prior “exhausted” claim falsified; this pass closes new P1s                                      |
 | R4d Task 4 (`sgps-core` import)                    | **LANDED** this pass — SHA `28dbbc7e…` via `PORTFOLIO_GITHUB_TOKEN`; Cursor App still omits repo |
