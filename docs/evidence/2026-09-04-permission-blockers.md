@@ -44,14 +44,21 @@ Historical gap note: `docs/evidence/2026-09-04-workers-builds-gap.md`.
 Deep link (settings still useful for env/truth vars):  
 https://dash.cloudflare.com/0dd046dab63171c38a6548642bc9f2d4/workers/services/view/blueskyz-web/settings
 
-Remaining Cloudflare owner action: when canonical domain + production emails
-exist, add `pnpm validate:public-truth` to the production trigger and set
-production env vars (not inventable by agent).
+Temporary domain (owner 2026-09-05): `PUBLIC_SITE_URL=https://tonydemo.com`
+set on Builds triggers; custom domains `tonydemo.com` / `www` / `blueskyz`
+attached to `blueskyz-web`. Emails still empty — keep
+`pnpm validate:public-truth` **out** of build until owner supplies them.
+Evidence: `docs/evidence/2026-09-05-owner-domain-sgps-core.md`.
 
 ## 3) R4d / sgps-core
 
-`BlueSkyz-Labs/sgps-core` returns HTTP 404 to this agent. Grant read access to that
-private repo (or publish the R4d v1.1 asset projection) before Task 4 can complete.
+`BlueSkyz-Labs/sgps-core` exists (Cloudflare GitHub App lists `repo_id=1336680359`)
+but returns HTTP 404 to Cursor/`gh` and to `PORTFOLIO_GITHUB_TOKEN`. Cursor App
+install is `repository_selection=selected` with **only** `SGPS-Marketing`.
+
+**Owner fix:** GitHub → Org `BlueSkyz-Labs` → GitHub Apps → **Cursor** → add
+repo `sgps-core` (or All repositories). Cloudflare connect ≠ Cursor App grant.
+Evidence: `docs/evidence/2026-09-05-owner-domain-sgps-core.md`.
 
 ## 4) Production truth env
 
@@ -85,5 +92,5 @@ Date/HEAD: post-redeploy + product-proof/QA hardening branch (2026-09-04T06:50Z)
 ### Unblock paths (remaining)
 
 **A — Workers Builds Git Connect:** **DONE** (agent API, 2026-09-05).  
-**B — Agent recovery redeploy (still available):** `PUBLIC_SITE_URL=https://blueskyz-web.thinhnguyen-km10.workers.dev pnpm deploy:workers`  
-**C — Still owner-gated:** Issue #8 ruleset write; `sgps-core`/R4d read; canonical domain + production emails for `validate:public-truth`.
+**B — Agent recovery redeploy:** `PUBLIC_SITE_URL=https://tonydemo.com pnpm deploy:workers` (temporary owner domain; emails still empty).  
+**C — Still owner-gated:** Issue #8 ruleset (deferred by owner); add `sgps-core` to Cursor GitHub App selected repos; production emails for `validate:public-truth`.
