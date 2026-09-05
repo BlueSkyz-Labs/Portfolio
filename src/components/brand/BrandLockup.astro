@@ -1,6 +1,4 @@
 ---
-import { SITE } from "@/data/site";
-
 interface Props {
   size?: "header" | "hero" | "footer";
   href?: string;
@@ -8,13 +6,33 @@ interface Props {
 
 const { size = "header", href } = Astro.props;
 
-function lockupPx(value: "header" | "hero" | "footer"): number {
+type LockupGeometry = {
+  height: number;
+  width: number;
+  src: string;
+};
+
+function lockupGeometry(value: "header" | "hero" | "footer"): LockupGeometry {
+  // Horizontal lockup viewBox 900×190 → keep aspect 900/190 ≈ 4.737
   switch (value) {
     case "header":
-    case "footer":
-      return 32;
+      return {
+        height: 28,
+        width: 133,
+        src: "/brand/blueskyz/r4d/lockup_horizontal_dark.svg",
+      };
     case "hero":
-      return 56;
+      return {
+        height: 44,
+        width: 208,
+        src: "/brand/blueskyz/r4d/lockup_horizontal_dark.svg",
+      };
+    case "footer":
+      return {
+        height: 28,
+        width: 133,
+        src: "/brand/blueskyz/r4d/lockup_horizontal_light.svg",
+      };
     default: {
       const _exhaustive: never = value;
       return _exhaustive;
@@ -22,34 +40,24 @@ function lockupPx(value: "header" | "hero" | "footer"): number {
   }
 }
 
-const px = lockupPx(size);
+const geometry = lockupGeometry(size);
 const Tag = href ? "a" : "p";
 const className = [
-  "brand-lockup inline-flex min-h-11 items-center gap-2.5 tracking-tight no-underline",
-  size === "header" &&
-    "brand-signal text-base font-semibold text-[var(--text-primary)] sm:text-lg",
-  size === "hero" &&
-    "brand-signal text-2xl font-semibold text-[var(--text-primary)] sm:text-3xl",
-  size === "footer" && "font-semibold text-[var(--brand-porcelain)]",
+  "brand-lockup inline-flex min-h-11 items-center no-underline",
+  size === "header" && "brand-signal",
+  size === "hero" && "brand-signal",
 ]
   .filter(Boolean)
   .join(" ");
 ---
 
-<Tag href={href} class={className}>
-  <span
-    class:list={[
-      "inline-flex shrink-0 items-center justify-center",
-      size === "footer" && "rounded-md bg-[var(--brand-porcelain)] p-1",
-    ]}
-  >
-    <img
-      src="/brand/blueskyz/r4d/symbol_mono_ink.svg"
-      alt=""
-      width={px}
-      height={px}
-      class="block"
-    />
-  </span>
-  <span>{SITE.name}</span>
+<Tag href={href} class={className} aria-label="BlueSkyz Labs">
+  <img
+    src={geometry.src}
+    alt="BlueSkyz Labs"
+    width={geometry.width}
+    height={geometry.height}
+    class="block h-auto max-w-full"
+    decoding="async"
+  />
 </Tag>

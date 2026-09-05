@@ -19,8 +19,8 @@ test("brand asset generator projects C1.1 primitives only", () => {
   assert.match(source, /symbol_mono_ink\.svg/);
   assert.match(source, /micro_mark_ink\.svg/);
   assert.match(source, /require_r4d_symbol/);
-  assert.match(source, /rsvg-convert/);
-  assert.match(source, /rasterize_svg/);
+  assert.match(source, /horizontal_light_1800\.png|rsvg-convert/);
+  assert.match(source, /brand_mark_for_og|rasterize_svg/);
   assert.doesNotMatch(source, /rounded_rectangle/);
 });
 

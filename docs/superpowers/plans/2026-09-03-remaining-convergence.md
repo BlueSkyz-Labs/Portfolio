@@ -75,7 +75,8 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 - [ ] Add `sgps-core` to **Cursor** GitHub App selected repos (still `selected` + only `SGPS-Marketing`; `gh api /installation/repositories` does not list `sgps-core`)
 - [x] Import exact `symbol_mono_ink.svg`, `micro_mark_ink.svg`, `brand_tokens.json` + manifest from `sgps-core` main `28dbbc7e28442173c367212096e9095b9e09c0d6` (`PORTFOLIO_GITHUB_TOKEN`)
-- [x] Replace text-only lockup with symbol + live text until outlined wordmark exists
+- [x] Owner Production Master Candidate v1.1 applied (outlined lockups/wordmarks + web icons)
+- [x] Site uses kit horizontal lockup SVG; evidence `docs/evidence/2026-09-05-r4d-branding-kit-applied.md`
 - [x] Rasterize committed R4d SVG into favicon.ico + social OG (no geometric placeholder)
 - [x] Empty public registry: email-aware Act soft-land (Contact if email; else About/Security; omit hollow Featured)
 - Evidence: `docs/evidence/2026-09-05-r4d-sgps-core-import.md`, `docs/evidence/2026-09-05-r4d-social-empty-ux.md`
