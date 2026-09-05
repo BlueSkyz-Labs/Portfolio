@@ -1,22 +1,27 @@
 # Workers Builds gap — blueskyz-web
 
+> **Superseded 2026-09-05.** Git Connect + first successful build landed via
+> Builds API. See `docs/evidence/2026-09-05-workers-builds-connected.md`.
+> Historical gap narrative below retained for audit trail.
+
 Date: 2026-09-04  
 Worker: `blueskyz-web` (`8a8fece25ca94b0cb05bcabac63c9020`)  
 Account: `0dd046dab63171c38a6548642bc9f2d4`  
 Live preview observed: `https://blueskyz-web.thinhnguyen-km10.workers.dev/` (HTTP 200; post-redeploy surface)
 
-## Finding
+## Finding (historical)
 
 Cloudflare Workers Builds API listing for this Worker returned **0 builds**
 (`total_count=0`) on re-verify **2026-09-04T06:50Z**. The Worker itself exists
 and now serves the current Astro static site after an agent Wrangler redeploy
 (see `docs/evidence/2026-09-04-workers-redeploy.md`), but the preferred remote
-promotion path from ADR 0002 / QA_STRATEGY is not yet emitting build records.
+promotion path from ADR 0002 / QA_STRATEGY was not yet emitting build records.
 
 Agent Cloudflare MCP can **read** Workers/Builds metadata but has **no write
 tool** to attach a Git repository to Workers Builds. Shell can one-shot
-`wrangler deploy` with `CLOUDFLARE_API_TOKEN` via `pnpm deploy:workers`; Builds
-Git Connect remains an owner dashboard action for steady-state CI.
+`wrangler deploy` with `CLOUDFLARE_API_TOKEN` via `pnpm deploy:workers`. Builds
+Git Connect was later completed through the **Builds REST API** (2026-09-05),
+not the dashboard.
 
 ## Owner action (least privilege)
 

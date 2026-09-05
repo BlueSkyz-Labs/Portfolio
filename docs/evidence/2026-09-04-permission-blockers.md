@@ -3,7 +3,9 @@
 Evidence for external holds that still block remote promotion / governance.
 PRs **#46–#50** are merged on `main`. Agent session at **2026-09-04T06:50Z**
 closed the live Workers drift via Wrangler redeploy when `CLOUDFLARE_API_TOKEN`
-became available. Workers Builds Git Connect and GitHub rulesets remain
+became available. Workers Builds Git Connect was later closed by agent via the
+Builds REST API on **2026-09-05** (see
+`docs/evidence/2026-09-05-workers-builds-connected.md`). GitHub rulesets remain
 owner-gated.
 
 ## 1) GitHub — merge / ruleset / PR moderation
@@ -33,14 +35,18 @@ owner-gated.
 
 ## 2) Cloudflare — Workers Builds Git attach
 
-See `docs/evidence/2026-09-04-workers-builds-gap.md` and
-`docs/evidence/2026-09-04-workers-redeploy.md`.
+**CLOSED 2026-09-05** by agent via Builds API (repo connection + production/
+preview triggers + successful build `2fa74438-1fc0-408c-beb2-70eeb653c6bc`).
+Evidence: `docs/evidence/2026-09-05-workers-builds-connected.md`.
 
-Deep link:  
+Historical gap note: `docs/evidence/2026-09-04-workers-builds-gap.md`.
+
+Deep link (settings still useful for env/truth vars):  
 https://dash.cloudflare.com/0dd046dab63171c38a6548642bc9f2d4/workers/services/view/blueskyz-web/settings
 
-Live surface was recovered by agent Wrangler redeploy (2026-09-04). Builds list
-still `total_count=0` — Connect Git remains the steady-state promotion path.
+Remaining Cloudflare owner action: when canonical domain + production emails
+exist, add `pnpm validate:public-truth` to the production trigger and set
+production env vars (not inventable by agent).
 
 ## 3) R4d / sgps-core
 
@@ -70,7 +76,7 @@ Date/HEAD: post-redeploy + product-proof/QA hardening branch (2026-09-04T06:50Z)
 | Live `/security/` advisory CTA                 | **PASS** after Wrangler redeploy                                                               |
 | Live HSTS + extended Permissions-Policy        | **PASS**                                                                                       |
 | Live canonical on workers.dev                  | **PASS** (`https://blueskyz-web…workers.dev/...`) after rebuild with `PUBLIC_SITE_URL`         |
-| Workers Builds list                            | `total_count=0` (still owner Connect)                                                          |
+| Workers Builds list                            | **PASS** `total_count≥1` after API Connect (2026-09-05)                                        |
 | Shell Cloudflare secrets                       | `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` present (redeploy works)                      |
 | GitHub rulesets                                | `[]`                                                                                           |
 | Close/comment #33 / Issue #8 comment / ruleset | #33 already CLOSED; Issue #8 comment / ruleset write still `403`                               |
@@ -78,9 +84,6 @@ Date/HEAD: post-redeploy + product-proof/QA hardening branch (2026-09-04T06:50Z)
 
 ### Unblock paths (remaining)
 
-**A — Preferred steady state:** Dashboard Connect Git → Workers Builds.  
-Deep link: https://dash.cloudflare.com/0dd046dab63171c38a6548642bc9f2d4/workers/services/view/blueskyz-web/settings  
-Docs: https://developers.cloudflare.com/workers/ci-cd/builds/
-
-**B — Agent recovery redeploy (available now):** `PUBLIC_SITE_URL=https://blueskyz-web.thinhnguyen-km10.workers.dev pnpm deploy:workers`  
-Token scopes already proven sufficient for Static Assets deploy of `blueskyz-web`. Prefer A for ongoing CI.
+**A — Workers Builds Git Connect:** **DONE** (agent API, 2026-09-05).  
+**B — Agent recovery redeploy (still available):** `PUBLIC_SITE_URL=https://blueskyz-web.thinhnguyen-km10.workers.dev pnpm deploy:workers`  
+**C — Still owner-gated:** Issue #8 ruleset write; `sgps-core`/R4d read; canonical domain + production emails for `validate:public-truth`.

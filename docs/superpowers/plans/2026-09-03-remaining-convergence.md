@@ -17,21 +17,21 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 **Current baseline (2026-09-05 agent @ trust/SEO/truth hardening pass):**
 
-| Area                                               | Status                                                         |
-| -------------------------------------------------- | -------------------------------------------------------------- |
-| C1.1 Tasks 1–3, 5–14 technical foundation          | Landed on `main` (#43–#54)                                     |
-| Product profile route `/products/[slug]/`          | Landed on `main` (#46)                                         |
-| Trust-path CTA / FlagshipProof / SoT hygiene       | Landed on `main` (#48–#54)                                     |
-| Customer copy / empty-state CTA / schema CTA truth | This hardening pass (agent-safe P1)                            |
-| Staging-host claim denylist + non-prod sitemap/404 | This hardening pass (agent-safe P1)                            |
-| Live Workers surface vs `main`                     | Reconcile after merge — Wrangler recovery still available      |
-| Honest empty public product registry               | PASS                                                           |
-| In-repo material work                              | Prior “exhausted” claim falsified; this pass closes new P1s    |
-| R4d Task 4 (`sgps-core` import)                    | **BLOCKED** — repo HTTP 404 from this environment              |
-| Cloudflare Workers Builds for `blueskyz-web`       | **GAP** — Worker exists; Builds list returns 0 runs            |
-| Draft PR #33 (`/so-tro`, Next atelier)             | **CLOSED** (superseded; do not reopen/merge into Astro `main`) |
-| Issue #8 main ruleset                              | **Owner-only** — API cannot write rulesets                     |
-| Canonical domain / emails / legal / founder copy   | **Owner/evidence**                                             |
+| Area                                               | Status                                                          |
+| -------------------------------------------------- | --------------------------------------------------------------- |
+| C1.1 Tasks 1–3, 5–14 technical foundation          | Landed on `main` (#43–#54)                                      |
+| Product profile route `/products/[slug]/`          | Landed on `main` (#46)                                          |
+| Trust-path CTA / FlagshipProof / SoT hygiene       | Landed on `main` (#48–#54)                                      |
+| Customer copy / empty-state CTA / schema CTA truth | This hardening pass (agent-safe P1)                             |
+| Staging-host claim denylist + non-prod sitemap/404 | This hardening pass (agent-safe P1)                             |
+| Live Workers surface vs `main`                     | Reconcile after merge — Wrangler recovery still available       |
+| Honest empty public product registry               | PASS                                                            |
+| In-repo material work                              | Prior “exhausted” claim falsified; this pass closes new P1s     |
+| R4d Task 4 (`sgps-core` import)                    | **BLOCKED** — repo HTTP 404 from this environment               |
+| Cloudflare Workers Builds for `blueskyz-web`       | **CLOSED 2026-09-05** — Git Connect + build `2fa74438…` success |
+| Draft PR #33 (`/so-tro`, Next atelier)             | **CLOSED** (superseded; do not reopen/merge into Astro `main`)  |
+| Issue #8 main ruleset                              | **Owner-only** — API cannot write rulesets                      |
+| Canonical domain / emails / legal / founder copy   | **Owner/evidence**                                              |
 
 ---
 
@@ -49,10 +49,11 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 ### Task 2: Cloudflare Workers Builds wiring
 
-- [ ] Connect `BlueSkyz-Labs/SGPS-Marketing` → Worker `blueskyz-web` Builds
-- [ ] Production command: `pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget && pnpm check:static-links`
-- [ ] Enable preview branches; omit truth gate only when production env is intentionally absent
-- [ ] Confirm Builds list is non-empty after the next `main`/PR push
+- [x] Connect `BlueSkyz-Labs/SGPS-Marketing` → Worker `blueskyz-web` Builds (API 2026-09-05)
+- [x] Preview trigger enabled (`*` except `main`); truth gate omitted while production env intentionally absent
+- [x] Confirm Builds list is non-empty (`total_count=1`, build `2fa74438…` success)
+- [ ] When canonical domain + production emails exist: add `pnpm validate:public-truth` to production build command and set production trigger env vars
+- Evidence: `docs/evidence/2026-09-05-workers-builds-connected.md`
 
 ---
 
