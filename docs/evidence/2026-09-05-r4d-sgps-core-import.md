@@ -6,9 +6,11 @@ Cursor GitHub App is still `repository_selection=selected` with **only**
 `BlueSkyz-Labs/SGPS-Marketing` (`GET /installation/repositories`,
 `total_count=1`). Direct `gh api repos/BlueSkyz-Labs/sgps-core` remains HTTP 404.
 
-This import used `PORTFOLIO_GITHUB_TOKEN`, which now returns HTTP 200 for the
+This import used `PORTFOLIO_GITHUB_TOKEN`, which returns HTTP 200 for the
 private repo (`full_name=BlueSkyz-Labs/sgps-core`). Cloudflare’s GitHub App
-continues to list `sgps-core` as `repo_id=1336680359`.
+continues to list `sgps-core` as `repo_id=1336680359`. Re-verified 2026-09-05:
+Cursor App still omits the repo; PAT still works; projected bytes MATCH —
+`docs/evidence/2026-09-05-sgps-core-access-reverify.md`.
 
 Owner still should add `sgps-core` to the **Cursor** GitHub App selected
 repositories so future agents can `git ls-remote` / `gh` without the portfolio

@@ -72,12 +72,13 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 ### Task 4: R4d brand provenance (C1.1 Task 4)
 
-- [ ] Add `sgps-core` to **Cursor** GitHub App selected repos (still `selected` + only `SGPS-Marketing`; `gh api /installation/repositories` does not list `sgps-core`)
+- [ ] Add `sgps-core` to **Cursor** GitHub App selected repos (still `selected` + only `SGPS-Marketing`; re-verified 2026-09-05 — `docs/evidence/2026-09-05-sgps-core-access-reverify.md`)
 - [x] Import exact `symbol_mono_ink.svg`, `micro_mark_ink.svg`, `brand_tokens.json` + manifest from `sgps-core` main `28dbbc7e28442173c367212096e9095b9e09c0d6` (`PORTFOLIO_GITHUB_TOKEN`)
 - [x] Replace text-only lockup with symbol + live text until outlined wordmark exists
 - [x] Rasterize committed R4d SVG into favicon.ico + social OG (no geometric placeholder)
 - [x] Empty public registry: primary CTAs soft-land on Contact (not an empty products aisle)
-- Evidence: `docs/evidence/2026-09-05-r4d-sgps-core-import.md`, `docs/evidence/2026-09-05-r4d-social-empty-ux.md`
+- [x] Re-verify projected bytes still MATCH remote at same SHA (2026-09-05) — no drift
+- Evidence: `docs/evidence/2026-09-05-r4d-sgps-core-import.md`, `docs/evidence/2026-09-05-r4d-social-empty-ux.md`, `docs/evidence/2026-09-05-sgps-core-access-reverify.md`
 
 ---
 
