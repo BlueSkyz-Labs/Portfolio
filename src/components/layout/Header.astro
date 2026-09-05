@@ -3,6 +3,12 @@ import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { NAV } from "@/data/site";
+import { getPublicProducts } from "@/lib/products";
+
+const hasPublicProducts = (await getPublicProducts()).length > 0;
+const primaryCta = hasPublicProducts
+  ? { href: "/products/", label: "Explore products" }
+  : { href: "/contact/", label: "Contact" };
 ---
 
 <header
@@ -22,8 +28,8 @@ import { NAV } from "@/data/site";
           </a>
         ))
       }
-      <ButtonLink href="/products/" variant="primary"
-        >Explore products</ButtonLink
+      <ButtonLink href={primaryCta.href} variant="primary"
+        >{primaryCta.label}</ButtonLink
       >
     </nav>
 
@@ -46,8 +52,8 @@ import { NAV } from "@/data/site";
               </a>
             ))
           }
-          <ButtonLink href="/products/" class="w-full"
-            >Explore products</ButtonLink
+          <ButtonLink href={primaryCta.href} class="w-full"
+            >{primaryCta.label}</ButtonLink
           >
         </nav>
       </div>

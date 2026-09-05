@@ -3,6 +3,10 @@ import BrandLockup from "@/components/brand/BrandLockup.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import Reveal from "@/components/ui/Reveal.astro";
 import { SITE } from "@/data/site";
+import { getPublicProducts } from "@/lib/products";
+
+const products = await getPublicProducts();
+const hasPublicProducts = products.length > 0;
 ---
 
 <section
@@ -26,8 +30,23 @@ import { SITE } from "@/data/site";
       real-world use.
     </p>
     <div class="mt-10 flex flex-wrap gap-3">
-      <ButtonLink href="/products/">Explore products</ButtonLink>
-      <ButtonLink href="/about/" variant="secondary">About BlueSkyz</ButtonLink>
+      {
+        hasPublicProducts ? (
+          <>
+            <ButtonLink href="/products/">Explore products</ButtonLink>
+            <ButtonLink href="/about/" variant="secondary">
+              About BlueSkyz
+            </ButtonLink>
+          </>
+        ) : (
+          <>
+            <ButtonLink href="/contact/">Contact</ButtonLink>
+            <ButtonLink href="/about/" variant="secondary">
+              About BlueSkyz
+            </ButtonLink>
+          </>
+        )
+      }
     </div>
   </Reveal>
 </section>

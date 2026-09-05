@@ -8,7 +8,7 @@ test("homepage explains BlueSkyz and rejects old positioning", async ({
     /build products.*complex.*clear/i,
   );
   await expect(
-    page.getByRole("link", { name: /Explore products/i }).first(),
+    page.getByRole("link", { name: /^Contact$/i }).first(),
   ).toBeVisible();
   await expect(
     page.getByText(/Quiet luxury|digital atelier|Savile Row|Selected works/i),

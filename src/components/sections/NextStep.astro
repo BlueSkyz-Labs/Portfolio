@@ -1,5 +1,8 @@
 ---
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { getPublicProducts } from "@/lib/products";
+
+const hasPublicProducts = (await getPublicProducts()).length > 0;
 ---
 
 <section class="py-16" aria-labelledby="next-title">
@@ -7,11 +10,29 @@ import ButtonLink from "@/components/ui/ButtonLink.astro";
     Next step
   </h2>
   <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-    Explore products when they are ready to evaluate, or contact BlueSkyz when
-    you have a concrete problem worth solving.
+    {
+      hasPublicProducts
+        ? "Explore products when they are ready to evaluate, or contact BlueSkyz when you have a concrete problem worth solving."
+        : "No public products are published yet. Contact BlueSkyz when you have a concrete problem worth solving, or learn who we are."
+    }
   </p>
   <div class="mt-8 flex flex-wrap gap-3">
-    <ButtonLink href="/products/">Explore products</ButtonLink>
-    <ButtonLink href="/contact/" variant="secondary">Contact</ButtonLink>
+    {
+      hasPublicProducts ? (
+        <>
+          <ButtonLink href="/products/">Explore products</ButtonLink>
+          <ButtonLink href="/contact/" variant="secondary">
+            Contact
+          </ButtonLink>
+        </>
+      ) : (
+        <>
+          <ButtonLink href="/contact/">Contact</ButtonLink>
+          <ButtonLink href="/about/" variant="secondary">
+            About BlueSkyz
+          </ButtonLink>
+        </>
+      )
+    }
   </div>
 </section>

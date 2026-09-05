@@ -2,6 +2,9 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { getPublicProducts } from "@/lib/products";
+
+const hasPublicProducts = (await getPublicProducts()).length > 0;
 ---
 
 <BaseLayout
@@ -14,13 +17,21 @@ import ButtonLink from "@/components/ui/ButtonLink.astro";
       <h1 class="text-3xl font-semibold tracking-tight">Page not found.</h1>
       <p class="mt-4 max-w-lg text-[var(--text-secondary)]">
         That address is not part of the BlueSkyz Labs site. You can return home
-        or explore products.
+        {hasPublicProducts ? " or explore products." : " or contact BlueSkyz."}
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <ButtonLink href="/">Go home</ButtonLink>
-        <ButtonLink href="/products/" variant="secondary"
-          >Explore products</ButtonLink
-        >
+        {
+          hasPublicProducts ? (
+            <ButtonLink href="/products/" variant="secondary">
+              Explore products
+            </ButtonLink>
+          ) : (
+            <ButtonLink href="/contact/" variant="secondary">
+              Contact
+            </ButtonLink>
+          )
+        }
       </div>
     </Container>
   </section>

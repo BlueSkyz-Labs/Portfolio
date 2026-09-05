@@ -112,3 +112,25 @@ test("404 page always requests noindex", () => {
   const page404 = readFileSync("src/pages/404.astro", "utf8");
   assert.match(page404, /noindex=\{?true\}?/);
 });
+
+test("empty registry soft-lands primary CTAs on Contact", () => {
+  for (const path of [
+    "src/components/sections/Hero.astro",
+    "src/components/layout/Header.astro",
+    "src/components/sections/NextStep.astro",
+    "src/pages/404.astro",
+    "src/pages/products/index.astro",
+  ]) {
+    const source = readFileSync(path, "utf8");
+    assert.match(
+      source,
+      /getPublicProducts|hasPublicProducts|products\.length/,
+    );
+    assert.match(source, /\/contact\//);
+  }
+  const productsIndex = readFileSync("src/pages/products/index.astro", "utf8");
+  assert.doesNotMatch(
+    productsIndex,
+    /Empty is preferred over invented maturity/i,
+  );
+});
