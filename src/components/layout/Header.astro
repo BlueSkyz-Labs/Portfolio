@@ -1,18 +1,15 @@
 ---
+import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { NAV, SITE } from "@/data/site";
+import { NAV } from "@/data/site";
 ---
 
 <header
   class="border-b border-[var(--border-subtle)] bg-[var(--surface-primary)]"
 >
   <Container class="flex min-h-16 items-center justify-between gap-4 py-3">
-    <a
-      href="/"
-      class="brand-signal inline-flex min-h-11 items-center text-base font-semibold tracking-tight text-[var(--text-primary)] no-underline sm:text-lg"
-      >{SITE.name}</a
-    >
+    <BrandLockup href="/" />
 
     <nav aria-label="Primary" class="hidden items-center gap-2 md:flex">
       {

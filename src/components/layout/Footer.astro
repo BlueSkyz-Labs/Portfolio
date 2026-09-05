@@ -1,4 +1,5 @@
 ---
+import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import { FOOTER_LINKS, SITE } from "@/data/site";
 ---
@@ -7,7 +8,7 @@ import { FOOTER_LINKS, SITE } from "@/data/site";
   class="mt-auto bg-[var(--surface-inverse)] text-[var(--brand-porcelain)]"
 >
   <Container class="flex flex-col gap-6 py-12">
-    <p class="font-semibold tracking-tight">{SITE.name}</p>
+    <BrandLockup size="footer" />
     <nav aria-label="Footer">
       <ul class="flex flex-wrap gap-x-5 gap-y-3">
         {

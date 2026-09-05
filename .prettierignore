@@ -6,3 +6,8 @@ playwright-report/
 test-results/
 .lighthouseci/
 coverage/
+
+# Exact sgps-core R4d byte projection — do not reformat.
+public/brand/blueskyz/r4d/symbol_mono_ink.svg
+public/brand/blueskyz/r4d/micro_mark_ink.svg
+public/brand/blueskyz/r4d/brand_tokens.json

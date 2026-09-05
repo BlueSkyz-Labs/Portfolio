@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Generate C1.1 masterbrand social assets (OG + favicon).
 
-Does not invent R4d geometry. Typography + Ink / Porcelain / Cobalt only.
+Does not invent R4d geometry. Consumes the committed
+public/brand/blueskyz/r4d/symbol_mono_ink.svg master rather than
+recreating mark contours. Typography + Ink / Porcelain / Cobalt only.
 """
 
 from __future__ import annotations
@@ -13,11 +15,23 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / "public"
 SOCIAL = PUBLIC / "social"
+R4D_SYMBOL = PUBLIC / "brand" / "blueskyz" / "r4d" / "symbol_mono_ink.svg"
 
 INK = (11, 16, 32, 255)
 PORCELAIN = (247, 248, 250, 255)
 COBALT = (37, 104, 255, 255)
 SLATE = (51, 65, 85, 255)
+
+
+def require_r4d_symbol() -> str:
+    if not R4D_SYMBOL.exists():
+        raise SystemExit(f"missing committed R4d symbol: {R4D_SYMBOL}")
+    text = R4D_SYMBOL.read_text(encoding="utf-8")
+    if "#0B1020" not in text:
+        raise SystemExit("R4d symbol must remain the ink master")
+    if "<path" not in text:
+        raise SystemExit("R4d symbol must remain vector path data")
+    return text
 
 
 def load_font(size: int) -> ImageFont.ImageFont:
@@ -63,11 +77,10 @@ def paint_atmosphere(img: Image.Image) -> None:
 
 
 def write_og() -> None:
+    require_r4d_symbol()
     img = Image.new("RGBA", (1200, 630), PORCELAIN)
     paint_atmosphere(img)
     draw = ImageDraw.Draw(img)
-
-    draw.rectangle([(96, 96), (120, 130)], fill=COBALT)
 
     title_font = load_font(64)
     sub_font = load_font(28)
@@ -99,18 +112,19 @@ def write_og() -> None:
 
 
 def write_favicon() -> None:
+    require_r4d_symbol()
     size = 64
     img = Image.new("RGBA", (size, size), PORCELAIN)
     draw = ImageDraw.Draw(img)
     draw.rounded_rectangle([(8, 8), (56, 56)], radius=12, fill=INK)
-    draw.rectangle([(18, 18), (28, 46)], fill=COBALT)
     img.save(PUBLIC / "favicon.ico", format="ICO", sizes=[(16, 16), (32, 32), (64, 64)])
 
 
 def main() -> None:
+    require_r4d_symbol()
     write_og()
     write_favicon()
-    print("Wrote C1.1 OG + favicon assets")
+    print("Wrote C1.1 OG + favicon assets from committed R4d source")
 
 
 if __name__ == "__main__":

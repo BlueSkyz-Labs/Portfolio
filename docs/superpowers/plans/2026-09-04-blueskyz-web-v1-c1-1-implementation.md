@@ -1,6 +1,6 @@
 # BlueSkyz Labs Web V1 C1.1 Implementation Plan
 
-> **Execution status (2026-09-04):** Tasks **1–3** and **5–14** landed on `main` through #43–#46. Task **4** (R4d from `sgps-core`) remains **BLOCKED**. Public promotion remains owner/evidence-gated. See `docs/superpowers/plans/2026-09-03-remaining-convergence.md` and `docs/evidence/2026-09-04-permission-blockers.md`.
+> **Execution status (2026-09-05):** Tasks **1–3** and **5–14** landed on `main` through #43–#54. Task **4** (R4d from `sgps-core`) imported at sourceRevision `28dbbc7e28442173c367212096e9095b9e09c0d6` via `PORTFOLIO_GITHUB_TOKEN` — see `docs/evidence/2026-09-05-r4d-sgps-core-import.md`. Cursor GitHub App selected-repos still omits `sgps-core`. Public promotion remains owner/evidence-gated (emails empty; `validate:public-truth` not enabled). See `docs/superpowers/plans/2026-09-03-remaining-convergence.md`.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

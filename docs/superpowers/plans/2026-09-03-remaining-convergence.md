@@ -17,22 +17,22 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 **Current baseline (2026-09-05 agent @ trust/SEO/truth hardening pass):**
 
-| Area                                               | Status                                                           |
-| -------------------------------------------------- | ---------------------------------------------------------------- |
-| C1.1 Tasks 1–3, 5–14 technical foundation          | Landed on `main` (#43–#54)                                       |
-| Product profile route `/products/[slug]/`          | Landed on `main` (#46)                                           |
-| Trust-path CTA / FlagshipProof / SoT hygiene       | Landed on `main` (#48–#54)                                       |
-| Customer copy / empty-state CTA / schema CTA truth | This hardening pass (agent-safe P1)                              |
-| Staging-host claim denylist + non-prod sitemap/404 | This hardening pass (agent-safe P1)                              |
-| Live Workers surface vs `main`                     | Reconcile after merge — Wrangler recovery still available        |
-| Honest empty public product registry               | PASS                                                             |
-| In-repo material work                              | Prior “exhausted” claim falsified; this pass closes new P1s      |
-| R4d Task 4 (`sgps-core` import)                    | **BLOCKED** — repo exists but Cursor App selected-repos omits it |
-| Cloudflare Workers Builds for `blueskyz-web`       | **CLOSED 2026-09-05** — Git Connect + build `2fa74438…` success  |
-| Draft PR #33 (`/so-tro`, Next atelier)             | **CLOSED** (superseded; do not reopen/merge into Astro `main`)   |
-| Issue #8 main ruleset                              | **Owner deferred** — rulesets `[]` by owner; leave #8 open       |
-| Temporary domain `tonydemo.com`                    | **IN PROGRESS** — custom domains + Builds `PUBLIC_SITE_URL` set  |
-| Production emails / legal / founder copy           | **Owner/evidence** — emails still empty                          |
+| Area                                               | Status                                                                                           |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| C1.1 Tasks 1–3, 5–14 technical foundation          | Landed on `main` (#43–#54)                                                                       |
+| Product profile route `/products/[slug]/`          | Landed on `main` (#46)                                                                           |
+| Trust-path CTA / FlagshipProof / SoT hygiene       | Landed on `main` (#48–#54)                                                                       |
+| Customer copy / empty-state CTA / schema CTA truth | This hardening pass (agent-safe P1)                                                              |
+| Staging-host claim denylist + non-prod sitemap/404 | This hardening pass (agent-safe P1)                                                              |
+| Live Workers surface vs `main`                     | Reconcile after merge — Wrangler recovery still available                                        |
+| Honest empty public product registry               | PASS                                                                                             |
+| In-repo material work                              | Prior “exhausted” claim falsified; this pass closes new P1s                                      |
+| R4d Task 4 (`sgps-core` import)                    | **LANDED** this pass — SHA `28dbbc7e…` via `PORTFOLIO_GITHUB_TOKEN`; Cursor App still omits repo |
+| Cloudflare Workers Builds for `blueskyz-web`       | **CLOSED 2026-09-05** — Git Connect + build `2fa74438…` success                                  |
+| Draft PR #33 (`/so-tro`, Next atelier)             | **CLOSED** (superseded; do not reopen/merge into Astro `main`)                                   |
+| Issue #8 main ruleset                              | **Owner deferred** — rulesets `[]` by owner; leave #8 open                                       |
+| Temporary domain `tonydemo.com`                    | **IN PROGRESS** — custom domains + Builds `PUBLIC_SITE_URL` set                                  |
+| Production emails / legal / founder copy           | **Owner/evidence** — emails still empty                                                          |
 
 ---
 
@@ -72,10 +72,10 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 ### Task 4: R4d brand provenance (C1.1 Task 4)
 
-- [ ] Add `sgps-core` to **Cursor** GitHub App selected repos (CF App already sees it; Cursor does not)
-- [ ] Or publish the R4d v1.1 projection into this repo
-- [ ] Import exact `symbol_mono_ink.svg`, `micro_mark_ink.svg`, `brand_tokens.json` + manifest
-- [ ] Replace text-only lockup with symbol + live text until outlined wordmark exists
+- [ ] Add `sgps-core` to **Cursor** GitHub App selected repos (still `selected` + only `SGPS-Marketing`; `gh api /installation/repositories` does not list `sgps-core`)
+- [x] Import exact `symbol_mono_ink.svg`, `micro_mark_ink.svg`, `brand_tokens.json` + manifest from `sgps-core` main `28dbbc7e28442173c367212096e9095b9e09c0d6` (`PORTFOLIO_GITHUB_TOKEN`)
+- [x] Replace text-only lockup with symbol + live text until outlined wordmark exists
+- Evidence: `docs/evidence/2026-09-05-r4d-sgps-core-import.md`
 
 ---
 
