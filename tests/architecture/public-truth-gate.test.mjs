@@ -90,3 +90,25 @@ test("isNonProductionSiteUrl rejects pages.dev, tonydemo staging, and trailing-d
   assert.equal(isNonProductionSiteUrl("https://example.com./"), true);
   assert.equal(isNonProductionSiteUrl("https://blueskyz.labs"), false);
 });
+
+test("isNonProductionSiteUrl allows owner temporary tonydemo site hosts only", () => {
+  assert.equal(isNonProductionSiteUrl("https://tonydemo.com/"), false);
+  assert.equal(isNonProductionSiteUrl("https://www.tonydemo.com/"), false);
+  assert.equal(isNonProductionSiteUrl("https://blueskyz.tonydemo.com/"), false);
+  assert.equal(isNonProductionSiteUrl("https://tonydemo.com./"), false);
+  // Product/staging hosts on the same zone stay non-production for claims.
+  assert.equal(isNonProductionSiteUrl("https://sotro.tonydemo.com/"), true);
+  assert.equal(isNonProductionSiteUrl("https://dashboard.tonydemo.com/"), true);
+});
+
+test("public truth gate accepts temporary tonydemo site URL but still requires emails", () => {
+  const errors = validatePublicTruth({
+    siteUrl: "https://tonydemo.com",
+  });
+  assert.equal(
+    errors.some((e) => e.includes("PUBLIC_SITE_URL")),
+    false,
+  );
+  assert.ok(errors.some((e) => e.includes("PUBLIC_CONTACT_EMAIL")));
+  assert.ok(errors.some((e) => e.includes("PUBLIC_SECURITY_EMAIL")));
+});

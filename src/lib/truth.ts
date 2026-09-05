@@ -49,9 +49,25 @@ function isReservedDocumentationHost(hostname: string): boolean {
   );
 }
 
+/**
+ * Owner-authorized temporary site hosts on tonydemo.com (2026-09-05).
+ * Product/staging subdomains (sotro, portfolio, …) stay non-production.
+ * Emails remain unset — `validatePublicTruth` still fails until owner supplies them.
+ */
+const TEMPORARY_SITE_HOSTS = new Set([
+  "tonydemo.com",
+  "www.tonydemo.com",
+  "blueskyz.tonydemo.com",
+]);
+
+function isTemporarySiteHost(hostname: string): boolean {
+  return TEMPORARY_SITE_HOSTS.has(bareHostname(hostname));
+}
+
 /** Preview / staging hosts that must never pass as production claim identity. */
 function isPreviewOrStagingHost(hostname: string): boolean {
   const bare = bareHostname(hostname);
+  if (isTemporarySiteHost(bare)) return false;
   return (
     bare === "workers.dev" ||
     bare.endsWith(".workers.dev") ||
@@ -64,8 +80,9 @@ function isPreviewOrStagingHost(hostname: string): boolean {
 
 /**
  * Sites that must not be treated as indexable production identity.
- * Includes local/dev hosts, workers.dev / pages.dev previews, known staging
- * (`*.tonydemo.com`), and RFC 2606 documentation domains.
+ * Includes local/dev hosts, workers.dev / pages.dev previews, staging
+ * `*.tonydemo.com` product hosts (except owner-approved temporary site hosts),
+ * and RFC 2606 documentation domains.
  */
 export function isNonProductionSiteUrl(siteUrl: string): boolean {
   const hostname = hostnameOf(siteUrl);
