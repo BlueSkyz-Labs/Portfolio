@@ -22,6 +22,10 @@ test("customer-facing pages ban internal path and env jargon", () => {
   assert.doesNotMatch(corpus, /PUBLIC_CONTACT_EMAIL/);
   assert.doesNotMatch(corpus, /PUBLIC_SECURITY_EMAIL/);
   assert.doesNotMatch(corpus, /PUBLIC_SITE_URL/);
+  assert.doesNotMatch(corpus, /this environment is configured/i);
+  assert.doesNotMatch(corpus, /owner review/i);
+  assert.doesNotMatch(corpus, /public inclusion gates/i);
+  assert.doesNotMatch(corpus, /approved public truth/i);
 });
 
 test("muted text token meets WCAG AA on Porcelain", () => {
@@ -88,4 +92,23 @@ test("privacy page summarizes practical trust answers", () => {
   assert.match(privacy, /How it is used/i);
   assert.match(privacy, /Deletion/i);
   assert.doesNotMatch(privacy, /tracking cookies are required/i);
+});
+
+test("empty featured state does not dead-end into Explore all products", () => {
+  const featured = readFileSync(
+    "src/components/sections/FeaturedProducts.astro",
+    "utf8",
+  );
+  assert.match(featured, /products\.length === 0/);
+  assert.match(featured, /Contact/);
+  // Explore-all must be gated to non-empty registry.
+  assert.match(
+    featured,
+    /products\.length > 0[\s\S]*Explore all products|Explore all products[\s\S]*products\.length/,
+  );
+});
+
+test("404 page always requests noindex", () => {
+  const page404 = readFileSync("src/pages/404.astro", "utf8");
+  assert.match(page404, /noindex=\{?true\}?/);
 });

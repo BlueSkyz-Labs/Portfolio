@@ -15,14 +15,14 @@ const products = await getPublicProducts();
     <Container>
       <h1 class="text-3xl font-semibold tracking-tight">Products</h1>
       <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-        Listings appear only after public inclusion gates pass. Empty is
-        preferred over invented maturity.
+        Products appear here when they are ready to evaluate. Empty is preferred
+        over invented maturity.
       </p>
       {
         products.length === 0 ? (
           <p class="mt-8 max-w-2xl border-y border-[var(--border-subtle)] py-6 text-[var(--text-secondary)]">
-            No public products are published yet. Products appear here when
-            identity, status, proof, and trust paths are verified.
+            No public products are published yet. Products appear here when they
+            are ready to evaluate.
           </p>
         ) : (
           <div class="mt-8 grid gap-4 md:grid-cols-2">

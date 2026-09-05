@@ -52,3 +52,18 @@ test("robots and sitemap endpoints exist and reference public routes only", () =
 test("default OG asset is committed masterbrand art", () => {
   assert.equal(existsSync("public/social/og-default.png"), true);
 });
+
+test("sitemap.xml.ts gates non-production identity like robots.txt", () => {
+  const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
+  assert.match(sitemap, /isNonProductionSiteUrl/);
+});
+
+test("HSTS preload remains deferred in live contract evidence", () => {
+  const headers = readFileSync("public/_headers", "utf8");
+  assert.doesNotMatch(headers, /preload/);
+  const earlyRedeploy = readFileSync(
+    "docs/evidence/2026-09-04-workers-redeploy.md",
+    "utf8",
+  );
+  assert.doesNotMatch(earlyRedeploy, /includeSubDomains; preload/);
+});

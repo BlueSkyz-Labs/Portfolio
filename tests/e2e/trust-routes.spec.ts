@@ -18,6 +18,10 @@ const BANNED = [
   /docs\/evidence/i,
   /PUBLIC_CONTACT_EMAIL/,
   /PUBLIC_SECURITY_EMAIL/,
+  /this environment is configured/i,
+  /owner review/i,
+  /public inclusion gates/i,
+  /approved public truth/i,
 ];
 
 for (const route of TRUST_ROUTES) {

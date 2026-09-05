@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { SITE } from "@/data/site";
 import { getPublicProducts } from "@/lib/products";
 import { absoluteUrl, PUBLIC_STATIC_PATHS } from "@/lib/seo";
+import { isNonProductionSiteUrl } from "@/lib/truth";
 
 export const prerender = true;
 
@@ -10,13 +11,14 @@ function urlEntry(loc: string): string {
 }
 
 export const GET: APIRoute = async () => {
-  const products = await getPublicProducts();
-  const locs = [
-    ...PUBLIC_STATIC_PATHS.map((path) => absoluteUrl(SITE.url, path)),
-    ...products.map((product) =>
-      absoluteUrl(SITE.url, `/products/${product.data.slug}/`),
-    ),
-  ];
+  const locs = isNonProductionSiteUrl(SITE.url)
+    ? []
+    : [
+        ...PUBLIC_STATIC_PATHS.map((path) => absoluteUrl(SITE.url, path)),
+        ...(await getPublicProducts()).map((product) =>
+          absoluteUrl(SITE.url, `/products/${product.data.slug}/`),
+        ),
+      ];
 
   const body = [
     '<?xml version="1.0" encoding="UTF-8"?>',

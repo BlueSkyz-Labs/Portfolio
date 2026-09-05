@@ -23,6 +23,23 @@ const { data } = product;
 const screenshot = data.proof.screenshot;
 const capabilities = data.capabilities ?? [];
 
+const PLATFORM_LABELS: Record<string, string> = {
+  web: "Web",
+  android: "Android",
+  ios: "iOS",
+  macos: "macOS",
+  windows: "Windows",
+  api: "API",
+};
+
+const AUDIENCE_LABELS: Record<string, string> = {
+  individual: "Individuals",
+  professional: "Professionals",
+  team: "Teams",
+  business: "Businesses",
+  organization: "Organizations",
+};
+
 const proofLinks = [
   { href: data.proof.publicUrl, label: "Product site" },
   { href: data.proof.documentationUrl, label: "Documentation" },
@@ -53,9 +70,7 @@ const proofLinks = [
 
       <div class="mt-6 flex flex-wrap items-center gap-3">
         <ProductStatus label={data.publicLabel} />
-        <p
-          class="text-xs font-medium uppercase tracking-wide text-[var(--text-muted)]"
-        >
+        <p class="text-xs font-medium tracking-wide text-[var(--text-muted)]">
           {data.endorsement}
         </p>
       </div>
@@ -94,7 +109,11 @@ const proofLinks = [
               Platforms
             </dt>
             <dd class="mt-1 text-[var(--text-primary)]">
-              {data.platforms.join(", ")}
+              {
+                data.platforms
+                  .map((p: string) => PLATFORM_LABELS[p] ?? p)
+                  .join(", ")
+              }
             </dd>
           </div>
           <div>
@@ -102,7 +121,11 @@ const proofLinks = [
               Audience
             </dt>
             <dd class="mt-1 text-[var(--text-primary)]">
-              {data.audience.join(", ")}
+              {
+                data.audience
+                  .map((a: string) => AUDIENCE_LABELS[a] ?? a)
+                  .join(", ")
+              }
             </dd>
           </div>
         </dl>
@@ -110,7 +133,7 @@ const proofLinks = [
 
       <section class="mt-14" aria-labelledby="profile-jobs">
         <h2 id="profile-jobs" class="text-xl font-semibold tracking-tight">
-          Customer jobs
+          What it’s for
         </h2>
         <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
           {data.jobs.map((job: string) => <li>{job}</li>)}

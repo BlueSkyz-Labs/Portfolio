@@ -78,3 +78,15 @@ test("validate-public-truth script exists and does not invent production fallbac
   assert.doesNotMatch(script, /portfolio\.tonydemo\.com/);
   assert.doesNotMatch(script, /hello@blueskyz\.io/);
 });
+
+test("isNonProductionSiteUrl rejects pages.dev, tonydemo staging, and trailing-dot FQDNs", () => {
+  assert.equal(
+    isNonProductionSiteUrl("https://blueskyz-labs-portfolio.pages.dev/"),
+    true,
+  );
+  assert.equal(isNonProductionSiteUrl("https://sotro.tonydemo.com/"), true);
+  assert.equal(isNonProductionSiteUrl("https://portfolio.tonydemo.com/"), true);
+  assert.equal(isNonProductionSiteUrl("https://demo.workers.dev./"), true);
+  assert.equal(isNonProductionSiteUrl("https://example.com./"), true);
+  assert.equal(isNonProductionSiteUrl("https://blueskyz.labs"), false);
+});

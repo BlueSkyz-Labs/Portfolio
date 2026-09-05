@@ -116,3 +116,76 @@ test("coherent public Available product parses", () => {
   const result = productSchema.safeParse(baseProduct());
   assert.equal(result.success, true);
 });
+
+test("isPublicClaimHttpsUrl rejects pages.dev and tonydemo staging hosts", () => {
+  assert.equal(isPublicClaimHttpsUrl("https://app.pages.dev/"), false);
+  assert.equal(isPublicClaimHttpsUrl("https://sotro.tonydemo.com/"), false);
+  assert.equal(isPublicClaimHttpsUrl("https://demo.workers.dev./"), false);
+});
+
+test("immature lifecycles cannot claim Try on primary or secondary actions", () => {
+  for (const lifecycle of ["concept", "prototype", "development"]) {
+    const primary = productSchema.safeParse(
+      baseProduct({
+        public: false,
+        lifecycle,
+        publicLabel: "In development",
+        availability: "waitlist",
+        capabilities: undefined,
+        primaryAction: {
+          type: "try",
+          label: "Try",
+          href: "https://product.blueskyz.labs/",
+        },
+      }),
+    );
+    assert.equal(
+      primary.success,
+      false,
+      `primary try allowed for ${lifecycle}`,
+    );
+
+    const secondary = productSchema.safeParse(
+      baseProduct({
+        public: false,
+        lifecycle,
+        publicLabel: "In development",
+        availability: "waitlist",
+        capabilities: undefined,
+        primaryAction: {
+          type: "waitlist",
+          label: "Join waitlist",
+          href: "https://product.blueskyz.labs/",
+        },
+        secondaryAction: {
+          type: "try",
+          label: "Try",
+          href: "https://product.blueskyz.labs/try",
+        },
+      }),
+    );
+    assert.equal(
+      secondary.success,
+      false,
+      `secondary try allowed for ${lifecycle}`,
+    );
+  }
+});
+
+test("waitlist availability cannot claim Try", () => {
+  const result = productSchema.safeParse(
+    baseProduct({
+      public: false,
+      lifecycle: "beta",
+      publicLabel: "Beta",
+      availability: "waitlist",
+      capabilities: undefined,
+      primaryAction: {
+        type: "try",
+        label: "Try",
+        href: "https://product.blueskyz.labs/",
+      },
+    }),
+  );
+  assert.equal(result.success, false);
+});

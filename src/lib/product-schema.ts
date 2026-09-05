@@ -155,15 +155,51 @@ export const productSchema = z
     lastReviewedAt: z.coerce.date(),
   })
   .superRefine((value, ctx) => {
-    if (
-      value.lifecycle === "development" &&
-      value.primaryAction.type === "try"
-    ) {
+    const immatureLifecycles: ReadonlySet<Lifecycle> = new Set([
+      "concept",
+      "prototype",
+      "development",
+    ]);
+    const tryBlockedByLifecycle = immatureLifecycles.has(value.lifecycle);
+    const tryBlockedByAvailability = value.availability === "waitlist";
+
+    const rejectTry = (
+      path: ["primaryAction" | "secondaryAction", "type"],
+      reason: string,
+    ) => {
       ctx.addIssue({
         code: "custom",
-        path: ["primaryAction", "type"],
-        message: "development product cannot claim Try",
+        path,
+        message: reason,
       });
+    };
+
+    if (value.primaryAction.type === "try") {
+      if (tryBlockedByLifecycle) {
+        rejectTry(
+          ["primaryAction", "type"],
+          `${value.lifecycle} product cannot claim Try`,
+        );
+      } else if (tryBlockedByAvailability) {
+        rejectTry(
+          ["primaryAction", "type"],
+          "waitlist availability cannot claim Try",
+        );
+      }
+    }
+
+    if (value.secondaryAction?.type === "try") {
+      if (tryBlockedByLifecycle) {
+        rejectTry(
+          ["secondaryAction", "type"],
+          `${value.lifecycle} product cannot claim Try`,
+        );
+      } else if (tryBlockedByAvailability) {
+        rejectTry(
+          ["secondaryAction", "type"],
+          "waitlist availability cannot claim Try",
+        );
+      }
     }
 
     if (
@@ -178,7 +214,7 @@ export const productSchema = z
       });
     }
 
-    // Coherence + public inclusion rules apply only to public listings.
+    // Coherence + public listing rules apply only to public listings.
     if (!value.public) return;
 
     const coherence = PUBLIC_LABEL_COHERENCE[value.publicLabel];

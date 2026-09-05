@@ -28,16 +28,24 @@ const ecosystem = products.filter((p) => p.data.featuredTier === "ecosystem");
         Only products with verified public evidence appear here.
       </p>
     </div>
-    <ButtonLink href="/products/" variant="secondary"
-      >Explore all products</ButtonLink
-    >
+    {
+      products.length > 0 ? (
+        <ButtonLink href="/products/" variant="secondary">
+          Explore all products
+        </ButtonLink>
+      ) : (
+        <ButtonLink href="/contact/" variant="secondary">
+          Contact
+        </ButtonLink>
+      )
+    }
   </div>
 
   {
     products.length === 0 ? (
       <p class="mt-8 max-w-2xl border-y border-[var(--border-subtle)] py-6 text-[var(--text-secondary)]">
-        No public products are published yet. Listings appear when identity,
-        status, proof, and trust paths are verified.
+        No public products are published yet. Listings appear when products are
+        ready to evaluate.
       </p>
     ) : (
       <div class="mt-8 grid gap-4">

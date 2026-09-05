@@ -32,7 +32,9 @@ GET https://blueskyz-web.thinhnguyen-km10.workers.dev/security/
   → 200
   → body contains "Open private vulnerability reporting"
   → href https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new
-  → Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  → Strict-Transport-Security: max-age=31536000; includeSubDomains
+    (no preload — deferred until a canonical corporate domain is ready;
+    see SECURITY.md and docs/evidence/2026-09-04-post-55-redeploy.md)
   → Permissions-Policy includes payment=(), usb=(), interest-cohort=()
   → canonical https://blueskyz-web.thinhnguyen-km10.workers.dev/security/
   → X-Robots-Tag: noindex (workers.dev non-production)
