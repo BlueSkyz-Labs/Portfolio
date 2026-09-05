@@ -21,6 +21,14 @@ test("static responses carry a safe baseline header set", () => {
   assert.match(headers, /script-src 'self'/);
   assert.match(headers, /style-src 'self' 'unsafe-inline'/);
   assert.match(headers, /X-Robots-Tag:\s*noindex/);
+  assert.match(
+    headers,
+    /https:\/\/blueskyz-web\.thinhnguyen-km10\.workers\.dev\/\*/,
+  );
+  assert.match(
+    headers,
+    /https:\/\/:version\.:worker\.:account\.workers\.dev\/\*/,
+  );
   assert.doesNotMatch(headers, /'unsafe-eval'/);
   const cspLine =
     headers

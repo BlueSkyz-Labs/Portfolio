@@ -2,6 +2,8 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import { SITE } from "@/data/site";
+
+const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout title="Support" description="Support for BlueSkyz Labs products.">
@@ -10,8 +12,7 @@ import { SITE } from "@/data/site";
       <h1 class="text-3xl font-semibold tracking-tight">Support</h1>
       <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
         Product-specific support destinations publish on each product profile
-        when verified. Until then, use the corporate contact lane or security
-        reporting path below.
+        when verified. Until then, use the working paths below.
       </p>
       {
         SITE.contactEmail ? (
@@ -29,23 +30,34 @@ import { SITE } from "@/data/site";
         ) : (
           <p class="mt-6 max-w-2xl text-[var(--text-secondary)]">
             A corporate support email will appear here when BlueSkyz publishes
-            one.
+            one. Until then, Security reporting is the actionable trust channel.
           </p>
         )
       }
       <div class="mt-8 flex flex-wrap gap-4">
-        <a
-          href="/contact/"
-          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-        >
-          Contact BlueSkyz
-        </a>
         <a
           href="/security/"
           class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
         >
           Security reporting
         </a>
+        {
+          hasBusinessEmail ? (
+            <a
+              href="/contact/"
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              Contact BlueSkyz
+            </a>
+          ) : (
+            <a
+              href="/about/"
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              About BlueSkyz
+            </a>
+          )
+        }
       </div>
     </Container>
   </section>

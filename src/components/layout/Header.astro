@@ -2,13 +2,14 @@
 import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { NAV } from "@/data/site";
+import { NAV, SITE } from "@/data/site";
+import { emptyRegistryPrimaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 
 const hasPublicProducts = (await getPublicProducts()).length > 0;
 const primaryCta = hasPublicProducts
   ? { href: "/products/", label: "Explore products" }
-  : { href: "/contact/", label: "Contact" };
+  : emptyRegistryPrimaryCta(SITE.contactEmail);
 ---
 
 <header

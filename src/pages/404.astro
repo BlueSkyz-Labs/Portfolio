@@ -2,9 +2,12 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { SITE } from "@/data/site";
+import { emptyRegistryPrimaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 
 const hasPublicProducts = (await getPublicProducts()).length > 0;
+const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
 ---
 
 <BaseLayout
@@ -17,7 +20,13 @@ const hasPublicProducts = (await getPublicProducts()).length > 0;
       <h1 class="text-3xl font-semibold tracking-tight">Page not found.</h1>
       <p class="mt-4 max-w-lg text-[var(--text-secondary)]">
         That address is not part of the BlueSkyz Labs site. You can return home
-        {hasPublicProducts ? " or explore products." : " or contact BlueSkyz."}
+        {
+          hasPublicProducts
+            ? " or explore products."
+            : SITE.contactEmail
+              ? " or contact BlueSkyz."
+              : " or learn who we are."
+        }
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <ButtonLink href="/">Go home</ButtonLink>
@@ -27,8 +36,8 @@ const hasPublicProducts = (await getPublicProducts()).length > 0;
               Explore products
             </ButtonLink>
           ) : (
-            <ButtonLink href="/contact/" variant="secondary">
-              Contact
+            <ButtonLink href={emptyPrimary.href} variant="secondary">
+              {emptyPrimary.label}
             </ButtonLink>
           )
         }

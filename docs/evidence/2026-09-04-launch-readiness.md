@@ -7,20 +7,20 @@ Technical implementation of C1.1 Tasks 1–3 and 5–14 are complete on `main`. 
 
 ## Checklist
 
-| Item                                                  | Status                                  | Evidence                                                                                                |
-| ----------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| canonical corporate domain supplied                   | **BLOCKED — owner/evidence dependency** | `PUBLIC_SITE_URL` required by `validate:public-truth`; no invented production domain                    |
-| no staging-domain metadata leakage                    | **PASS** (local/build)                  | Architecture + e2e SEO assert no `portfolio.tonydemo.com` hard-codes; canonical derives from `SITE.url` |
-| public product inventory/status reviewed              | **PASS** (honest empty)                 | `docs/evidence/2026-09-04-public-product-audit.md` — all candidates HIDDEN                              |
-| real public artifacts available for promoted products | **BLOCKED — owner/evidence dependency** | Zero public YAML entries                                                                                |
-| all CTAs work                                         | **PASS**                                | Playwright shell/home; Explore products / About / trust routes                                          |
-| founder/company copy approved                         | **BLOCKED — owner/evidence dependency** | Stub About/Contact copy only; no invented biography                                                     |
-| privacy path factual/approved                         | **BLOCKED — owner/evidence dependency** | Route exists; legal text not owner-approved                                                             |
-| support/contact works                                 | **BLOCKED — owner/evidence dependency** | Routes exist; emails require env                                                                        |
-| security reporting works                              | **PASS** (repo)                         | `SECURITY.md` private vulnerability reporting; public security email env-gated                          |
-| unsupported claims = 0                                | **PASS**                                | No Flagship Proof without evidence; empty registry                                                      |
-| critical broken links = 0                             | **PASS** (agent routes)                 | Nav/footer routes resolve in e2e                                                                        |
-| generated fake product proof = 0                      | **PASS**                                | No synthesized screenshots/marks beyond committed OG masterbrand raster                                 |
+| Item                                                  | Status                                  | Evidence                                                                                                                         |
+| ----------------------------------------------------- | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| canonical corporate domain supplied                   | **BLOCKED — owner/evidence dependency** | `PUBLIC_SITE_URL` required by `validate:public-truth`; no invented production domain                                             |
+| no staging-domain metadata leakage                    | **PASS** (local/build)                  | Architecture + e2e SEO assert no `portfolio.tonydemo.com` hard-codes; canonical derives from `SITE.url`                          |
+| public product inventory/status reviewed              | **PASS** (honest empty)                 | `docs/evidence/2026-09-04-public-product-audit.md` — all candidates HIDDEN                                                       |
+| real public artifacts available for promoted products | **BLOCKED — owner/evidence dependency** | Zero public YAML entries                                                                                                         |
+| all CTAs work                                         | **PASS** (email-aware Act)              | Empty registry + empty email soft-lands About/Security; Contact when email exists — see `2026-09-05-act-path-workers-noindex.md` |
+| founder/company copy approved                         | **BLOCKED — owner/evidence dependency** | Stub About/Contact copy only; no invented biography                                                                              |
+| privacy path factual/approved                         | **BLOCKED — owner/evidence dependency** | Route exists; legal text not owner-approved                                                                                      |
+| support/contact works                                 | **PARTIAL**                             | Routes exist; Security advisory works; business mailto **BLOCKED** until emails                                                  |
+| security reporting works                              | **PASS** (repo)                         | `SECURITY.md` private vulnerability reporting; public security email env-gated                                                   |
+| unsupported claims = 0                                | **PASS**                                | No Flagship Proof without evidence; empty registry                                                                               |
+| critical broken links = 0                             | **PASS** (agent routes)                 | Nav/footer routes resolve in e2e                                                                                                 |
+| generated fake product proof = 0                      | **PASS**                                | No synthesized screenshots/marks beyond committed OG masterbrand raster                                                          |
 
 ## External holds (unchanged)
 
@@ -59,7 +59,7 @@ Landed via #46 (merged):
 Public promotion blockers above remain unchanged except live Workers drift,
 which was closed by Wrangler redeploy on 2026-09-04
 (`docs/evidence/2026-09-04-workers-redeploy.md`). Workers Builds Git Connect
-remains open.
+**CLOSED** 2026-09-05 (`docs/evidence/2026-09-05-workers-builds-connected.md`).
 
 ## Security/Experience hardening pass (same branch)
 

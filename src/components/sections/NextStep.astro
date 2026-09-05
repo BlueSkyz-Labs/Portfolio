@@ -1,8 +1,12 @@
 ---
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { SITE } from "@/data/site";
+import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 
 const hasPublicProducts = (await getPublicProducts()).length > 0;
+const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
+const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
 ---
 
 <section class="py-16" aria-labelledby="next-title">
@@ -13,7 +17,9 @@ const hasPublicProducts = (await getPublicProducts()).length > 0;
     {
       hasPublicProducts
         ? "Explore products when they are ready to evaluate, or contact BlueSkyz when you have a concrete problem worth solving."
-        : "No public products are published yet. Contact BlueSkyz when you have a concrete problem worth solving, or learn who we are."
+        : SITE.contactEmail
+          ? "No public products are published yet. Contact BlueSkyz when you have a concrete problem worth solving, or learn who we are."
+          : "No public products are published yet. Learn who we are, or use the security reporting path when you need a working trust channel."
     }
   </p>
   <div class="mt-8 flex flex-wrap gap-3">
@@ -27,9 +33,9 @@ const hasPublicProducts = (await getPublicProducts()).length > 0;
         </>
       ) : (
         <>
-          <ButtonLink href="/contact/">Contact</ButtonLink>
-          <ButtonLink href="/about/" variant="secondary">
-            About BlueSkyz
+          <ButtonLink href={emptyPrimary.href}>{emptyPrimary.label}</ButtonLink>
+          <ButtonLink href={emptySecondary.href} variant="secondary">
+            {emptySecondary.label}
           </ButtonLink>
         </>
       )
