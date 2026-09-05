@@ -15,17 +15,18 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 **Permission evidence:** `docs/evidence/2026-09-04-permission-blockers.md`  
 **Live redeploy evidence:** `docs/evidence/2026-09-04-workers-redeploy.md`
 
-**Current baseline (2026-09-04 agent @ trust/UX hardening pass):**
+**Current baseline (2026-09-05 agent @ trust/SEO/truth hardening pass):**
 
 | Area                                               | Status                                                         |
 | -------------------------------------------------- | -------------------------------------------------------------- |
 | C1.1 Tasks 1–3, 5–14 technical foundation          | Landed on `main` (#43–#54)                                     |
 | Product profile route `/products/[slug]/`          | Landed on `main` (#46)                                         |
 | Trust-path CTA / FlagshipProof / SoT hygiene       | Landed on `main` (#48–#54)                                     |
-| Customer copy / privacy summary / schema coherence | This hardening pass (agent-safe P1/P2)                         |
-| Live Workers surface vs `main`                     | **Recovered** via Wrangler redeploy after #55 (`ee7bd9ad…`)    |
+| Customer copy / empty-state CTA / schema CTA truth | This hardening pass (agent-safe P1)                            |
+| Staging-host claim denylist + non-prod sitemap/404 | This hardening pass (agent-safe P1)                            |
+| Live Workers surface vs `main`                     | Reconcile after merge — Wrangler recovery still available      |
 | Honest empty public product registry               | PASS                                                           |
-| In-repo material work                              | High-value agent-safe gaps from red-team closed in this pass   |
+| In-repo material work                              | Prior “exhausted” claim falsified; this pass closes new P1s    |
 | R4d Task 4 (`sgps-core` import)                    | **BLOCKED** — repo HTTP 404 from this environment              |
 | Cloudflare Workers Builds for `blueskyz-web`       | **GAP** — Worker exists; Builds list returns 0 runs            |
 | Draft PR #33 (`/so-tro`, Next atelier)             | **CLOSED** (superseded; do not reopen/merge into Astro `main`) |
@@ -101,7 +102,8 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 ## Autonomous-safe work already landed (do not redo)
 
-- Customer-facing copy hygiene (no `docs/evidence` / env jargon); privacy practical summary; Support email fallback; product profile publicLabel-only; schema coherence + production claim URLs; muted AA contrast; HSTS preload deferred; JSON-LD escape; status chrome (this pass)
+- Trust/SEO/truth hardening (2026-09-05): customer jargon scrub; empty featured CTA → Contact; `*.pages.dev` / `*.tonydemo.com` / trailing-dot FQDN denylist; Try banned for concept/prototype/development + waitlist; 404 always noindex; non-prod empty sitemap; HSTS preload evidence corrected; regression tests
+- Customer-facing copy hygiene (no `docs/evidence` / env jargon); privacy practical summary; Support email fallback; product profile publicLabel-only; schema coherence + production claim URLs; muted AA contrast; HSTS preload deferred; JSON-LD escape; status chrome (#55)
 - Product proof contract + static links + WCAG 2.2 axe + Playwright bootstrap + live Workers redeploy evidence (#51)
 - Public-truth rejects example/preview hosts; product URLs https-only; support recourse CTAs; Builds recipe includes `check:static-links` (#53)
 

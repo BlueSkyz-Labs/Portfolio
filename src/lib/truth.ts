@@ -23,12 +23,17 @@ function hostnameOf(siteUrl: string): string | null {
   }
 }
 
-/** Normalize Node/browser hostname forms (`[::1]` → `::1`). */
+/** Normalize Node/browser hostname forms (`[::1]` → `::1`, trailing FQDN `.`). */
 function bareHostname(hostname: string): string {
-  if (hostname.startsWith("[") && hostname.endsWith("]")) {
-    return hostname.slice(1, -1);
+  let bare = hostname;
+  if (bare.startsWith("[") && bare.endsWith("]")) {
+    bare = bare.slice(1, -1);
   }
-  return hostname;
+  // DNS root label: `demo.workers.dev.` is equivalent to `demo.workers.dev`.
+  if (bare.endsWith(".") && bare !== ".") {
+    bare = bare.slice(0, -1);
+  }
+  return bare;
 }
 
 function isLoopbackHost(hostname: string): boolean {
@@ -44,14 +49,28 @@ function isReservedDocumentationHost(hostname: string): boolean {
   );
 }
 
+/** Preview / staging hosts that must never pass as production claim identity. */
+function isPreviewOrStagingHost(hostname: string): boolean {
+  const bare = bareHostname(hostname);
+  return (
+    bare === "workers.dev" ||
+    bare.endsWith(".workers.dev") ||
+    bare === "pages.dev" ||
+    bare.endsWith(".pages.dev") ||
+    bare === "tonydemo.com" ||
+    bare.endsWith(".tonydemo.com")
+  );
+}
+
 /**
  * Sites that must not be treated as indexable production identity.
- * Includes local/dev hosts, workers.dev previews, and RFC 2606 documentation domains.
+ * Includes local/dev hosts, workers.dev / pages.dev previews, known staging
+ * (`*.tonydemo.com`), and RFC 2606 documentation domains.
  */
 export function isNonProductionSiteUrl(siteUrl: string): boolean {
   const hostname = hostnameOf(siteUrl);
   if (!hostname) return true;
-  if (hostname.endsWith(".workers.dev")) return true;
+  if (isPreviewOrStagingHost(hostname)) return true;
   return isReservedDocumentationHost(hostname);
 }
 
@@ -67,7 +86,7 @@ export function validatePublicTruth(input: PublicTruthInput): string[] {
     errors.push("PUBLIC_SITE_URL must be an https URL");
   } else if (isNonProductionSiteUrl(input.siteUrl)) {
     errors.push(
-      "PUBLIC_SITE_URL must be a canonical corporate https domain (not localhost, workers.dev, or documentation/example hosts)",
+      "PUBLIC_SITE_URL must be a canonical corporate https domain (not localhost, workers.dev, pages.dev, staging, or documentation/example hosts)",
     );
   }
   if (!isPlausibleEmail(input.contactEmail)) {

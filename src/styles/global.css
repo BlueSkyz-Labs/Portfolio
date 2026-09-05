@@ -179,3 +179,11 @@ body {
     opacity: 1;
   }
 }
+
+/* Mobile nav disclosure: hide default marker for consistent control chrome. */
+summary::-webkit-details-marker {
+  display: none;
+}
+summary {
+  list-style: none;
+}

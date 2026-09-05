@@ -42,7 +42,7 @@ test("robots and sitemap are public and exclude staging hard-codes", async ({
   expect(sitemap.ok()).toBeTruthy();
   const sitemapBody = await sitemap.text();
   expect(sitemapBody).toContain("<urlset");
-  expect(sitemapBody).toContain("/products/");
-  expect(sitemapBody).toContain("/about/");
+  // Non-production SITE.url must not advertise absolute locs.
+  expect(sitemapBody).not.toContain("<loc>");
   expect(sitemapBody).not.toMatch(/portfolio\.tonydemo\.com/);
 });

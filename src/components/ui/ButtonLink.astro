@@ -5,10 +5,12 @@ interface Props {
   class?: string;
 }
 const { href, variant = "primary", class: className = "" } = Astro.props;
+const isExternal = /^https?:\/\//i.test(href);
 ---
 
 <a
   href={href}
+  rel={isExternal ? "noopener noreferrer" : undefined}
   class:list={[
     "inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold no-underline",
     variant === "primary" && "bg-[#1d4ed8] text-[#ffffff] hover:bg-[#1e40af]",

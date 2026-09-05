@@ -15,6 +15,10 @@ test("404 page recovers without atelier copy", async ({ page }) => {
   await expect(
     page.getByText(/Quiet luxury|digital atelier|Savile Row/i),
   ).toHaveCount(0);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+    "content",
+    /noindex/,
+  );
 });
 
 test("homepage featured empty state stays honest", async ({ page }) => {
@@ -25,4 +29,10 @@ test("homepage featured empty state stays honest", async ({ page }) => {
   await expect(page.locator("[data-product-card]")).toHaveCount(0);
   const body = await page.locator("body").innerText();
   expect(body).not.toMatch(/docs\/evidence|candidates under review/i);
+  await expect(
+    page.getByRole("link", { name: /Explore all products/i }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: /^Contact$/i }).first(),
+  ).toBeVisible();
 });
