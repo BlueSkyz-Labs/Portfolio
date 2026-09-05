@@ -15,8 +15,10 @@ inventing email, product, or ruleset facts.
    only; no redrawn geometry).
 2. `BaseLayout` prefers the SVG micro mark as `rel=icon`, with `.ico` fallback.
 3. When the public product registry is empty, Hero / Header / NextStep / 404
-   primary CTAs soft-land on Contact (Products nav remains honest).
-4. `/products/` empty state drops internal jargon and offers Contact + About.
+   primary CTAs soft-land on Contact **if** `PUBLIC_CONTACT_EMAIL` is set
+   (Products nav remains honest). Superseded for empty-email by
+   `docs/evidence/2026-09-05-act-path-workers-noindex.md` (About / Security).
+4. `/products/` empty state drops internal jargon and offers email-aware Act CTAs.
 5. Stale “Task 4 BLOCKED” claims in launch-readiness / owner-domain evidence
    corrected to **LANDED (#61)**.
 

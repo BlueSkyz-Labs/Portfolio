@@ -78,11 +78,12 @@ test("product status chrome avoids universal pills and all-caps", () => {
   assert.match(status, /radius-card|rounded-\[/);
 });
 
-test("support empty state offers corporate email fallback wiring", () => {
+test("support empty state offers working trust paths without Contact loop", () => {
   const support = readFileSync("src/pages/support.astro", "utf8");
   assert.match(support, /SITE\.contactEmail/);
-  assert.match(support, /href="\/contact\/"/);
   assert.match(support, /href="\/security\/"/);
+  assert.match(support, /href="\/about\/"/);
+  assert.match(support, /hasBusinessEmail/);
 });
 
 test("privacy page summarizes practical trust answers", () => {
@@ -92,20 +93,18 @@ test("privacy page summarizes practical trust answers", () => {
   assert.match(privacy, /How it is used/i);
   assert.match(privacy, /Deletion/i);
   assert.doesNotMatch(privacy, /tracking cookies are required/i);
+  assert.match(privacy, /hasBusinessEmail/);
+  assert.match(privacy, /href="\/security\/"/);
 });
 
-test("empty featured state does not dead-end into Explore all products", () => {
+test("empty featured section is omitted instead of a hollow shelf", () => {
   const featured = readFileSync(
     "src/components/sections/FeaturedProducts.astro",
     "utf8",
   );
-  assert.match(featured, /products\.length === 0/);
-  assert.match(featured, /Contact/);
-  // Explore-all must be gated to non-empty registry.
-  assert.match(
-    featured,
-    /products\.length > 0[\s\S]*Explore all products|Explore all products[\s\S]*products\.length/,
-  );
+  assert.match(featured, /products\.length > 0/);
+  assert.match(featured, /Explore all products/);
+  assert.doesNotMatch(featured, /No public products are published yet/);
 });
 
 test("404 page always requests noindex", () => {
@@ -113,7 +112,12 @@ test("404 page always requests noindex", () => {
   assert.match(page404, /noindex=\{?true\}?/);
 });
 
-test("empty registry soft-lands primary CTAs on Contact", () => {
+test("empty registry soft-lands via email-aware Act helper", () => {
+  const act = readFileSync("src/lib/act.ts", "utf8");
+  assert.match(act, /emptyRegistryPrimaryCta/);
+  assert.match(act, /\/about\//);
+  assert.match(act, /\/contact\//);
+  assert.match(act, /\/security\//);
   for (const path of [
     "src/components/sections/Hero.astro",
     "src/components/layout/Header.astro",
@@ -126,11 +130,25 @@ test("empty registry soft-lands primary CTAs on Contact", () => {
       source,
       /getPublicProducts|hasPublicProducts|products\.length/,
     );
-    assert.match(source, /\/contact\//);
+    assert.match(source, /emptyRegistryPrimaryCta/);
   }
   const productsIndex = readFileSync("src/pages/products/index.astro", "utf8");
   assert.doesNotMatch(
     productsIndex,
     /Empty is preferred over invented maturity/i,
   );
+});
+
+test("UI muted token must not equal brand slate_500", () => {
+  const css = readFileSync("src/styles/global.css", "utf8");
+  const tokens = readFileSync(
+    "public/brand/blueskyz/r4d/brand_tokens.json",
+    "utf8",
+  );
+  const muted = css.match(/--text-muted:\s*(#[0-9a-fA-F]{6})/)?.[1];
+  const slate500 = JSON.parse(tokens).colors?.slate_500;
+  assert.ok(muted);
+  assert.ok(slate500);
+  assert.notEqual(muted.toLowerCase(), String(slate500).toLowerCase());
+  assert.match(css, /Brand slate_500/);
 });

@@ -8,7 +8,7 @@ test("homepage explains BlueSkyz and rejects old positioning", async ({
     /build products.*complex.*clear/i,
   );
   await expect(
-    page.getByRole("link", { name: /^Contact$/i }).first(),
+    page.getByRole("link", { name: /About BlueSkyz/i }).first(),
   ).toBeVisible();
   await expect(
     page.getByText(/Quiet luxury|digital atelier|Savile Row|Selected works/i),
@@ -29,9 +29,10 @@ test("320px homepage has no horizontal overflow", async ({ page }) => {
 
 test("homepage keeps the C1.1 customer order landmarks", async ({ page }) => {
   await page.goto("/");
+  // Featured shelf is omitted while the public registry is empty.
   await expect(
     page.getByRole("heading", { name: "Featured products" }),
-  ).toBeVisible();
+  ).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "One house" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Trust" })).toBeVisible();
   await expect(

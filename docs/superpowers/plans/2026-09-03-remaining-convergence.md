@@ -22,8 +22,9 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 | C1.1 Tasks 1–3, 5–14 technical foundation          | Landed on `main` (#43–#54)                                                                       |
 | Product profile route `/products/[slug]/`          | Landed on `main` (#46)                                                                           |
 | Trust-path CTA / FlagshipProof / SoT hygiene       | Landed on `main` (#48–#54)                                                                       |
-| Customer copy / empty-state CTA / schema CTA truth | This hardening pass (agent-safe P1)                                                              |
-| Staging-host claim denylist + non-prod sitemap/404 | This hardening pass (agent-safe P1)                                                              |
+| Customer copy / empty-state CTA / schema CTA truth | Landed (#55–#57)                                                                                 |
+| Staging-host claim denylist + non-prod sitemap/404 | Landed (#57)                                                                                     |
+| Empty-email Act path + stable workers.dev noindex  | This pass (`docs/evidence/2026-09-05-act-path-workers-noindex.md`)                               |
 | Live Workers surface vs `main`                     | Reconcile after merge — Wrangler recovery still available                                        |
 | Honest empty public product registry               | PASS                                                                                             |
 | In-repo material work                              | Prior “exhausted” claim falsified; this pass closes new P1s                                      |
@@ -76,7 +77,7 @@ without inventing owner-gated domain, email, legal, product, or R4d facts.
 - [x] Import exact `symbol_mono_ink.svg`, `micro_mark_ink.svg`, `brand_tokens.json` + manifest from `sgps-core` main `28dbbc7e28442173c367212096e9095b9e09c0d6` (`PORTFOLIO_GITHUB_TOKEN`)
 - [x] Replace text-only lockup with symbol + live text until outlined wordmark exists
 - [x] Rasterize committed R4d SVG into favicon.ico + social OG (no geometric placeholder)
-- [x] Empty public registry: primary CTAs soft-land on Contact (not an empty products aisle)
+- [x] Empty public registry: email-aware Act soft-land (Contact if email; else About/Security; omit hollow Featured)
 - Evidence: `docs/evidence/2026-09-05-r4d-sgps-core-import.md`, `docs/evidence/2026-09-05-r4d-social-empty-ux.md`
 
 ---

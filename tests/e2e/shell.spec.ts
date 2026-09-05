@@ -14,9 +14,11 @@ test("shell exposes skip link and product-led nav", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "Contact" }).first(),
   ).toBeVisible();
-  // Empty public registry: primary CTA soft-lands on Contact, not an empty aisle.
+  // Empty registry + empty email: primary CTA soft-lands on About, not Contact dead-end.
   await expect(
-    page.getByRole("link", { name: "Contact" }).first(),
+    page.getByRole("navigation", { name: "Primary" }).getByRole("link", {
+      name: "About BlueSkyz",
+    }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "complex things feel naturally clear",

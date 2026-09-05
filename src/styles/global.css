@@ -20,6 +20,7 @@
   --surface-inverse: var(--brand-ink);
   --text-primary: var(--brand-ink);
   --text-secondary: #334155;
+  /* Brand slate_500 (#64748B) fails AA on Porcelain; UI muted stays #475569. */
   --text-muted: #475569;
   --border-subtle: #cbd5e1;
   --action-primary: #1d4ed8;

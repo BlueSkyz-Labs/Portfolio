@@ -59,26 +59,21 @@ Version ID: `2c212770-2e03-445c-9008-ef1ec13a4bc6`
 | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
 | Cursor GitHub App (`/installation/repositories`)                               | `repository_selection=selected`, **only** `BlueSkyz-Labs/SGPS-Marketing` (`total_count=1`) |
 | Cursor `gh` token                                                              | `BlueSkyz-Labs/sgps-core` → **HTTP 404**                                                   |
-| `PORTFOLIO_GITHUB_TOKEN` (`blackangelz`)                                       | Org-visible repos = **only** `SGPS-Marketing`; `sgps-core` → **404**                       |
+| `PORTFOLIO_GITHUB_TOKEN`                                                       | HTTP **200** for private `BlueSkyz-Labs/sgps-core` (used for R4d #61 import)               |
 | Cloudflare GitHub App (`GET .../pages/connections/github/BlueSkyz-Labs/repos`) | Lists **`sgps-core`** (`repo_id=1336680359`) among org repos                               |
 
-**Root cause:** `sgps-core` **exists** (Cloudflare’s GitHub App enumerates it),
-but it is **private** and **not** in the Cursor GitHub App’s selected-repository
-grant. Connecting Cloudflare — or enabling Cursor only on `SGPS-Marketing` —
-does **not** grant this agent read on other private org repos.
+**Root cause (Cursor `gh` 404):** `sgps-core` is private and **not** in the
+Cursor GitHub App selected-repository grant. Cloudflare App visibility does
+not grant Cursor `gh` read. R4d Task 4 still **LANDED** via
+`PORTFOLIO_GITHUB_TOKEN` (`docs/evidence/2026-09-05-r4d-sgps-core-import.md`).
 
-**Owner fix (one place):**
+**Owner fix (optional, for future Cursor `gh` reads):**
 
 GitHub → Organization `BlueSkyz-Labs` → Settings → GitHub Apps → **Cursor** →
 Repository access → add **`sgps-core`** (keep Selected repositories, or switch
 to All).
 
-Optional: expand `PORTFOLIO_GITHUB_TOKEN` repo scope the same way — today it
-only sees `SGPS-Marketing`.
-
 Unrelated public hit `openwifi-su/sgps-core` is **not** the BlueSkyz R4d source.
 
-Until Cursor App includes `sgps-core`, future `gh`/`git ls-remote` reads stay
-blocked for that identity — but C1.1 Task 4 R4d **import already LANDED** on
-2026-09-05 (#61) using `PORTFOLIO_GITHUB_TOKEN`. Evidence:
-`docs/evidence/2026-09-05-r4d-sgps-core-import.md`.
+Until Cursor App includes `sgps-core`, future Cursor `gh`/`git ls-remote` reads
+stay blocked for that identity — but C1.1 Task 4 R4d **import already LANDED**.

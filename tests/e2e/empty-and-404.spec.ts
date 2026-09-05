@@ -11,7 +11,9 @@ test("404 page recovers without atelier copy", async ({ page }) => {
   );
   await expect(
     page
-      .getByRole("link", { name: /Go home|Contact|Explore products/i })
+      .getByRole("link", {
+        name: /Go home|About BlueSkyz|Contact|Explore products/i,
+      })
       .first(),
   ).toBeVisible();
   await expect(
@@ -23,11 +25,13 @@ test("404 page recovers without atelier copy", async ({ page }) => {
   );
 });
 
-test("homepage featured empty state stays honest", async ({ page }) => {
+test("homepage empty registry omits hollow featured shelf", async ({
+  page,
+}) => {
   await page.goto("/");
   await expect(
-    page.getByText(/No public products are published yet/i).first(),
-  ).toBeVisible();
+    page.getByRole("heading", { name: "Featured products" }),
+  ).toHaveCount(0);
   await expect(page.locator("[data-product-card]")).toHaveCount(0);
   const body = await page.locator("body").innerText();
   expect(body).not.toMatch(/docs\/evidence|candidates under review/i);
@@ -35,6 +39,22 @@ test("homepage featured empty state stays honest", async ({ page }) => {
     page.getByRole("link", { name: /Explore all products/i }),
   ).toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: /^Contact$/i }).first(),
+    page.getByRole("link", { name: /About BlueSkyz/i }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/No public products are published yet/i).first(),
+  ).toBeVisible();
+});
+
+test("contact empty-email state leads with working security path", async ({
+  page,
+}) => {
+  await page.goto("/contact/");
+  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: /private vulnerability reporting/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Security" }).first(),
   ).toBeVisible();
 });
