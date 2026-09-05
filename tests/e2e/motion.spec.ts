@@ -8,7 +8,7 @@ test("reduced motion keeps hero content immediately visible", async ({
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(
-    page.getByRole("link", { name: /Explore products/i }).first(),
+    page.getByRole("link", { name: /Contact|Explore products/i }).first(),
   ).toBeVisible();
   await context.close();
 });

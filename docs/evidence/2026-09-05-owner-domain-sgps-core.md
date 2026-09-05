@@ -78,4 +78,7 @@ only sees `SGPS-Marketing`.
 
 Unrelated public hit `openwifi-su/sgps-core` is **not** the BlueSkyz R4d source.
 
-Until Cursor App includes `sgps-core`, C1.1 Task 4 (R4d import) stays **BLOCKED**.
+Until Cursor App includes `sgps-core`, future `gh`/`git ls-remote` reads stay
+blocked for that identity — but C1.1 Task 4 R4d **import already LANDED** on
+2026-09-05 (#61) using `PORTFOLIO_GITHUB_TOKEN`. Evidence:
+`docs/evidence/2026-09-05-r4d-sgps-core-import.md`.

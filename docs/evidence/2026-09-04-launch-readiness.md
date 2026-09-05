@@ -3,7 +3,7 @@
 Date: 2026-09-04  
 Branch: `main` (post-#47)
 
-Technical implementation of C1.1 Tasks 1–3 and 5–14 are complete on `main`. Task 4 (R4d asset import from `sgps-core`) remains blocked. Public production promotion remains blocked on owner/external truth — **do not treat technical green as launch approval**.
+Technical implementation of C1.1 Tasks 1–3 and 5–14 are complete on `main`. Task 4 (R4d asset import from `sgps-core`) **LANDED** on 2026-09-05 via #61 (`28dbbc7e…`); Cursor GitHub App still omits `sgps-core` (optional follow-up). Public production promotion remains blocked on owner/external truth — **do not treat technical green as launch approval**.
 
 ## Checklist
 
@@ -27,7 +27,7 @@ Technical implementation of C1.1 Tasks 1–3 and 5–14 are complete on `main`. 
 - PR **#33** (`/so-tro`) — **CLOSED** (superseded by Astro C1.1; do not reopen/merge).
 - Issue **#8** main ruleset — owner-gated.
 - DNS for `portfolio.tonydemo.com` — owner-gated; not used as canonical.
-- Task 4: `BlueSkyz-Labs/sgps-core` not readable from this environment (HTTP 404).
+- Task 4: R4d import **LANDED** 2026-09-05 (#61) from `sgps-core` `28dbbc7e…` via `PORTFOLIO_GITHUB_TOKEN`. Cursor App selected-repos still omits `sgps-core` (optional). See `docs/evidence/2026-09-05-r4d-sgps-core-import.md`.
 - PRs **#42** / **#43** / **#44** landed on `main` (C1.1 foundation + SoT doc sync).
 - Legacy **Cloudflare Pages** project `blueskyz-labs-portfolio`: Git deployments disabled 2026-09-04 (Workers is canonical). See `docs/evidence/2026-09-04-pages-disable.md`.
 
@@ -51,7 +51,7 @@ Landed via #46 (merged):
 
 - `/products/[slug]/` static profiles + card deep-links + sitemap slug URLs
 - C1.1 OG/favicon generator (no Quiet Luxury gold) + regenerated social assets
-- Porcelain atmosphere / brand-signal hero (text lockup; R4d still blocked)
+- Porcelain atmosphere / brand-signal hero (R4d symbol + live text lockup landed #61; favicon/OG now rasterize committed R4d SVG)
 - Trust-route Playwright matrix + architecture guards
 - ADR 0001 marked superseded; remaining-convergence refreshed
 - Workers Builds gap recorded (`docs/evidence/2026-09-04-workers-builds-gap.md`)

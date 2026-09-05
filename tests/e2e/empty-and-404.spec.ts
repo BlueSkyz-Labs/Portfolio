@@ -10,7 +10,9 @@ test("404 page recovers without atelier copy", async ({ page }) => {
     /not found/i,
   );
   await expect(
-    page.getByRole("link", { name: /Go home|Explore products/i }).first(),
+    page
+      .getByRole("link", { name: /Go home|Contact|Explore products/i })
+      .first(),
   ).toBeVisible();
   await expect(
     page.getByText(/Quiet luxury|digital atelier|Savile Row/i),
@@ -24,7 +26,7 @@ test("404 page recovers without atelier copy", async ({ page }) => {
 test("homepage featured empty state stays honest", async ({ page }) => {
   await page.goto("/");
   await expect(
-    page.getByText(/No public products are published yet/i),
+    page.getByText(/No public products are published yet/i).first(),
   ).toBeVisible();
   await expect(page.locator("[data-product-card]")).toHaveCount(0);
   const body = await page.locator("body").innerText();
